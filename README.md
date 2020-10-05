@@ -8,14 +8,16 @@ build-essential curl file git tig vim
 
 # install
 
+## インストール
 ```
-git clone https://github.com/fixme199/dotfiles.git ~/.dotfiles
+git clone https://github.com/oktntko/dotfiles.git ~/.dotfiles
 sh ~/.dotfiles/install.sh
 ```
 
-# 説明書き
-## Linuxbrew インストール
-
-## zplug インストール
-
-## vim-plugin インストール
+## 説明書き
+1. Homebrewをインストール
+2. Homebrewで zshをインストール
+3. gitで preztoをダウンロード
+4. Homebrewで zplugをインストール
+5. curlで vim-plugをダウンロード
+6. zshに デフォルトのシェルを変更

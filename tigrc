@@ -1,0 +1,79 @@
+set commit-order = topo
+set line-graphics = ascii
+set show-changes = true
+set show-notes = true
+set tab-size = 4
+set vertical-split = false
+set wrap-lines = false
+
+set blame-view = \
+  line-number:display=true,interval=1 \
+  id:display=true,width=7 \
+  date:display=custom,local=true,format=%Y-%m-%d \
+  author:display=full \
+  text
+
+set blob-view = \
+  line-number:display=true,interval=1 \
+  text
+
+set main-view = \
+  line-number:display=true,interval=5 \
+  id:display=true,width=7 \
+  date:display=true,local=true \
+  author:display=full \
+  commit-title:graph=v2,refs=true
+
+bind generic - none
+bind generic w move-page-up
+
+set git-colors = no
+
+color cursor               003     008
+color title-blur           000     002
+color title-focus          006     000
+color status               003     000
+color header               default 000
+color line-number          008     default
+
+color graph-commit         008     default
+color id                   001     default
+color date                 004     default
+color author               002     default
+color main-head            006     default
+color main-ref             001     default
+color main-remote          001     default
+color main-tracked         011     default
+color main-tag             004     default
+color main-local-tag       004     default
+color palette-0            001     default
+color palette-1            011     default
+color palette-2            006     default
+color palette-3            002     default
+color palette-7            004     default
+color palette-9            014     default
+
+color 'commit '            002     000
+color 'Refs: '             001     000
+color 'Author: '           006     000
+color 'AuthorDate: '       006     000
+color 'Commit: '           011     000
+color 'CommitDate: '       011     000
+color '---'                008     default
+color diff-stat            006     default
+color diff-header          000     003
+color 'old file mode '     001     000
+color 'new file mode '     002     000
+color 'deleted file mode ' 013     000
+color diff-index           008     000
+color '--- '               001     000
+color '+++ '               002     000
+color diff-chunk           001     default
+color diff-del             001     default
+color diff-add             002     default
+
+color stat-staged          002     default
+color stat-unstaged        011     default
+
+color mode                 006     default
+color directory            012     default
