@@ -14,13 +14,14 @@ brew install zsh
 which zsh | sudo tee -a /etc/shells
 
 ## plugins
-### prezto
-git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 ### zplug
 brew install zplug
 ## vim-plug
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+# link
+zsh "${ZDOTDIR:-$HOME}"/.dotfiles/link.sh
+
+# sh 変更して終了(パスワード聞かれる)
 chsh -s /home/linuxbrew/.linuxbrew/bin/zsh
 
-zsh "${ZDOTDIR:-$HOME}"/.dotfiles/link.sh
