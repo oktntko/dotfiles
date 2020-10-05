@@ -1,4 +1,3 @@
-  
 call plug#begin('~/.vim/plugged')
 Plug 'tomasr/molokai'
 call plug#end()
@@ -6,20 +5,27 @@ call plug#end()
 syntax on
 colorscheme molokai
 set t_Co=256
+filetype plugin indent on
+set encoding=utf-8
 
 " 画面表示の設定
 
 set number         " 行番号を表示する
 set cursorline     " カーソル行の背景色を変える
-"set cursorcolumn   " カーソル位置のカラムの背景色を変える
 set laststatus=2   " ステータス行を常に表示
 set cmdheight=1    " メッセージ表示欄を行確保
 set showmatch      " 対応する括弧を強調表示
 set matchtime=1    "
 set helpheight=999 " ヘルプを画面いっぱいに開く
-"set list           " 不可視文字を表示
+set list           " 不可視文字を表示
 " 不可視文字の表示記号指定
-"set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
+" tab: “タブ”の表示を決定する。
+" trail: 行末に続くスペースを表す表示。
+" eol: 改行記号を表す表示。
+" extends: ウィンドウの幅が狭くて右に省略された文字がある場合に表示される。
+" precedes: extends と同じで左に省略された文字がある場合に表示される。
+" nbsp: 不可視のスペースを表す表示。
+set listchars=tab:»-,trail:-,extends:»,precedes:«
 
 " カーソル移動関連の設定
 
@@ -33,7 +39,7 @@ set sidescroll=1               " 左右スクロールは一文字づつ行う
 
 set confirm    " 保存されていないファイルがあるときは終了前に保存確認
 set hidden     " 保存されていないファイルがあるときでも別のファイルを開くことが出来る
-set autoread   "外部でファイルに変更がされた場合は読みなおす
+set autoread   " 外部でファイルに変更がされた場合は読みなおす
 set nobackup   " ファイル保存時にバックアップファイルを作らない
 set noswapfile " ファイル編集中にスワップファイルを作らない
 
@@ -54,24 +60,6 @@ set shiftwidth=2  " 自動インデントでずれる幅
 set softtabstop=2 " 連続した空白に対してタブキーやバックスペースキーでカーソルが動く幅
 set autoindent    " 改行時に前の行のインデントを継続する
 set smartindent   " 改行時に入力された行の末尾に合わせて次の行のインデントを増減する
-
-" 動作環境との統合関連の設定
-
-" OSのクリップボードをレジスタ指定無しで Yank, Put 出来るようにする
-set clipboard& clipboard^=unnamedplus
-" マウスの入力を受け付ける
-set mouse=a
-" Windows でもパスの区切り文字を / にする
-set shellslash
-" インサートモードから抜けると自動的にIMEをオフにする
-set iminsert=2
-
-" コマンドラインの設定
-
-" コマンドラインモードでTABキーによるファイル名補完を有効にする
-set wildmenu wildmode=list:longest,full
-" コマンドラインの履歴を10000件保存する
-set history=10000
 
 " ビープの設定
 
