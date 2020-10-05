@@ -23,11 +23,4 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.c
 
 chsh -s /home/linuxbrew/.linuxbrew/bin/zsh
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
-zsh ${SCRIPT_DIR}/link.sh
-
-setopt extended_glob
-for rcfile in "${SCRIPT_DIR}"^(README.md|LICENSE|install.sh)(.N); do
-  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-done
-setopt no_extended_glob
+zsh "${ZDOTDIR:-$HOME}"/.dotfiles/link.sh
