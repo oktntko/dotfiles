@@ -2,9 +2,6 @@
 ## brew
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
-## prezto 
-source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-
 ## zplug 
 export ZPLUG_HOME=/home/linuxbrew/.linuxbrew/opt/zplug
 source $ZPLUG_HOME/init.zsh
@@ -40,7 +37,8 @@ export LS_COLORS='di=94:ln=36:ex=32:so=46;34:pi=43;34'
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 # プロンプトのカスタマイズ
-zstyle ':prezto:module:prompt' theme 'powerlevel10k'
+autoload -Uz promptinit && promptinit
+zplug romkatv/powerlevel10k, as:theme, depth:1
 
 ## plugin
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
