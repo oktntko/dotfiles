@@ -3,6 +3,6 @@
 # link
 setopt extended_glob
 for rcfile in "${ZDOTDIR:-$HOME}"/.dotfiles/^(LICENSE|README.md|install.sh|link.sh)(.N); do
-  echo $rcfile
+  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
 done
 setopt no_extended_glob
