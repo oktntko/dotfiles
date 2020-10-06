@@ -16,8 +16,22 @@ which zsh | sudo tee -a /etc/shells
 ## plugins
 ### zplug
 brew install zplug
-## vim-plug
+
+### vim-plug
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+### nodenv
+brew install nodenv
+mkdir -p "$(nodenv root)"/plugins
+git clone https://github.com/nodenv/nodenv-update.git "$(nodenv root)"/plugins/nodenv-update
+git clone https://github.com/nodenv/nodenv-package-rehash.git "$(nodenv root)"/plugins/nodenv-package-rehash
+# --------------------------------------------------------------------------------
+# nodenv -l
+# nodenv install 12.18.4
+# nodenv rehash
+# nodenv global 12.18.4
+# --------------------------------------------------------------------------------
+
 
 # link
 zsh "${ZDOTDIR:-$HOME}"/.dotfiles/link.zsh
