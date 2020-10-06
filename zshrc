@@ -117,12 +117,21 @@ wslcd() {
 # bindkey
 # --------------------------------------------------------------------------------
 # confirm : sudo showkey
-bindkey "^[[H"   beginning-of-line   # Home
-bindkey "^[[F"   end-of-line         # End
+bindkey "^[[H"    beginning-of-line   # Home
+bindkey "^[[F"    end-of-line         # End
 bindkey "^[[3~"   delete-char         # Delete
 bindkey "^[[1;5D" emacs-backward-word # Ctrl + Left
 bindkey "^[[1;5C" emacs-forward-word  # Ctrl + Right
 bindkey "^H"      backward-kill-word  # Ctrl + Backspace
+
+# --------------------------------------------------------------------------------
+# その他
+# --------------------------------------------------------------------------------
+# nodenv
+## brew install nodenv
+if type "nodenv" > /dev/null 2>&1; then
+  eval "$(nodenv init -)"
+fi
 
 # --------------------------------------------------------------------------------
 # local用
