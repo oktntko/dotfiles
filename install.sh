@@ -20,7 +20,7 @@ brew install zplug
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # link
-zsh "${ZDOTDIR:-$HOME}"/.dotfiles/link.sh
+zsh "${ZDOTDIR:-$HOME}"/.dotfiles/link.zsh
 
 # sh 変更して終了(パスワード聞かれる)
 chsh -s /home/linuxbrew/.linuxbrew/bin/zsh
