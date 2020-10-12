@@ -10,7 +10,7 @@ build-essential curl file git tig vim
 
 ## インストール
 ```
-git clone https://github.com/oktntko/dotfiles.git ~/.dotfiles
+git clone git@github.com:oktntko/dotfiles.git ~/.dotfiles
 sh ~/.dotfiles/install.sh
 ```
 
