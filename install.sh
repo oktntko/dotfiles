@@ -20,18 +20,8 @@ brew install zplug
 ### vim-plug
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-### nodenv
-brew install nodenv
-mkdir -p "$(nodenv root)"/plugins
-git clone https://github.com/nodenv/nodenv-update.git "$(nodenv root)"/plugins/nodenv-update
-git clone https://github.com/nodenv/nodenv-package-rehash.git "$(nodenv root)"/plugins/nodenv-package-rehash
-# --------------------------------------------------------------------------------
-# nodenv -l
-# nodenv install 12.18.4
-# nodenv rehash
-# nodenv global 12.18.4
-# --------------------------------------------------------------------------------
-
+### nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 
 # link
 zsh "${ZDOTDIR:-$HOME}"/.dotfiles/link.zsh
