@@ -3,3 +3,5 @@
 	name = oktntko
 [core]
 	editor = vim -c \"set fenc=utf-8\"
+[credential]
+	helper = store
