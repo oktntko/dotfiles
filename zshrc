@@ -94,10 +94,12 @@ elif [[ -n $( uname | grep -i 'Linux' ) ]] && [[ -z $( uname -r | grep -i 'micro
 
 elif [[ -n $( uname | grep -i 'Linux' ) ]] && [[ -n $( uname -r | grep -i 'microsoft' ) ]] ; then
   # 'WSL'
-  alias cd=wslcd
-  alias pwdw="wslpath -w ."
   export WSL_ip_line=$(ipconfig.exe | grep "WSL" -n | awk -F ":" '{print $1+4}')
   export DISPLAY=$(ipconfig.exe | awk -v a=$WSL_ip_line '{if (NR==a) print $NF":0.0"}' | tr -d "\r")
+  export WINDOWS_USERNAME=$(cd /mnt/c && cmd.exe /c 'echo %USERNAME%' | awk '{ print $1 }' | tr -d "\r")
+
+  alias cd=wslcd
+  alias pwdw="wslpath -w ."
 
 else
   # 'Windows'
