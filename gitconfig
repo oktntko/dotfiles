@@ -5,3 +5,11 @@
 	editor = vim -c \"set fenc=utf-8\"
 [credential]
 	helper = store
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+[merge]
+	tool = vimdiff
+[mergetool]
+	prompt = false

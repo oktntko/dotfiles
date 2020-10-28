@@ -98,7 +98,6 @@ elif [[ -n $( uname | grep -i 'Linux' ) ]] && [[ -n $( uname -r | grep -i 'micro
   export DISPLAY=$(ipconfig.exe | awk -v a=$WSL_ip_line '{if (NR==a) print $NF":0.0"}' | tr -d "\r")
   export WINDOWS_USERNAME=$(cd /mnt/c && cmd.exe /c 'echo %USERNAME%' | awk '{ print $1 }' | tr -d "\r")
 
-  alias cd=wslcd
   alias pwdw="wslpath -w ."
 
 else
