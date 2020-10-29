@@ -1,15 +1,17 @@
 [user]
-	email = oktntko@gmail.com
-	name = oktntko
+  email = oktntko@gmail.com
+  name = oktntko
 [core]
-	editor = vim -c \"set fenc=utf-8\"
+  editor = vim -c \"set fenc=utf-8\"
+  pager = diff-so-fancy | less -FXRi
 [credential]
-	helper = store
+  helper = store
 [diff]
-	tool = vimdiff
+  tool = vimdiff
 [difftool]
-	prompt = false
+  prompt = false
 [merge]
-	tool = vimdiff
+  tool = vimdiff
 [mergetool]
-	prompt = false
+  prompt = false
+
