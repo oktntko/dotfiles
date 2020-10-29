@@ -72,6 +72,34 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
 
+# git diff
+zplug "zdharma/zsh-diff-so-fancy"
+
+# --------------------------------------------------------------------------------
+# fzf
+# --------------------------------------------------------------------------------
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
+# cd
+zplug "b4b4r07/enhancd", use:init.sh
+# git
+zplug "wfxr/forgit"
+function fzf-checkout-branch() {
+  local branches branch
+  branches=$(git branch | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
+  branch=$(echo "$branches" | fzf --preview "git show --color=always {}") &&
+  git checkout $(echo "$branch")
+}
+
+alias gcb=fzf-checkout-branch
+
+# default options
+export FZF_DEFAULT_OPTS='--color=fg+:11 --height 70% --reverse --select-1 --exit-0 --multi'
+# files
+export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,header,grid --line-range :500 {} | head -200"'
+# cd
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+
 # check install
 if ! zplug check --verbose; then
     zplug install
@@ -120,6 +148,8 @@ wslcd() {
 # bindkey
 # --------------------------------------------------------------------------------
 # confirm : sudo showkey
+[[ ! -f ~/.dotfiles/key-bindings.zsh ]] || source ~/.dotfiles/key-bindings.zsh
+
 bindkey "^[[H"    beginning-of-line   # Home
 bindkey "^[[F"    end-of-line         # End
 bindkey "^[[3~"   delete-char         # Delete

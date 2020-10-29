@@ -23,6 +23,21 @@ if !(type "zplug" > /dev/null 2>&1); then
   brew install zplug
 fi
 
+### tree
+if !(type "tree" > /dev/null 2>&1); then
+  brew install tree
+fi
+
+### bat
+if !(type "bat" > /dev/null 2>&1); then
+  brew install bat
+fi
+
+### ripgrep
+if !(type "ripgrep" > /dev/null 2>&1); then
+  brew install ripgrep
+fi
+
 ### vim-plug
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
