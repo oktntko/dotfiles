@@ -4,6 +4,7 @@
 [core]
   editor = vim -c \"set fenc=utf-8\"
   pager = diff-so-fancy | less -FXRi
+  quotepath = false
 [credential]
   helper = store
 [diff]
