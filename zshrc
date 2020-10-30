@@ -86,7 +86,7 @@ zplug "wfxr/forgit"
 function fzf-checkout-branch() {
   local branches branch
   branches=$(git branch | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
-  branch=$(echo "$branches" | fzf --preview "git show --color=always {}") &&
+  branch=$(echo "$branches" | fzf --preview "git log --oneline --graph --color=always {}") &&
   git checkout $(echo "$branch")
 }
 
