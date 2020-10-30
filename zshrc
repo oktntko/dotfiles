@@ -27,7 +27,6 @@ source $ZPLUG_HOME/init.zsh
 alias ls='ls --color=auto'
 alias ll='ls -lphA --group-directories-first --time-style=long-iso'
 alias ..='cd ..'
-alias dotfiles="cd ~/.dotfiles"
 
 # --------------------------------------------------------------------------------
 # zsh 設定
@@ -93,7 +92,8 @@ function fzf-checkout-branch() {
 alias gcb=fzf-checkout-branch
 
 # default options
-export FZF_DEFAULT_OPTS='--color=fg+:11 --height 70% --reverse --select-1 --exit-0 --multi'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_OPTS='--height 70% --reverse --select-1 --exit-0 --multi --bind=shift-up:preview-up,shift-down:preview-down,shift-left:preview-page-up,shift-right:preview-page-down'
 # files
 export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,header,grid --line-range :500 {} | head -200"'
