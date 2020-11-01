@@ -80,6 +80,8 @@ zplug "zdharma/zsh-diff-so-fancy"
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 # cd
 zplug "b4b4r07/enhancd", use:init.sh
+export ENHANCD_DISABLE_DOT=1
+export ENHANCD_DISABLE_HOME=1
 # git
 zplug "wfxr/forgit"
 function fzf-checkout-branch() {
