@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-# link
-setopt extended_glob
-for rcfile in "${ZDOTDIR:-$HOME}"/.dotfiles/^(LICENSE|README.md|install.sh|link.zsh)(.N); do
-  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+local SCRIPT_DIR=$(cd $(dirname $0); pwd)
+
+local links=$(find "$SCRIPT_DIR"/links -type f | sed -e 's/\(^\* \|^ \)//g' | cut -d " " -f 1) &&
+echo $links | fzf --preview "bat --color=always --style=numbers,header,grid --line-range :500 {}" | while read item; do
+  ln -s "${(q)item}" "${ZDOTDIR:-$HOME}/.$(basename ${(q)item})"
 done
-setopt no_extended_glob
