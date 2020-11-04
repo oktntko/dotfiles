@@ -1,0 +1,35 @@
+#
+#                        ___
+#               ,--,   ,--.'|_
+#             ,--.'|   |  | :,'
+#    ,----._,.|  |,    :  : ' :
+#   /   /  ' /`--'_  .;__,'  /
+#  |   :     |,' ,'| |  |   |
+#  |   | .\  .'  | | :__,'| :
+#  .   ; ';  ||  | :   '  : |__
+#  '   .   . |'  : |__ |  | '.'|
+#   `---`-'| ||  | '.'|;  :    ;
+#   .'__/\_: |;  :    ;|  ,   /
+#   |   :    :|  ,   /  ---`-'
+#    \   \  /  ---`-'
+#     `--`-'
+#
+
+[user]
+  email = oktntko@gmail.com
+  name = oktntko
+[core]
+  editor = vim -c \"set fenc=utf-8\"
+  pager = diff-so-fancy | less -FXRi
+  quotepath = false
+[credential]
+  helper = store
+[diff]
+  tool = vimdiff
+[difftool]
+  prompt = false
+[merge]
+  tool = vimdiff
+[mergetool]
+  prompt = false
+
