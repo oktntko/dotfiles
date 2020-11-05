@@ -101,6 +101,15 @@ function fzf-checkout-branch() {
 
 alias gcb=fzf-checkout-branch
 
+function fzf-checkout-remote-branch() {
+  local branches branch
+  branches=$(git branch -r | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
+  branch=$(echo "$branches" | fzf --preview "git log --oneline --graph --color=always {}") &&
+  git checkout -t $(echo "$branch")
+}
+
+alias gcrb=fzf-checkout-remote-branch
+
 # default options
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 export FZF_DEFAULT_OPTS='--height 70% --reverse --select-1 --exit-0 --multi --bind=shift-up:preview-up,shift-down:preview-down,shift-left:preview-page-up,shift-right:preview-page-down'
@@ -132,12 +141,12 @@ elif [[ -n $( uname | grep -i 'Linux' ) ]] && [[ -z $( uname -r | grep -i 'micro
 
 elif [[ -n $( uname | grep -i 'Linux' ) ]] && [[ -n $( uname -r | grep -i 'microsoft' ) ]] ; then
   # 'WSL'
+  ## ディスプレイ設定
   export WSL_ip_line=$(ipconfig.exe | grep "WSL" -n | awk -F ":" '{print $1+4}')
   export DISPLAY=$(ipconfig.exe | awk -v a=$WSL_ip_line '{if (NR==a) print $NF":0.0"}' | tr -d "\r")
   export WINDOWS_USERNAME=$(cd /mnt/c && cmd.exe /c 'echo %USERNAME%' | awk '{ print $1 }' | tr -d "\r")
-
+  ## wslコマンド
   alias pwdw="wslpath -w ."
-
 else
   # 'Windows'
 
