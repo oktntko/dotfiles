@@ -1,8 +1,11 @@
+
 #     ____      ____
 #    / __/___  / __/
 #   / /_/_  / / /_
 #  / __/ / /_/ __/
-# /_/   /___/_/ key-bindings.zsh
+# /_/   /___/_/
+#
+# https://www.mankier.com/1/fzf
 #
 # - $FZF_TMUX_OPTS
 # - $FZF_CTRL_T_COMMAND
@@ -11,9 +14,24 @@
 # - $FZF_ALT_C_COMMAND
 # - $FZF_ALT_C_OPTS
 
-# Key bindings
-# ------------
+# --------------------------------------------------------------------------------
+# オプション
+# --------------------------------------------------------------------------------
+# default  | パイプ経由で候補リストが渡されなかったときのデフォルトコマンド
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_OPTS='--height 70% --reverse --select-1 --exit-0 --multi --bind=shift-up:preview-up,shift-down:preview-down,shift-left:preview-page-up,shift-right:preview-page-down'
+# Ctrl + T | 現在のディレクトリ配下のファイル検索
+export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,header,grid --line-range :500 {} | head -200"'
+# Alt + C  | 現在のディレクトリ配下のディレクトリ検索
+# export FZF_ALT_C_COMMAND=""
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+# Ctrl + R | ヒストリの検索
+# export FZF_CTRL_R_OPTS=""
 
+# --------------------------------------------------------------------------------
+# Key bindings
+# --------------------------------------------------------------------------------
 # The code at the top and the bottom of this file is the same as in completion.zsh.
 # Refer to that file for explanation.
 if 'zmodload' 'zsh/parameter' 2>'/dev/null' && (( ${+options} )); then
@@ -125,3 +143,25 @@ bindkey '^R' fzf-history-widget
   eval $__fzf_key_bindings_options
   'unset' '__fzf_key_bindings_options'
 }
+
+# --------------------------------------------------------------------------------
+# custom function
+# --------------------------------------------------------------------------------
+### git
+function fzf-switch-local-branch() {
+  local branches branch
+  branches=$(git branch | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
+  branch=$(echo "$branches" | fzf --preview "git log --oneline --graph --color=always {}") &&
+  git switch $(echo "$branch")
+}
+
+alias gswl=fzf-switch-local-branch
+
+function fzf-switch-remote-branch() {
+  local branches branch
+  branches=$(git branch -r | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
+  branch=$(echo "$branches" | fzf --preview "git log --oneline --graph --color=always {}") &&
+  git switch -t $(echo "$branch")
+}
+
+alias gswr=fzf-switch-remote-branch
