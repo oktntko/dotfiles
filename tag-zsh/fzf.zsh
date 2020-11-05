@@ -151,7 +151,7 @@ bindkey '^R' fzf-history-widget
 function fzf-switch-local-branch() {
   local branches branch
   branches=$(git branch | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
-  branch=$(echo "$branches" | fzf --preview "git log --oneline --graph --color=always {}") &&
+  branch=$(echo "$branches" | fzf --no-multi --preview "git log --oneline --graph --color=always {}") &&
   git switch $(echo "$branch")
 }
 
@@ -160,7 +160,7 @@ alias gswl=fzf-switch-local-branch
 function fzf-switch-remote-branch() {
   local branches branch
   branches=$(git branch -r | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
-  branch=$(echo "$branches" | fzf --preview "git log --oneline --graph --color=always {}") &&
+  branch=$(echo "$branches" | fzf --no-multi --preview "git log --oneline --graph --color=always {}") &&
   git switch -t $(echo "$branch")
 }
 
