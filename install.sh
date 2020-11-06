@@ -50,6 +50,10 @@ if !(type "fzf" > /dev/null 2>&1); then
   brew install fzf
 fi
 
+if !(type "git-delta" > /dev/null 2>&1); then
+  brew install git-delta
+fi
+
 # nvm
 if !(type "nvm" > /dev/null 2>&1); then
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
