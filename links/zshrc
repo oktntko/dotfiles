@@ -51,7 +51,7 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2     # コマンドに色付�
 zplug "zsh-users/zsh-autosuggestions"                  # 薄い色で直近の履歴を表示する
 zplug "zsh-users/zsh-completions"                      # 補完を詳細に表示する
 zplug "Aloxaf/fzf-tab"                                 # fzf で 入力補完を強化する
-#zplug "b4b4r07/enhancd", use:init.sh                   # fzf で cd を強化する
+zplug "b4b4r07/enhancd", use:init.sh                   # fzf で cd を強化する
 #zplug "wfxr/forgit"                                    # fzf で git を強化する
 #zplug "bigH/git-fuzzy", as:command, use:bin/git-fuzzy  # fzf で git を強化する
 
