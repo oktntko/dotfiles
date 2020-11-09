@@ -16,8 +16,7 @@
 #
 
 [user]
-  email = oktntko@gmail.com
-  name = oktntko
+  useConfigOnly = true
 [core]
   editor = vim -c \"set fenc=utf-8\"
   pager = delta
