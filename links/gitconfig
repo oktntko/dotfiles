@@ -24,13 +24,17 @@
 [credential]
   helper = store
 [diff]
-  tool = vimdiff
+  tool = vscode
 [difftool]
   prompt = false
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
 [merge]
-  tool = vimdiff
+  tool = vscode
 [mergetool]
   prompt = false
+[mergetool "vscode"]
+  cmd = code --wait $MERGED
 [delta]
   syntax-theme = Monokai Extended
   line-numbers = true

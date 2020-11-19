@@ -19,7 +19,7 @@
 # --------------------------------------------------------------------------------
 # default  | パイプ経由で候補リストが渡されなかったときのデフォルトコマンド
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-export FZF_DEFAULT_OPTS='--height 70% --reverse --bind=shift-up:preview-up,shift-down:preview-down,shift-left:preview-page-up,shift-right:preview-page-down'
+export FZF_DEFAULT_OPTS='--reverse --bind=shift-up:preview-up,shift-down:preview-down,shift-left:preview-page-up,shift-right:preview-page-down'
 # Ctrl + T | 現在のディレクトリ配下のファイル検索
 export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,header,grid --line-range :500 {} | head -200"'
