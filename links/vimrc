@@ -15,7 +15,10 @@
 "                 ++
 
 call plug#begin('~/.vim/plugged')
-Plug 'tomasr/molokai'
+Plug 'tomasr/molokai'     " カラーテーマ
+Plug 'preservim/nerdtree' |
+  \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+  \ Plug 'ryanoasis/vim-devicons'        " エクスプローラー表示とgitプラグインとアイコン
 call plug#end()
 
 syntax on
@@ -82,3 +85,9 @@ set smartindent   " 改行時に入力された行の末尾に合わせて次の
 "ビープ音すべてを無効にする
 set visualbell t_vb=
 set noerrorbells "エラーメッセージの表示時にビープを鳴らさない
+
+" ショートカット
+map <C-i> :PlugInstall<CR>    # vim-plug install
+map <C-n> :NERDTreeToggle<CR> # nerdtree で開く
+map <C-s> :w<CR>              # 保存
+map <C-w> :q!<CR>             # 保存せず終了
