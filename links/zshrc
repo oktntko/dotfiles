@@ -54,7 +54,6 @@ zplug "Aloxaf/fzf-tab"                                 # fzf で 入力補完を
 zplug "b4b4r07/enhancd", use:init.sh                   # fzf で cd を強化する
 zplug "wfxr/forgit"                                    # fzf で git を強化する
 zplug "bigH/git-fuzzy", as:command, use:bin/git-fuzzy  # fzf で git を強化する
-zplug "oktntko/fit", as:command, use:fit
 
 # --------------------------------------------------------------------------------
 # os差分
