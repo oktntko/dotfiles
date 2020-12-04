@@ -28,10 +28,10 @@
 [difftool]
   prompt = false
 [difftool "vscode"]
-  cmd = code --wait --diff $LOCAL $REMOTE
+  cmd = code -r --wait --diff $LOCAL $REMOTE
 [merge]
   tool = vscode
-	ff = false
+  ff = false
 [mergetool]
   prompt = false
 [mergetool "vscode"]
@@ -39,6 +39,5 @@
 [delta]
   syntax-theme = Monokai Extended
   line-numbers = true
-
 [pull]
-	rebase = true
+  rebase = true
