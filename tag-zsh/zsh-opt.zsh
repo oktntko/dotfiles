@@ -30,3 +30,5 @@ setopt auto_cd
 setopt auto_list
 ### 補完キー（Tab, Ctrl+I) を連打するだけで順に補完候補を自動で補完
 setopt auto_menu
+### コマンド上でコメントを有効にする
+setopt interactivecomments

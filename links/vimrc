@@ -19,6 +19,7 @@ Plug 'tomasr/molokai'     " カラーテーマ
 Plug 'preservim/nerdtree' |
   \ Plug 'Xuyuanp/nerdtree-git-plugin' |
   \ Plug 'ryanoasis/vim-devicons'        " エクスプローラー表示とgitプラグインとアイコン
+Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 syntax on
