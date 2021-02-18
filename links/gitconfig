@@ -41,3 +41,5 @@
   line-numbers = true
 [pull]
   rebase = true
+[init]
+	defaultBranch = main
