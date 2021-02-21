@@ -42,7 +42,11 @@ export NVM_DIR="$HOME/.nvm"
 # zplug
 # --------------------------------------------------------------------------------
 ## init
-export ZPLUG_HOME="/home/linuxbrew/.linuxbrew/opt/zplug"
+if [[ -n $(uname | grep -i 'Darwin') ]] ; then
+  export ZPLUG_HOME="/usr/local/opt/zplug"
+else
+  export ZPLUG_HOME="/home/linuxbrew/.linuxbrew/opt/zplug"
+fi
 source $ZPLUG_HOME/init.zsh
 
 ## plugins
