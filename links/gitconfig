@@ -38,6 +38,7 @@
   cmd = code --wait $MERGED
 [delta]
   syntax-theme = Monokai Extended
+  side-by-side = true
   line-numbers = true
 [pull]
   rebase = true
