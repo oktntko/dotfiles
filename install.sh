@@ -20,43 +20,14 @@ fi
 # package install
 # ------------------------------------------------------------------------------
 # zsh
-if !(type "zsh" > /dev/null 2>&1); then
-  brew install zsh
-  which zsh | sudo tee -a /etc/shells
-fi
+brew install zsh
+which zsh | sudo tee -a /etc/shells
 
-# zplug
-if !(type "zplug" > /dev/null 2>&1); then
-  brew install zplug
-fi
-
-# tree
-if !(type "tree" > /dev/null 2>&1); then
-  brew install tree
-fi
-
-# bat
-if !(type "bat" > /dev/null 2>&1); then
-  brew install bat
-fi
-
-# ripgrep
-if !(type "ripgrep" > /dev/null 2>&1); then
-  brew install ripgrep
-fi
-
-# fzf
-if !(type "fzf" > /dev/null 2>&1); then
-  brew install fzf
-fi
-
-if !(type "git-delta" > /dev/null 2>&1); then
-  brew install git-delta
-fi
+brew install zplug tree bat ripgrep fzf git-delta
 
 # nvm
 if !(type "nvm" > /dev/null 2>&1); then
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 fi
 
 # vim-plug
