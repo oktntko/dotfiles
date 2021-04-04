@@ -20,10 +20,7 @@ fi
 # package install
 # ------------------------------------------------------------------------------
 # zsh
-brew install zsh
-which zsh | sudo tee -a /etc/shells
-
-brew install zplug tree bat ripgrep fzf git-delta
+brew install zplug tree bat ripgrep fzf git-delta exa
 
 # nvm
 if !(type "nvm" > /dev/null 2>&1); then
@@ -38,7 +35,3 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.c
 # ------------------------------------------------------------------------------
 zsh "${ZDOTDIR:-$HOME}"/.dotfiles/link.zsh
 
-# ------------------------------------------------------------------------------
-# sh 変更して終了(パスワード聞かれる)
-# ------------------------------------------------------------------------------
-chsh -s /home/linuxbrew/.linuxbrew/bin/zsh
