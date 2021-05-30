@@ -100,8 +100,17 @@ done
 # --------------------------------------------------------------------------------
 zplug check --verbose || zplug install
 zplug load
+
+# --------------------------------------------------------------------------------
+# pyenv pipenv
+# --------------------------------------------------------------------------------
 export PYENV_ROOT="${HOME}/.pyenv"
 if [ -d "${PYENV_ROOT}" ]; then
     export PATH=${PYENV_ROOT}/bin:$PATH
     eval "$(pyenv init -)"
 fi
+export PIPENV_VENV_IN_PROJECT=true
+
+
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
