@@ -4,7 +4,7 @@
 - ubuntu
 ```
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y build-essential procps curl file git zsh vim
+sudo apt install -y build-essential procps curl file git zlib1g zlib1g-dev libssl-dev zsh vim
 ```
 - homebrew
 ```
@@ -25,6 +25,7 @@ git checkout "$(git describe --abbrev=0 --tags)"
 ```
 git clone git@github.com:oktntko/dotfiles.git ~/.dotfiles
 sh ~/.dotfiles/install.sh
+zsh ~/.dotfiles/link.zsh
 ```
 
 ## 説明書き
