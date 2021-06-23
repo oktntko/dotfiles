@@ -4,17 +4,24 @@
 - ubuntu
 ```
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y build-essential procps curl file git zsh
+sudo apt install -y build-essential procps curl file git zsh vim
+```
+- homebrew
+```
 git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
 mkdir ~/.linuxbrew/bin
 ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin
 eval $(~/.linuxbrew/bin/brew shellenv)
 ```
+- asdf
+```
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+cd ~/.asdf
+git checkout "$(git describe --abbrev=0 --tags)"
+```
 
 # install
 
-``
-## インストール
 ```
 git clone git@github.com:oktntko/dotfiles.git ~/.dotfiles
 sh ~/.dotfiles/install.sh
