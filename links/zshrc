@@ -18,39 +18,28 @@
 # --------------------------------------------------------------------------------
 # init
 # --------------------------------------------------------------------------------
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+## linuxbrew
+eval $($HOME/.linuxbrew/bin/brew shellenv)
+## asdf
+source $HOME/.asdf/asdf.sh
+## Powerlevel10k
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
+## zplug
+if [[ -n $(uname | grep -i 'Darwin') ]] ; then
+  export ZPLUG_HOME="/usr/local/opt/zplug"
+else
+  export ZPLUG_HOME="$HOMEBREW_PREFIX/opt/zplug"
+fi
+source $ZPLUG_HOME/init.zsh
 # --------------------------------------------------------------------------------
 # PATH
 # --------------------------------------------------------------------------------
-export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-
-export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
-# --------------------------------------------------------------------------------
-# nvm
-# --------------------------------------------------------------------------------
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # --------------------------------------------------------------------------------
 # zplug
 # --------------------------------------------------------------------------------
-## init
-if [[ -n $(uname | grep -i 'Darwin') ]] ; then
-  export ZPLUG_HOME="/usr/local/opt/zplug"
-else
-  export ZPLUG_HOME="/home/linuxbrew/.linuxbrew/opt/zplug"
-fi
-source $ZPLUG_HOME/init.zsh
-
 ## plugins
 zplug "romkatv/powerlevel10k", as:theme, depth:1       # プロンプトのカスタマイズ
 zplug "zsh-users/zsh-syntax-highlighting", defer:2     # コマンドに色付けする
@@ -58,8 +47,6 @@ zplug "zsh-users/zsh-autosuggestions"                  # 薄い色で直近の�
 zplug "zsh-users/zsh-completions"                      # 補完を詳細に表示する
 zplug "Aloxaf/fzf-tab"                                 # fzf で 入力補完を強化する
 zplug "b4b4r07/enhancd", use:init.sh                   # fzf で cd を強化する
-zplug "wfxr/forgit"                                    # fzf で git を強化する
-zplug "bigH/git-fuzzy", as:command, use:bin/git-fuzzy  # fzf で git を強化する
 
 # --------------------------------------------------------------------------------
 # os差分
@@ -102,15 +89,7 @@ zplug check --verbose || zplug install
 zplug load
 
 # --------------------------------------------------------------------------------
-# pyenv pipenv
+# asdf
 # --------------------------------------------------------------------------------
-export PYENV_ROOT="${HOME}/.pyenv"
-if [ -d "${PYENV_ROOT}" ]; then
-    export PATH=${PYENV_ROOT}/bin:$PATH
-    eval "$(pyenv init -)"
-fi
+# python
 export PIPENV_VENV_IN_PROJECT=true
-
-
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"

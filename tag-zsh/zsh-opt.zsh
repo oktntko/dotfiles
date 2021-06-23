@@ -3,6 +3,7 @@
 # --------------------------------------------------------------------------------
 
 ## 補完機能を使用する
+fpath=($ASDF_DIR/completions $fpath)
 autoload -Uz compinit && compinit
 autoload -Uz bashcompinit && bashcompinit
 autoload -Uz promptinit && promptinit

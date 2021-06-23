@@ -18,14 +18,14 @@
 # オプション
 # --------------------------------------------------------------------------------
 # default  | パイプ経由で候補リストが渡されなかったときのデフォルトコマンド
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_COMMAND='rg --files --follow --glob "!.git/*"'
 export FZF_DEFAULT_OPTS='--reverse --bind=shift-up:preview-up,shift-down:preview-down,shift-left:preview-page-up,shift-right:preview-page-down'
 # Ctrl + T | 現在のディレクトリ配下のファイル検索
-export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,header,grid --line-range :500 {} | head -200"'
+export FZF_CTRL_T_COMMAND='rg --files --follow --glob "!.git/*"'
+export FZF_CTRL_T_OPTS='--cycle --preview-window=75% --preview="bat --color=always --style=numbers,header,grid --line-range :500 {}"'
 # Alt + C  | 現在のディレクトリ配下のディレクトリ検索
 # export FZF_ALT_C_COMMAND=""
-export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+export FZF_ALT_C_OPTS="--cycle --preview-window=75% --preview='tree -C {}'"
 # Ctrl + R | ヒストリの検索
 # export FZF_CTRL_R_OPTS=""
 
@@ -63,7 +63,7 @@ __fsel() {
     -o -type d -print \
     -o -type l -print 2> /dev/null | cut -b3-"}"
   setopt localoptions pipefail no_aliases 2> /dev/null
-  eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
+  eval "$cmd" | FZF_DEFAULT_OPTS="--reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
     echo -n "${(q)item} "
   done
   local ret=$?
@@ -100,7 +100,7 @@ fzf-cd-widget() {
   local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
     -o -type d -print 2> /dev/null | cut -b3-"}"
   setopt localoptions pipefail no_aliases 2> /dev/null
-  local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m)"
+  local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--reverse $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m)"
   if [[ -z "$dir" ]]; then
     zle redisplay
     return 0
@@ -125,7 +125,7 @@ fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
   selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+    FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
@@ -143,25 +143,3 @@ bindkey '^R' fzf-history-widget
   eval $__fzf_key_bindings_options
   'unset' '__fzf_key_bindings_options'
 }
-
-# --------------------------------------------------------------------------------
-# custom function
-# --------------------------------------------------------------------------------
-### git
-function fzf-switch-local-branch() {
-  local branches branch
-  branches=$(git branch | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
-  branch=$(echo "$branches" | fzf --no-multi --preview "git log --oneline --graph --color=always {}") &&
-  git switch $(echo "$branch")
-}
-
-alias gswl=fzf-switch-local-branch
-
-function fzf-switch-remote-branch() {
-  local branches branch
-  branches=$(git branch -r | sed -e 's/\(^\* \|^  \)//g' | cut -d " " -f 1) &&
-  branch=$(echo "$branches" | fzf --no-multi --preview "git log --oneline --graph --color=always {}") &&
-  git switch -t $(echo "$branch")
-}
-
-alias gswr=fzf-switch-remote-branch
