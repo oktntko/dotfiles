@@ -1,13 +1,19 @@
 # dotfiles
 
-# インストール済みであること
-
+# Requirements
+- ubuntu
 ```
-build-essential curl file git tig vim
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y build-essential procps curl file git zsh
+git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
+mkdir ~/.linuxbrew/bin
+ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin
+eval $(~/.linuxbrew/bin/brew shellenv)
 ```
 
 # install
 
+``
 ## インストール
 ```
 git clone git@github.com:oktntko/dotfiles.git ~/.dotfiles
