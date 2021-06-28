@@ -13,6 +13,9 @@ export LS_COLORS='di=94:ln=36:ex=32:so=46;34:pi=43;34'
 zstyle ':completion:*:default' menu select=1
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
+## エディタ
+export EDITOR=vim
+
 ## ヒストリ設定
 HISTFILE="$HOME/.history"
 HISTSIZE=100000
