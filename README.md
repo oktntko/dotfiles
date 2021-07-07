@@ -1,10 +1,28 @@
 # dotfiles
 
 # Requirements
-- ubuntu
+## ubuntu
 ```
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y build-essential procps curl file git zlib1g zlib1g-dev libssl-dev zsh vim libbz2-dev libreadline-dev libsqlite3-dev
+```
+## arch
+https://qiita.com/Gen-Arch/items/f2921e2b010115aa2495
+https://github.com/yuk7/ArchWSL/releases
+home directory
+```
+pacman-key --init
+pacman-key --populate archlinux
+pacman -Syy archlinux-keyring
+pacman -Syu
+pacman -Sy base-devel
+pacman -Sy git
+--create uesr
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+cd ..
+rm -rf yay
 ```
 - homebrew
 ```
