@@ -24,7 +24,7 @@
 
 [user@PC-NAME]$ sudo pacman -Syu
 
-[user@PC-NAME]$ sudo pacman -Sy base-devel git zsh 
+[user@PC-NAME]$ sudo pacman -Sy base-devel git zsh wget
 ```
 
 ```
