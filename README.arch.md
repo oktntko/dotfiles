@@ -24,12 +24,11 @@
 
 [user@PC-NAME]$ sudo pacman -Syu
 
-[user@PC-NAME]$ sudo pacman -Sy base-devel git zsh wget
+[user@PC-NAME]$ sudo pacman -Sy base-devel git zsh wget curl
 ```
 
 ```
 [user@PC-NAME]$ git clone https://aur.archlinux.org/yay.git
 
 [user@PC-NAME]$ cd yay && makepkg -si --noconfirm && cd .. && rm -rf yay
-
 ```
