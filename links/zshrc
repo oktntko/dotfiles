@@ -18,20 +18,16 @@
 # --------------------------------------------------------------------------------
 # init
 # --------------------------------------------------------------------------------
-## linuxbrew
-eval $($HOME/.linuxbrew/bin/brew shellenv)
-## asdf
-source $HOME/.asdf/asdf.sh
 ## Powerlevel10k
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+## linuxbrew
+eval $($HOME/.linuxbrew/bin/brew shellenv)
+## asdf
+source $HOME/.asdf/asdf.sh
 ## zplug
-if [[ -n $(uname | grep -i 'Darwin') ]] ; then
-  export ZPLUG_HOME="/usr/local/opt/zplug"
-else
-  export ZPLUG_HOME="$HOMEBREW_PREFIX/opt/zplug"
-fi
+export ZPLUG_HOME="$HOME/.zplug"
 source $ZPLUG_HOME/init.zsh
 # --------------------------------------------------------------------------------
 # PATH
