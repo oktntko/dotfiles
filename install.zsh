@@ -2,7 +2,7 @@
 
 if type yay > /dev/null; then
   yay -S tree bat ripgrep fzf git-delta-git exa
-elif type yay > /dev/null; then
+elif type brew > /dev/null; then
   brew install tree bat ripgrep fzf git-delta exa
 fi
 
