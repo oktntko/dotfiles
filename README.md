@@ -23,7 +23,7 @@ git clone https://github.com/zplug/zplug ~/.zplug
 
 # Install
 ```
-git https://github.com/oktntko/dotfiles.git ~/.dotfiles
+git clone https://github.com/oktntko/dotfiles.git ~/.dotfiles
 zsh ~/.dotfiles/install.zsh
 zsh ~/.dotfiles/link.zsh
 ```
