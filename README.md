@@ -12,8 +12,7 @@ eval $(~/.linuxbrew/bin/brew shellenv)
 - asdf
 ```
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf
-cd ~/.asdf
-git checkout "$(git describe --abbrev=0 --tags)"
+cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)" && cd ~/
 ```
 
 - zplug
