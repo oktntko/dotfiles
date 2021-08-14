@@ -89,3 +89,6 @@ zplug load
 # --------------------------------------------------------------------------------
 # python
 export PIPENV_VENV_IN_PROJECT=true
+
+# To customize prompt, run `p10k configure` or edit ~/.dotfiles/tag-zsh/p10k.zsh.
+[[ ! -f ~/.dotfiles/tag-zsh/p10k.zsh ]] || source ~/.dotfiles/tag-zsh/p10k.zsh
