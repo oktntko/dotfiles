@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 if type yay > /dev/null; then
-  yay -S tree bat ripgrep fzf git-delta-git exa
+  yay -S tree bat ripgrep fzf git-delta exa
 elif type brew > /dev/null; then
   brew install tree bat ripgrep fzf git-delta exa
 fi
