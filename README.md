@@ -31,13 +31,23 @@ zsh ~/.dotfiles/link.zsh
 ```
 asdf plugin add nodejs
 asdf plugin add python
+asdf plugin add java
 asdf install
 asdf reshim python
 python --version
-node -v
+node --version
+java --version
+```
 
+- python
+```
 pip install --upgrade pip
 pip install pipenv
 asdf reshim python
 pipenv --version
+```
+
+- node
+```
+npm i -g npm@latest
 ```
