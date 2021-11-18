@@ -24,8 +24,12 @@ SAVEHIST=100000
 setopt hist_ignore_dups
 ### 同じコマンドをヒストリに残さない
 setopt hist_ignore_all_dups
+### 先頭がスペースで始まる場合は履歴に追加しない
+setopt hist_ignore_space
 ### 同時に起動したzshの間でヒストリを共有
 setopt share_history
+### 余分な空白は詰めて記録
+setopt hist_reduce_blanks
 
 ## ディレクトリ関連
 ### cdなしでディレクトリ名を直接指定して移動

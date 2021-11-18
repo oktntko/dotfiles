@@ -22,7 +22,7 @@ export FZF_DEFAULT_COMMAND='rg --files --follow --glob "!.git/*"'
 export FZF_DEFAULT_OPTS='--reverse --bind=shift-up:preview-up,shift-down:preview-down,shift-left:preview-page-up,shift-right:preview-page-down'
 # Ctrl + T | 現在のディレクトリ配下のファイル検索
 export FZF_CTRL_T_COMMAND='rg --files --follow --glob "!.git/*"'
-export FZF_CTRL_T_OPTS='--cycle --preview-window=75% --preview="cat --color=always --style=numbers,header,grid --line-range :500 {}"'
+export FZF_CTRL_T_OPTS='--cycle --preview-window=75% --preview="bat --color=always --style=numbers,header,grid --line-range :500 {}"'
 # Alt + C  | 現在のディレクトリ配下のディレクトリ検索
 # export FZF_ALT_C_COMMAND=""
 export FZF_ALT_C_OPTS="--cycle --preview-window=75% --preview='tree -C {}'"

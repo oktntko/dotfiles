@@ -6,7 +6,7 @@
 # ls
 # --------------------------------------------------------------------------------
 alias ls='exa --color=auto'
-alias ll='exa  --all --long --modified --group --group-directories-first --icons --git --time-style=long-iso'
+alias ll='exa --all --long --modified --group --group-directories-first --icons --git --time-style=long-iso'
 
 # --------------------------------------------------------------------------------
 # grep
