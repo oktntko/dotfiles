@@ -46,3 +46,5 @@
   defaultBranch = main
 [alias]
   lg = log --graph --color=always --pretty='[%C(yellow)%h%Creset]%C(auto)%d%Creset %s %C(dim)@%an(%ad)%Creset' --date=format:'%Y-%m-%d %H:%M:%S'
+[include]
+  path = ~/.gitconfig.local
