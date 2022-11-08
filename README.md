@@ -28,12 +28,20 @@ zsh ~/.dotfiles/link.zsh
 ```
 
 # re login
-- asdf
+- asdf (python 以外)
 ```
 asdf plugin add nodejs && \
-asdf plugin add python && \
 asdf plugin add java && \
 asdf install
+```
+
+- asdf (python)
+```
+brew install openssl && \
+LDFLAGS="-Wl,-rpath,$(brew --prefix openssl)/lib" \
+CPPFLAGS="-I$(brew --prefix openssl)/include" \
+CONFIGURE_OPTS="--with-openssl=$(brew --prefix openssl)" \
+asdf install python
 ```
 
 - node
