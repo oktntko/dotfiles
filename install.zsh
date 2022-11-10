@@ -1,4 +1,4 @@
-c#!/bin/zsh
+#!/bin/zsh
 
 if type yay > /dev/null; then
   yay -S tree bat ripgrep fzf git-delta exa
