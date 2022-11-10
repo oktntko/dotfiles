@@ -1,7 +1,7 @@
 # dotfiles
 
 # Requirements
-- brew
+- brew(ubuntuの場合)
 ```
 git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew && \
 mkdir ~/.linuxbrew/bin && \
@@ -28,20 +28,12 @@ zsh ~/.dotfiles/link.zsh
 ```
 
 # re login
-- asdf (python 以外)
+- asdf
 ```
 asdf plugin add nodejs && \
 asdf plugin add java && \
+asdf plugin add python && \
 asdf install
-```
-
-- asdf (python)
-```
-brew install openssl && \
-LDFLAGS="-Wl,-rpath,$(brew --prefix openssl)/lib" \
-CPPFLAGS="-I$(brew --prefix openssl)/include" \
-CONFIGURE_OPTS="--with-openssl=$(brew --prefix openssl)" \
-asdf install python
 ```
 
 - node
