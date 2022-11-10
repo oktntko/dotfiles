@@ -22,13 +22,17 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
 ## linuxbrew
-eval $($HOME/.linuxbrew/bin/brew shellenv)
+[[ ! -f $HOME/.linuxbrew/bin/brew shellenv ]] || eval $($HOME/.linuxbrew/bin/brew shellenv)
+
 ## asdf
 source $HOME/.asdf/asdf.sh
+
 ## zplug
 export ZPLUG_HOME="$HOME/.zplug"
 source $ZPLUG_HOME/init.zsh
+
 # --------------------------------------------------------------------------------
 # PATH
 # --------------------------------------------------------------------------------
