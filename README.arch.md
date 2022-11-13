@@ -1,7 +1,7 @@
 - [yuk7/ArchWSL](https://github.com/yuk7/ArchWSL/releases)から Arch.zip をダウンロード
-  - C:\Users\user\.arch にダウンロードしたものとする
+  - `C:\Users\user\.arch` にダウンロードしたものとする
 - zipファイルを展開する
-  - C:\Users\user\.arch
+  - `C:\Users\user\.arch`
     - Arch.exe
     - Arch.zip
     - rootfs.tar.gz
