@@ -40,7 +40,7 @@
 
 [user@PC-NAME]$ cd yay && makepkg -si --noconfirm && cd .. && rm -rf yay
 ```
-- Dockerを使うために (Distrod)[https://github.com/nullpo-head/wsl-distrod#option-2-make-your-current-distro-run-systemd]で systemctl を有効にする
+- Dockerを使うために [Distrod](https://github.com/nullpo-head/wsl-distrod#option-2-make-your-current-distro-run-systemd)で systemctl を有効にする
 ```
 curl -L -O "https://raw.githubusercontent.com/nullpo-head/wsl-distrod/main/install.sh"
 chmod +x install.sh
