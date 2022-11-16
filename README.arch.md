@@ -55,3 +55,8 @@ sudo systemctl start docker
 sudo systemctl status docker
 sudo systemctl enable docker
 ```
+
+- ユーザをグループに追加
+```
+sudo usermod -aG docker $USER
+```
