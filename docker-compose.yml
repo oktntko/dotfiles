@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  # Arch Linux
+  archlinux: # https://hub.docker.com/_/archlinux
+    container_name: arch-archlinux
+    build:
+      context: ./.docker/arch/archlinux
+      dockerfile: Dockerfile
+
+  # Debian
+  debian: # https://hub.docker.com/_/debian
+    container_name: debian-debian
+    build:
+      context: ./.docker/debian/debian
+      dockerfile: Dockerfile
+  ubuntu: # https://hub.docker.com/_/ubuntu
+    container_name: debian-ubuntu
+    build:
+      context: ./.docker/debian/ubuntu
+      dockerfile: Dockerfile
+      args:
+        - WORK_USER=${USER}
+        - WORK_GROUP=${USER}
+        - WORK_UID=${UID}
+        - WORK_GID=${GID}
+    tty: true
+
+  # Red Hat
+  almalinux: # https://hub.docker.com/_/almalinux
+    container_name: redhat-almalinux
+    build:
+      context: ./.docker/redhat/almalinux
+      dockerfile: Dockerfile
+  amazonlinux: # https://hub.docker.com/_/amazonlinux
+    container_name: redhat-amazonlinux
+    build:
+      context: ./.docker/redhat/amazonlinux
+      dockerfile: Dockerfile
+  fedora: # https://hub.docker.com/_/fedora
+    container_name: redhat-fedora
+    build:
+      context: ./.docker/redhat/fedora
+      dockerfile: Dockerfile
+  rockylinux: # https://hub.docker.com/_/rockylinux
+    container_name: redhat-rockylinux
+    build:
+      context: ./.docker/redhat/rockylinux
+      dockerfile: Dockerfile
+
+  # openSUSE
+  opensuse: # https://hub.docker.com/r/opensuse/leap
+    container_name: suse-opensuse
+    build:
+      context: ./.docker/suse/opensuse
+      dockerfile: Dockerfile

@@ -1,0 +1,15 @@
+{
+  "name": "dotfiles",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node --loader @swc-node/register/esm dev.ts",
+    "start": "node --loader @swc-node/register/esm start.ts"
+  },
+  "devDependencies": {
+    "@swc-node/register": "^1.6.2",
+    "@types/minimist": "^1.2.2",
+    "typescript": "^5.0.2",
+    "zx": "^7.2.1"
+  }
+}
