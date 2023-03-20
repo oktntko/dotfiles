@@ -68,5 +68,6 @@ java --version
 
 ```
 asdf install
+ll
 mkdir python && cd python && pipenv --python 3.11 && pipenv install textual && pipenv run python -m textual
 ```

@@ -3,14 +3,14 @@ version: "3"
 services:
   # Alpine Linux
   alpinelinux: # https://hub.docker.com/_/alpine
-    container_name: alpine-alpinelinux
+    container_name: dotfiles-alpinelinux
     build:
       context: ./.docker/alpine/alpinelinux
       dockerfile: Dockerfile
 
   # Arch Linux
   archlinux: # https://hub.docker.com/_/archlinux
-    container_name: arch-archlinux
+    container_name: dotfiles-archlinux
     build:
       context: ./
       dockerfile: ./.docker/arch/archlinux/Dockerfile
@@ -31,12 +31,26 @@ services:
 
   # Debian
   debian: # https://hub.docker.com/_/debian
-    container_name: debian-debian
+    container_name: dotfiles-debian
     build:
-      context: ./.docker/debian/debian
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./.docker/debian/debian/Dockerfile
+      args:
+        - WORK_USER=${USER}
+        - WORK_GROUP=${USER}
+        - WORK_UID=${WORK_UID}
+        - WORK_GID=${WORK_GID}
+    volumes:
+      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
+      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
+      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
+      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
+      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
+      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
+      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
+    tty: true
   ubuntu: # https://hub.docker.com/_/ubuntu
-    container_name: debian-ubuntu
+    container_name: dotfiles-ubuntu
     build:
       context: ./
       dockerfile: ./.docker/debian/ubuntu/Dockerfile
@@ -57,29 +71,29 @@ services:
 
   # Red Hat
   almalinux: # https://hub.docker.com/_/almalinux
-    container_name: redhat-almalinux
+    container_name: dotfiles-almalinux
     build:
       context: ./.docker/redhat/almalinux
       dockerfile: Dockerfile
   amazonlinux: # https://hub.docker.com/_/amazonlinux
-    container_name: redhat-amazonlinux
+    container_name: dotfiles-amazonlinux
     build:
       context: ./.docker/redhat/amazonlinux
       dockerfile: Dockerfile
   fedora: # https://hub.docker.com/_/fedora
-    container_name: redhat-fedora
+    container_name: dotfiles-fedora
     build:
       context: ./.docker/redhat/fedora
       dockerfile: Dockerfile
   rockylinux: # https://hub.docker.com/_/rockylinux
-    container_name: redhat-rockylinux
+    container_name: dotfiles-rockylinux
     build:
       context: ./.docker/redhat/rockylinux
       dockerfile: Dockerfile
 
   # openSUSE
   opensuse: # https://hub.docker.com/r/opensuse/leap
-    container_name: suse-opensuse
+    container_name: dotfiles-opensuse
     build:
       context: ./.docker/suse/opensuse
       dockerfile: Dockerfile

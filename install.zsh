@@ -18,7 +18,7 @@ if [[ $distribution == "Arch" ]]; then
   git clone https://aur.archlinux.org/yay.git ./yay && cd ./yay && makepkg -si --noconfirm && cd .. && rm -rf ./yay
   yay -S --noconfirm bat ripgrep fzf exa
 
-elif [[ $distribution == "Ubuntu" ]]; then
+else
   NONINTERACTIVE=1 /bin/bash -c "$(curl --fail --silent --show-error --location https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   brew install bat ripgrep fzf exa
