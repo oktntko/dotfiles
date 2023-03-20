@@ -1,7 +1,5 @@
 import "zx/globals";
 
-$`export UID GID`;
-
 const containers = argv._;
 
 const services = [
@@ -35,4 +33,7 @@ if (
   }
 }
 
-$`docker compose up ${containers} -d --build`;
+const UID = await $`id --user`;
+const GID = await $`id --group`;
+
+await $`WORK_UID=${UID} WORK_GID=${GID} docker compose up ${containers} -d --build`;

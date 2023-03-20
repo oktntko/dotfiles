@@ -29,9 +29,10 @@ services:
       args:
         - WORK_USER=${USER}
         - WORK_GROUP=${USER}
-        - WORK_UID=${UID}
-        - WORK_GID=${GID}
+        - WORK_UID=${WORK_UID}
+        - WORK_GID=${WORK_GID}
     volumes:
+      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
       - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
       - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
       - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions

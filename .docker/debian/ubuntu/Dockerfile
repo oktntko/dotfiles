@@ -51,9 +51,11 @@ RUN sudo apt-get install -y \
     # ディストリビューションの確認のため
     lsb-release \
     # Homebrew on Linux
-    build-essential procps curl file git \
+    build-essential curl file git procps \
     # Basic tools
-    zsh vim wget curl git
+    curl git vim wget zsh \
+    # asdf-python (https://github.com/asdf-community/asdf-python/issues/119)
+    build-essential curl libbz2-dev libffi-dev liblzma-dev libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev libxml2-dev libxmlsec1-dev llvm make tk-dev wget xz-utils zlib1g-dev
 
 COPY ../../../install.zsh ./
 

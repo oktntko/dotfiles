@@ -20,5 +20,15 @@ if [[ $distribution == "Ubuntu" ]]; then
   brew install bat ripgrep fzf exa
 fi
 
+# asdf
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf && \
+  cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)" && cd ~/
+
+source "$HOME/.asdf/asdf.sh"
+
+asdf plugin add nodejs
+asdf plugin add java
+asdf plugin add python
+
 # chsh
 sudo chsh $USER --shell $(which zsh)

@@ -23,6 +23,15 @@ fi
 ## Homebrew on Linux
 [[ ! -f /home/linuxbrew/.linuxbrew/bin/brew ]] || eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
+## asdf
+[[ ! -f "$HOME/.asdf/asdf.sh" ]] || source "$HOME/.asdf/asdf.sh"
+
+## asdf-python
+export PIPENV_VENV_IN_PROJECT=true
+
+## asdf-java
+[[ ! -f ~/.asdf/plugins/java/set-java-home.zsh ]] || source ~/.asdf/plugins/java/set-java-home.zsh
+
 # --------------------------------------------------------------------------------
 # alias
 # --------------------------------------------------------------------------------
