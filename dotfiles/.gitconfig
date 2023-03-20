@@ -1,0 +1,52 @@
+#
+#                        ___
+#               ,--,   ,--.'|_
+#             ,--.'|   |  | :,'
+#    ,----._,.|  |,    :  : ' :
+#   /   /  ' /`--'_  .;__,'  /
+#  |   :     |,' ,'| |  |   |
+#  |   | .\  .'  | | :__,'| :
+#  .   ; ';  ||  | :   '  : |__
+#  '   .   . |'  : |__ |  | '.'|
+#   `---`-'| ||  | '.'|;  :    ;
+#   .'__/\_: |;  :    ;|  ,   /
+#   |   :    :|  ,   /  ---`-'
+#    \   \  /  ---`-'
+#     `--`-'
+#
+
+[user]
+  useConfigOnly = true
+[core]
+  editor = vim -c \"set fenc=utf-8\"
+  pager = delta
+  quotepath = false
+[credential]
+  helper = store
+[diff]
+  tool = vscode
+[difftool]
+  prompt = false
+[difftool "vscode"]
+  cmd = code -r --wait --diff $LOCAL $REMOTE
+[merge]
+  tool = vscode
+  ff = false
+[mergetool]
+  prompt = false
+[mergetool "vscode"]
+  cmd = code --wait $MERGED
+[delta]
+  syntax-theme = Monokai Extended
+  side-by-side = true
+  line-numbers = true
+[pull]
+  rebase = true
+[rebase]
+  rebase-merge = true
+[init]
+  defaultBranch = main
+[alias]
+  lg = log --graph --color=always --pretty='[%C(yellow)%h%Creset]%C(auto)%d%Creset %s %C(dim)@%an(%ad)%Creset' --date=format:'%Y-%m-%d %H:%M:%S'
+[include]
+  path = ~/.gitconfig.local

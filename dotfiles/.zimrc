@@ -1,0 +1,7 @@
+## plugins
+zmodule romkatv/powerlevel10k --use degit                # プロンプトのカスタマイズ
+zmodule zsh-users/zsh-completions --fpath src            # 補完を詳細に表示する
+zmodule zsh-users/zsh-syntax-highlighting                # コマンドに色付けする
+zmodule zsh-users/zsh-autosuggestions                    # 薄い色で直近の履歴を表示する
+zmodule Aloxaf/fzf-tab                                   # fzf で 入力補完を強化する
+zmodule b4b4r07/enhancd --source init.sh                 # fzf で cd を強化する

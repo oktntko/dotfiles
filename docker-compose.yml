@@ -1,6 +1,13 @@
 version: "3"
 
 services:
+  # Alpine Linux
+  alpinelinux: # https://hub.docker.com/_/alpine
+    container_name: alpine-alpinelinux
+    build:
+      context: ./.docker/alpine/alpinelinux
+      dockerfile: Dockerfile
+
   # Arch Linux
   archlinux: # https://hub.docker.com/_/archlinux
     container_name: arch-archlinux
@@ -17,13 +24,20 @@ services:
   ubuntu: # https://hub.docker.com/_/ubuntu
     container_name: debian-ubuntu
     build:
-      context: ./.docker/debian/ubuntu
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./.docker/debian/ubuntu/Dockerfile
       args:
         - WORK_USER=${USER}
         - WORK_GROUP=${USER}
         - WORK_UID=${UID}
         - WORK_GID=${GID}
+    volumes:
+      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
+      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
+      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
+      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
+      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
+      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
     tty: true
 
   # Red Hat

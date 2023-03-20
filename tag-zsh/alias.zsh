@@ -14,7 +14,7 @@ alias ll='exa --all --long --modified --group --group-directories-first --icons 
 alias grep='rg'
 
 # --------------------------------------------------------------------------------
-# grep
+# cat
 # --------------------------------------------------------------------------------
 alias cat='bat'
 
@@ -24,4 +24,3 @@ alias cat='bat'
 # --------------------------------------------------------------------------------
 alias dcs='docker-compose start'
 alias dcp='docker-compose stop'
-

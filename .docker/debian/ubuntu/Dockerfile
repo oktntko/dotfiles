@@ -29,7 +29,9 @@ FROM ubuntu:22.04
 
 RUN apt-get update && apt-get upgrade
 
-RUN apt-get install sudo
+RUN apt-get install sudo \
+    # タイムゾーンの設定のため
+    tzdata && ln --symbolic --force /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 ARG WORK_USER
 ARG WORK_GROUP
@@ -43,3 +45,16 @@ RUN groupadd --gid $WORK_GID $WORK_GROUP \
 
 USER $WORK_USER
 WORKDIR /home/$WORK_USER/
+
+# How to setup
+RUN sudo apt-get install -y \
+    # ディストリビューションの確認のため
+    lsb-release \
+    # Homebrew on Linux
+    build-essential procps curl file git \
+    # Basic tools
+    zsh vim wget curl git
+
+COPY ../../../install.zsh ./
+
+RUN zsh install.zsh && rm install.zsh
