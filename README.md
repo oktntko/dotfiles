@@ -1,7 +1,9 @@
 # dotfiles
 
 # Requirements
-- brew(ubuntuの場合)
+
+- brew(ubuntu の場合)
+
 ```
 git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew && \
 mkdir ~/.linuxbrew/bin && \
@@ -10,17 +12,20 @@ eval $(~/.linuxbrew/bin/brew shellenv)
 ```
 
 - asdf
+
 ```
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf && \
 cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)" && cd ~/
 ```
 
 - zplug
+
 ```
 git clone https://github.com/zplug/zplug ~/.zplug
 ```
 
 # Install
+
 ```
 git clone https://github.com/oktntko/dotfiles.git ~/.dotfiles && \
 zsh ~/.dotfiles/install.zsh && \
@@ -28,7 +33,9 @@ zsh ~/.dotfiles/link.zsh
 ```
 
 # re login
+
 - asdf
+
 ```
 asdf plugin add nodejs && \
 asdf plugin add java && \
@@ -37,11 +44,13 @@ asdf install
 ```
 
 - node
+
 ```
 npm i -g npm@latest
 ```
 
 - python
+
 ```
 pip install --upgrade pip && \
 pip install pipenv && \
@@ -50,8 +59,14 @@ pipenv --version
 ```
 
 - version
+
 ```
 python --version && \
 node --version && \
 java --version
+```
+
+```
+asdf install
+mkdir python && cd python && pipenv --python 3.11 && pipenv install textual && pipenv run python -m textual
 ```
