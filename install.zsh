@@ -6,13 +6,12 @@ if [[ -z ${ZSH_VERSION} ]]; then
 fi
 
 if ! type lsb_release > /dev/null; then
-  echo 'You must install lsb-release' >&2
-  exit 1
+  distribution="distribution"
+
+else
+  # https://www.cyberciti.biz/faq/find-linux-distribution-name-version-number/
+  distribution=`lsb_release --id --short`
 fi
-
-
-# https://www.cyberciti.biz/faq/find-linux-distribution-name-version-number/
-distribution=`lsb_release --id --short`
 
 if [[ $distribution == "Arch" ]]; then
   git clone https://aur.archlinux.org/yay.git ./yay && cd ./yay && makepkg -si --noconfirm && cd .. && rm -rf ./yay

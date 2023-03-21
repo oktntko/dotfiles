@@ -1,4 +1,4 @@
-FROM fedora:37
+FROM almalinux:9.1
 
 RUN dnf update -y
 
@@ -6,7 +6,9 @@ RUN dnf install -y sudo tzdata \
     # タイムゾーンの設定のため
     && ln --symbolic --force /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
     # ロケールの設定のため
-    && dnf install -y langpacks-en
+    && dnf install -y langpacks-en \
+    # chsh のため (https://forums.centos.org/viewtopic.php?t=73864)
+    util-linux-user
 
 ENV LANG en_US.UTF-8
 
@@ -24,11 +26,9 @@ USER $WORK_USER
 WORKDIR /home/$WORK_USER/
 
 # How to setup
-RUN sudo dnf install -y \
-    # ディストリビューションの確認のため
-    redhat-lsb \
-    # Homebrew on Linux
-    && sudo dnf groupinstall -y 'Development Tools' && sudo dnf install -y procps-ng curl file git \
+# Homebrew on Linux
+# https://bugs.launchpad.net/tripleo/+bug/1953156 (The curl installation conflicts with curl-minimal package.)
+RUN sudo dnf groupinstall -y 'Development Tools' && sudo dnf install -y --allowerasing procps-ng curl file git \
     # Basic tools
     curl git vim wget zsh
 

@@ -73,8 +73,22 @@ services:
   almalinux: # https://hub.docker.com/_/almalinux
     container_name: dotfiles-almalinux
     build:
-      context: ./.docker/redhat/almalinux
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./.docker/redhat/almalinux/Dockerfile
+      args:
+        - WORK_USER=${USER}
+        - WORK_GROUP=${USER}
+        - WORK_UID=${WORK_UID}
+        - WORK_GID=${WORK_GID}
+    volumes:
+      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
+      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
+      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
+      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
+      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
+      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
+      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
+    tty: true
   amazonlinux: # https://hub.docker.com/_/amazonlinux
     container_name: dotfiles-amazonlinux
     build:
