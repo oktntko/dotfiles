@@ -29,9 +29,13 @@ FROM ubuntu:22.04
 
 RUN apt-get update && apt-get upgrade
 
-RUN apt-get install -y sudo \
+RUN apt-get install -y sudo tzdata locales \
     # タイムゾーンの設定のため
-    tzdata && ln --symbolic --force /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+    && ln --symbolic --force /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+    # ロケールの設定のため
+    && sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen && locale-gen
+
+ENV LANG en_US.UTF-8
 
 ARG WORK_USER
 ARG WORK_GROUP
