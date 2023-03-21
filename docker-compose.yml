@@ -83,8 +83,22 @@ services:
   fedora: # https://hub.docker.com/_/fedora
     container_name: dotfiles-fedora
     build:
-      context: ./.docker/redhat/fedora
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./.docker/redhat/fedora/Dockerfile
+      args:
+        - WORK_USER=${USER}
+        - WORK_GROUP=${USER}
+        - WORK_UID=${WORK_UID}
+        - WORK_GID=${WORK_GID}
+    volumes:
+      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
+      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
+      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
+      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
+      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
+      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
+      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
+    tty: true
   rockylinux: # https://hub.docker.com/_/rockylinux
     container_name: dotfiles-rockylinux
     build:
