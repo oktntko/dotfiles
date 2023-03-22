@@ -31,7 +31,3 @@ RUN sudo pacman -S --noconfirm \
     base-devel curl file git procps \
     # Basic tools
     curl git vim wget zsh
-
-COPY ../../../install.zsh ./
-
-RUN zsh install.zsh && rm install.zsh

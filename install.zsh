@@ -44,3 +44,25 @@ asdf plugin add python
 
 # chsh
 sudo chsh $USER --shell $(which zsh)
+
+# dotfiles
+for DOTFILE in \
+  ".default-python-packages" \
+  ".gitconfig" \
+  ".p10k.zsh" \
+  ".tool-versions" \
+  ".vimrc" \
+  ".zimrc" \
+  ".zshrc"
+do
+  curl -fsSL --create-dirs -o ${HOME}/${DOTFILE} \
+      https://raw.githubusercontent.com/oktntko/dotfiles/main/dotfiles/${DOTFILE}
+done
+
+# modules
+for MODULE in \
+  "fzf.init.zsh"
+do
+  curl -fsSL --create-dirs -o ${HOME}/.dotfiles/modules/${MODULE} \
+      https://raw.githubusercontent.com/oktntko/dotfiles/main/modules/${MODULE}
+done

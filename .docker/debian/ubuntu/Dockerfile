@@ -61,7 +61,3 @@ RUN sudo apt-get install -y \
 
 # asdf-python (https://github.com/asdf-community/asdf-python/issues/119)
 RUN sudo apt-get install -y build-essential curl libbz2-dev libffi-dev liblzma-dev libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev libxml2-dev libxmlsec1-dev llvm make tk-dev wget xz-utils zlib1g-dev
-
-COPY ../../../install.zsh ./
-
-RUN zsh install.zsh && rm install.zsh

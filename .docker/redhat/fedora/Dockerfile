@@ -34,7 +34,3 @@ RUN sudo dnf install -y \
 
 # asdf-python
 RUN sudo dnf install -y openssl-devel bzip2-devel ncurses-devel libffi-devel readline-devel sqlite-devel
-
-COPY ../../../install.zsh ./
-
-RUN zsh install.zsh && rm install.zsh
