@@ -3,8 +3,8 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "node --loader @swc-node/register/esm dev.ts",
-    "start": "node --loader @swc-node/register/esm start.ts"
+    "dev": "node --loader @swc-node/register/esm scripts/dev.ts",
+    "start": "node --loader @swc-node/register/esm scripts/start.ts"
   },
   "devDependencies": {
     "@swc-node/register": "^1.6.2",

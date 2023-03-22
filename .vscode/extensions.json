@@ -3,6 +3,7 @@
     "ms-azuretools.vscode-docker",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "XadillaX.viml"
+    "XadillaX.viml",
+    "aaron-bond.better-comments"
   ]
 }

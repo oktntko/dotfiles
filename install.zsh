@@ -5,29 +5,38 @@ if [[ -z ${ZSH_VERSION} ]]; then
   exit 1
 fi
 
-if ! type lsb_release > /dev/null; then
-  distribution="distribution"
-
-else
+if type lsb_release > /dev/null; then
   # https://www.cyberciti.biz/faq/find-linux-distribution-name-version-number/
   distribution=`lsb_release --id --short`
+
+else
+  distribution="distribution"
+
 fi
 
 if [[ $distribution == "Arch" ]]; then
-  git clone https://aur.archlinux.org/yay.git ./yay && cd ./yay && makepkg -si --noconfirm && cd .. && rm -rf ./yay
+  if ! type yay > /dev/null; then
+    git clone https://aur.archlinux.org/yay.git ./yay && cd ./yay && makepkg -si --noconfirm && cd .. && rm -rf ./yay
+  fi
+
   yay -S --noconfirm bat ripgrep fzf exa
 
 else
-  NONINTERACTIVE=1 /bin/bash -c "$(curl --fail --silent --show-error --location https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  if ! type brew > /dev/null; then
+    NONINTERACTIVE=1 /bin/bash -c "$(curl --fail --silent --show-error --location https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  fi
+
   brew install bat ripgrep fzf exa
 fi
 
 # asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf && \
-  cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)" && cd ~/
+if ! type asdf > /dev/null; then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf && \
+    cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)" && cd ~/
 
-source "$HOME/.asdf/asdf.sh"
+  source "$HOME/.asdf/asdf.sh"
+fi
 
 asdf plugin add nodejs
 asdf plugin add java
