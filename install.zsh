@@ -19,7 +19,10 @@ if [[ $distribution == "Arch" ]]; then
     git clone https://aur.archlinux.org/yay.git ./yay && cd ./yay && makepkg -si --noconfirm && cd .. && rm -rf ./yay
   fi
 
-  yay -S --noconfirm bat ripgrep fzf exa
+  yay -S --noconfirm bat ripgrep fzf exa git-delta
+
+elif [[ $distribution == "Alpine" ]]; then
+  sudo apk add bat ripgrep fzf exa delta
 
 else
   if ! type brew > /dev/null; then
@@ -27,23 +30,8 @@ else
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
-  brew install bat ripgrep fzf exa
+  brew install bat ripgrep fzf exa git-delta
 fi
-
-# asdf
-if ! type asdf > /dev/null; then
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf && \
-    cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)" && cd ~/
-
-  source "$HOME/.asdf/asdf.sh"
-fi
-
-asdf plugin add nodejs
-asdf plugin add java
-asdf plugin add python
-
-# chsh
-sudo chsh $USER --shell $(which zsh)
 
 # dotfiles
 for DOTFILE in \
@@ -67,3 +55,26 @@ do
   curl -fsSL --create-dirs -o ${HOME}/.dotfiles/modules/${MODULE} \
       https://raw.githubusercontent.com/oktntko/dotfiles/main/modules/${MODULE}
 done
+
+# asdf
+if ! type asdf > /dev/null; then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf && \
+    cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)" && cd ~/
+
+  source "$HOME/.asdf/asdf.sh"
+fi
+
+for PLUGIN in \
+  "nodejs" \
+  "java" \
+  "python"
+do
+  asdf plugin add ${PLUGIN}
+done
+
+asdf install
+
+if [[ $distribution != "Alpine" ]]; then
+  # chsh
+  sudo chsh --shell $(which zsh) $(whoami)
+fi

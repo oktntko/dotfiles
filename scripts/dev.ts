@@ -1,6 +1,7 @@
 import "zx/globals";
 
 const SERVICES = [
+  "alpinelinux",
   "archlinux",
   "debian",
   "kalilinux",
@@ -9,7 +10,6 @@ const SERVICES = [
   "amazonlinux",
   "fedora",
   "rockylinux",
-  "opensuse",
 ] as const;
 
 async function choiceContainer(

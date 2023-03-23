@@ -1,12 +1,20 @@
 version: "3"
 
 services:
+  # https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg
+
   # Alpine Linux
   alpinelinux: # https://hub.docker.com/_/alpine
     container_name: dotfiles-alpinelinux
     build:
-      context: ./.docker/alpine/alpinelinux
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./.docker/alpine/alpinelinux/Dockerfile
+      args:
+        - WORK_USER=${USER}
+        - WORK_GROUP=${USER}
+        - WORK_UID=${WORK_UID}
+        - WORK_GID=${WORK_GID}
+    tty: true
 
   # Arch Linux
   archlinux: # https://hub.docker.com/_/archlinux
@@ -101,10 +109,3 @@ services:
         - WORK_UID=${WORK_UID}
         - WORK_GID=${WORK_GID}
     tty: true
-
-  # openSUSE
-  opensuse: # https://hub.docker.com/r/opensuse/leap
-    container_name: dotfiles-opensuse
-    build:
-      context: ./.docker/suse/opensuse
-      dockerfile: Dockerfile
