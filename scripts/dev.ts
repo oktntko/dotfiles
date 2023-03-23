@@ -1,39 +1,38 @@
 import "zx/globals";
 
-const containers = argv._;
-
-const services = [
+const SERVICES = [
   "archlinux",
   "debian",
+  "kalilinux",
   "ubuntu",
   "almalinux",
   "amazonlinux",
   "fedora",
   "rockylinux",
   "opensuse",
-];
+] as const;
 
-if (
-  !containers.length ||
-  !containers.some((container) =>
-    services.some((service) => service === container),
-  )
-) {
-  containers.length = 0;
+async function choiceContainer(
+  container: string | undefined,
+): Promise<typeof SERVICES[number]> {
+  if (SERVICES.some((service) => service === container)) {
+    return container as typeof SERVICES[number];
+  }
 
   for (;;) {
-    const container = await question(`Choice container [${services}] ❯ `, {
-      choices: services,
-    });
+    const container = await question(`Choice container [${SERVICES}] ❯ `);
 
-    if (services.some((service) => service === container)) {
-      containers.push(container);
-      break;
+    if (SERVICES.some((service) => service === container)) {
+      return container as typeof SERVICES[number];
     }
   }
 }
 
+const container = await choiceContainer(argv._[0]);
+
 const UID = await $`id --user`;
 const GID = await $`id --group`;
 
-await $`WORK_UID=${UID} WORK_GID=${GID} docker compose up ${containers} -d --build`;
+await $`WORK_UID=${UID} WORK_GID=${GID} docker compose up ${container} --detach --build`;
+
+await $`docker exec --interactive --tty dotfiles-${container} /bin/bash`;

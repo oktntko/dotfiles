@@ -47,6 +47,7 @@ sudo chsh $USER --shell $(which zsh)
 
 # dotfiles
 for DOTFILE in \
+  ".default-npm-packages" \
   ".default-python-packages" \
   ".gitconfig" \
   ".p10k.zsh" \

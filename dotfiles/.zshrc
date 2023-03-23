@@ -120,7 +120,7 @@
 
   #* cat
   if (( ${+commands[bat]} )); then
-    alias cat='bat --pager="more -f"'
+    alias cat='bat --pager="less -RFX"'
   fi
   #/ alias ---------------------------------------------------------------------
 

@@ -19,14 +19,6 @@ services:
         - WORK_GROUP=${USER}
         - WORK_UID=${WORK_UID}
         - WORK_GID=${WORK_GID}
-    volumes:
-      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
-      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
-      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
-      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
-      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
-      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
-      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
     tty: true
 
   # Debian
@@ -40,14 +32,17 @@ services:
         - WORK_GROUP=${USER}
         - WORK_UID=${WORK_UID}
         - WORK_GID=${WORK_GID}
-    volumes:
-      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
-      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
-      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
-      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
-      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
-      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
-      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
+    tty: true
+  kalilinux: # https://hub.docker.com/r/kalilinux/kali-rolling
+    container_name: dotfiles-kalilinux
+    build:
+      context: ./
+      dockerfile: ./.docker/debian/kalilinux/Dockerfile
+      args:
+        - WORK_USER=${USER}
+        - WORK_GROUP=${USER}
+        - WORK_UID=${WORK_UID}
+        - WORK_GID=${WORK_GID}
     tty: true
   ubuntu: # https://hub.docker.com/_/ubuntu
     container_name: dotfiles-ubuntu
@@ -59,14 +54,6 @@ services:
         - WORK_GROUP=${USER}
         - WORK_UID=${WORK_UID}
         - WORK_GID=${WORK_GID}
-    volumes:
-      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
-      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
-      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
-      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
-      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
-      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
-      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
     tty: true
 
   # Red Hat
@@ -80,14 +67,6 @@ services:
         - WORK_GROUP=${USER}
         - WORK_UID=${WORK_UID}
         - WORK_GID=${WORK_GID}
-    volumes:
-      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
-      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
-      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
-      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
-      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
-      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
-      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
     tty: true
   amazonlinux: # https://hub.docker.com/_/amazonlinux
     container_name: dotfiles-amazonlinux
@@ -99,14 +78,6 @@ services:
         - WORK_GROUP=${USER}
         - WORK_UID=${WORK_UID}
         - WORK_GID=${WORK_GID}
-    volumes:
-      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
-      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
-      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
-      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
-      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
-      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
-      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
     tty: true
   fedora: # https://hub.docker.com/_/fedora
     container_name: dotfiles-fedora
@@ -118,14 +89,6 @@ services:
         - WORK_GROUP=${USER}
         - WORK_UID=${WORK_UID}
         - WORK_GID=${WORK_GID}
-    volumes:
-      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
-      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
-      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
-      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
-      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
-      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
-      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
     tty: true
   rockylinux: # https://hub.docker.com/_/rockylinux
     container_name: dotfiles-rockylinux
@@ -137,14 +100,6 @@ services:
         - WORK_GROUP=${USER}
         - WORK_UID=${WORK_UID}
         - WORK_GID=${WORK_GID}
-    volumes:
-      - ./dotfiles/.default-python-packages:/home/${USER}/.default-python-packages
-      - ./dotfiles/.gitconfig:/home/${USER}/.gitconfig
-      - ./dotfiles/.p10k.zsh:/home/${USER}/.p10k.zsh
-      - ./dotfiles/.tool-versions:/home/${USER}/.tool-versions
-      - ./dotfiles/.vimrc:/home/${USER}/.vimrc
-      - ./dotfiles/.zimrc:/home/${USER}/.zimrc
-      - ./dotfiles/.zshrc:/home/${USER}/.zshrc
     tty: true
 
   # openSUSE
