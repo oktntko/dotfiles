@@ -32,7 +32,7 @@ fi
 # Alt + C  | 現在のディレクトリ配下のディレクトリ検索
 if (( ${+commands[bat]} )); then
   # export FZF_ALT_C_COMMAND=""
-  export FZF_ALT_C_OPTS="--cycle --preview-window=75% --preview='exa --tree --color=auto --group-directories-first --icons --git --level=3{}'"
+  export FZF_ALT_C_OPTS="--cycle --preview-window=75% --preview='exa --tree --color=auto --group-directories-first --icons --git --level=3 {}'"
 fi
 
 # Ctrl + R | ヒストリの検索
