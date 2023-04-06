@@ -128,8 +128,8 @@
 
 ## Modules ---------------------------------------------------------------------
   #* enhancd
-  export ENHANCD_DISABLE_DOT=1
-  export ENHANCD_DISABLE_HOME=1
+  export ENHANCD_ENABLE_DOUBLE_DOT=false
+  export ENHANCD_ENABLE_HOME=false
 
   #* modules
   for file in $HOME/.dotfiles/modules/*.zsh(.N); do
