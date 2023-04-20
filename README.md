@@ -47,6 +47,7 @@ For example on Ubuntu, see [Ubuntu](.docker/debian/ubuntu/Dockerfile) `# How to 
     - [Java](https://github.com/halcyon/asdf-java)
     - [Python](https://github.com/asdf-community/asdf-python)
     - [Nodejs](https://github.com/asdf-vm/asdf-nodejs)
+    - [direnv](https://github.com/asdf-community/asdf-direnv)
 - Editor: **[vim](https://github.com/vim/vim)**
   - Plugin Manager
     - [Jetpack.vim](https://gist.asciidoctor.org/?github-tani/vim-jetpack/main//README.adoc&source-highlighter=highlightjs)
