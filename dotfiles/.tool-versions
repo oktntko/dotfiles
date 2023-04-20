@@ -1,3 +1,4 @@
 nodejs 18.15.0
 python 3.11.2
 java openjdk-17
+direnv 2.32.2
