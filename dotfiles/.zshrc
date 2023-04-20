@@ -44,6 +44,12 @@
     export PIPENV_VENV_IN_PROJECT=true
     #* asdf-java
     [[ ! -f ~/.asdf/plugins/java/set-java-home.zsh ]] || source ~/.asdf/plugins/java/set-java-home.zsh
+    #* asdf-direnv
+    if [[ -e "$HOME/.asdf/installs/direnv" ]]; then
+      if (( ! ${+DIRENV_LOG_FORMAT} )) export DIRENV_LOG_FORMAT=$'\E[1mdirenv: %s\E[0m'
+      alias direnv='asdf exec direnv'
+      eval "$(direnv hook zsh)"
+    fi
 
 #/ Load ------------------------------------------------------------------------
 
