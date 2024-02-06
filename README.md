@@ -38,7 +38,7 @@ For example on Ubuntu, see [Ubuntu](.docker/debian/ubuntu/Dockerfile) `# How to 
       - `Ctrl + R` : xxx
       - `Ctrl + T` : xxx
       - `Alt  + C` : xxx
-  - [exa](https://the.exa.website/)
+  - [eza](https://eza.rocks/)
     - A modern replacement for ls.
   - [delta](https://dandavison.github.io/delta/)
     - A syntax-highlighting pager for git, diff, and grep output

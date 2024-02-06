@@ -19,10 +19,10 @@ if [[ $distribution == "Arch" ]]; then
     git clone https://aur.archlinux.org/yay.git ./yay && cd ./yay && makepkg -si --noconfirm && cd .. && rm -rf ./yay
   fi
 
-  yay -S --noconfirm bat ripgrep fzf exa git-delta
+  yay -S --noconfirm bat ripgrep fzf eza git-delta
 
 elif [[ $distribution == "Alpine" ]]; then
-  sudo apk add bat ripgrep fzf exa delta
+  sudo apk add bat ripgrep fzf eza delta
 
 else
   if ! type brew > /dev/null; then
@@ -30,7 +30,7 @@ else
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
-  brew install bat ripgrep fzf exa git-delta
+  brew install bat ripgrep fzf eza git-delta
 fi
 
 # dotfiles

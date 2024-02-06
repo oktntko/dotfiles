@@ -114,9 +114,9 @@
 
   ## alias ---------------------------------------------------------------------
   #* ls
-  if (( ${+commands[exa]} )); then
-    alias ls='exa --color=auto'
-    alias ll='exa --all --long --modified --group --group-directories-first --icons --git --time-style=long-iso'
+  if (( ${+commands[eza]} )); then
+    alias ls='eza --color=auto'
+    alias ll='eza --all --long --modified --group --group-directories-first --icons --git --time-style=long-iso'
   fi
 
   #* grep
