@@ -2,3 +2,4 @@ nodejs 20.10.0
 python 3.12.1
 java openjdk-21
 direnv 2.33.0
+bun 1.0.26
