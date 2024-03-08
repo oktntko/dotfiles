@@ -68,7 +68,8 @@ for PLUGIN in \
   "nodejs" \
   "java" \
   "python" \
-  "direnv"
+  "direnv" \
+  "bun"
 do
   asdf plugin add ${PLUGIN}
 done
