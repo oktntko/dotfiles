@@ -30,7 +30,7 @@ WORKDIR /home/$WORK_USER/
 # https://bugs.launchpad.net/tripleo/+bug/1953156 (The curl installation conflicts with curl-minimal package.)
 RUN sudo dnf groupinstall -y 'Development Tools' && sudo dnf install -y --allowerasing procps-ng curl file git \
     # Basic tools
-    curl git vim wget zsh
+    curl wget git zip unzip vim zsh
 
 # asdf-python
 RUN sudo dnf install -y openssl-devel bzip2-devel ncurses-devel libffi-devel readline-devel sqlite-devel
