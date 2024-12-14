@@ -26,7 +26,7 @@ RUN sudo apk add \
     # Homebrew on Linux
     build-base curl file git procps \
     # Basic tools
-    curl git vim wget zsh
+    curl wget git zip unzip vim zsh
 
 # asdf-python (https://github.com/asdf-community/asdf-python/issues/119)
 RUN sudo apk add openssl-dev bzip2-dev ncurses-dev libffi-dev readline-dev sqlite-dev tk-dev xz-dev
