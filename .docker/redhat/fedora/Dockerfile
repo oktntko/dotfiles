@@ -30,7 +30,7 @@ RUN sudo dnf install -y \
     # Homebrew on Linux
     && sudo dnf groupinstall -y 'Development Tools' && sudo dnf install -y procps-ng curl file git \
     # Basic tools
-    curl git vim wget zsh
+    curl wget git zip unzip vim zsh
 
 # asdf-python
 RUN sudo dnf install -y openssl-devel bzip2-devel ncurses-devel libffi-devel readline-devel sqlite-devel
