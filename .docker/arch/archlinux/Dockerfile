@@ -30,4 +30,4 @@ RUN sudo pacman -S --noconfirm \
     # Homebrew on Linux
     base-devel curl file git procps \
     # Basic tools
-    curl git vim wget zsh
+    curl wget git zip unzip vim zsh
