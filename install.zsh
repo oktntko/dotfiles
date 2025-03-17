@@ -19,10 +19,10 @@ if [[ $distribution == "Arch" ]]; then
     git clone https://aur.archlinux.org/yay.git ./yay && cd ./yay && makepkg -si --noconfirm && cd .. && rm -rf ./yay
   fi
 
-  yay -S --noconfirm bat ripgrep fzf eza git-delta
+  yay -S --noconfirm bat ripgrep fzf eza git-delta mise
 
 elif [[ $distribution == "Alpine" ]]; then
-  sudo apk add bat ripgrep fzf eza delta
+  sudo apk add bat ripgrep fzf eza delta mise
 
 else
   if ! type brew > /dev/null; then
@@ -30,7 +30,7 @@ else
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
-  brew install bat ripgrep fzf eza git-delta
+  brew install bat ripgrep fzf eza git-delta mise
 fi
 
 # dotfiles
@@ -42,39 +42,17 @@ for DOTFILE in \
   ".tool-versions" \
   ".vimrc" \
   ".zimrc" \
-  ".zshrc"
+  ".zprofile" \
+  ".zshrc" \
+  ".config/mise/config.toml" \
+  ".dotfiles/modules/fzf.init.zsh"
 do
   curl -fsSL --create-dirs -o ${HOME}/${DOTFILE} \
       https://raw.githubusercontent.com/oktntko/dotfiles/main/dotfiles/${DOTFILE}
 done
 
-# modules
-for MODULE in \
-  "fzf.init.zsh"
-do
-  curl -fsSL --create-dirs -o ${HOME}/.dotfiles/modules/${MODULE} \
-      https://raw.githubusercontent.com/oktntko/dotfiles/main/modules/${MODULE}
-done
-
-# asdf
-if ! type asdf > /dev/null; then
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf && \
-    cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)" && cd ~/
-
-  source "$HOME/.asdf/asdf.sh"
-fi
-
-for PLUGIN in \
-  "nodejs" \
-  "java" \
-  "python" \
-  "direnv" \
-  "bun"
-do
-  asdf plugin add ${PLUGIN}
-done
-
-asdf install
+# mise
+mise install
 
 if [[ $distribution != "Alpine" ]]; then
   # chsh

@@ -38,18 +38,8 @@
     [[ ! -f ${BREW_DIR}/bin/brew ]] || eval $($BREW_DIR/bin/brew shellenv)
   done
 
-  #* asdf
-  [[ ! -f "$HOME/.asdf/asdf.sh" ]] || source "$HOME/.asdf/asdf.sh"
-    #* asdf-python
-    export PIPENV_VENV_IN_PROJECT=true
-    #* asdf-java
-    [[ ! -f ~/.asdf/plugins/java/set-java-home.zsh ]] || source ~/.asdf/plugins/java/set-java-home.zsh
-    #* asdf-direnv
-    if [[ -e "$HOME/.asdf/installs/direnv" ]]; then
-      if (( ! ${+DIRENV_LOG_FORMAT} )) export DIRENV_LOG_FORMAT=$'\E[1mdirenv: %s\E[0m'
-      alias direnv='asdf exec direnv'
-      eval "$(direnv hook zsh)"
-    fi
+  #* mise
+  eval "$(mise activate zsh)"
 
 #/ Load ------------------------------------------------------------------------
 
@@ -57,7 +47,6 @@
 
   ## Environment ---------------------------------------------------------------
   #* Completion
-  fpath=($ASDF_DIR/completions $fpath)
   autoload -Uz compinit && compinit
   autoload -Uz bashcompinit && bashcompinit
   autoload -Uz promptinit && promptinit
