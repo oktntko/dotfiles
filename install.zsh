@@ -39,7 +39,6 @@ for DOTFILE in \
   ".default-python-packages" \
   ".gitconfig" \
   ".p10k.zsh" \
-  ".tool-versions" \
   ".vimrc" \
   ".zimrc" \
   ".zprofile" \
