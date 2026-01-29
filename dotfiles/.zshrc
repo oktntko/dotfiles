@@ -88,6 +88,8 @@
   zstyle ':zle:*' word-chars ' _-./;:={}[]()<>'
   zstyle ':zle:*' word-style unspecified
 
+  bindkey -e # emacs モード固定
+
   bindkey "^[[H"    beginning-of-line   # Home
   bindkey "^[[F"    end-of-line         # End
   bindkey "^[[3~"   delete-char         # Delete
@@ -160,4 +162,3 @@
   #* Powerlevel10k
   # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
   [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
