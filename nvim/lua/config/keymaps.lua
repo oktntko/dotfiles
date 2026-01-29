@@ -8,3 +8,8 @@ local map = vim.keymap.set
 map("n", "<C-t>", function()
   require("config.myfunction").toggle_explorer()
 end, { desc = "Toggle Snacks Explorer" })
+
+-- Add custom keymap to toggle Snacks Terminal
+map({ "n", "t" }, "<C-g>", function()
+  Snacks.terminal()
+end, { desc = "Terminal (Root Dir)" })
