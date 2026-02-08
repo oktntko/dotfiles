@@ -89,3 +89,8 @@ end, { desc = "Toggle Snacks Explorer" })
 map({ "n", "t" }, "<C-g>", function()
   Snacks.terminal()
 end, { desc = "Terminal (Root Dir)" })
+
+-- 次のバッファへ
+map('n', '<Tab>', ':BufferLineCycleNext<CR>', { silent = true })
+-- 前のバッファへ
+map('n', '<S-Tab>', ':BufferLineCyclePrev<CR>', { silent = true })
