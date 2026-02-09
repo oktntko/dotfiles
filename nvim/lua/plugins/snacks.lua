@@ -16,6 +16,24 @@ return {
   lazy = false,
   opts = {
     picker = {
+      win = {
+        input = {
+          keys = {
+            -- Snacksが <C-r>にショートカットを設定しているため、クリップボードの中身を直接挿入する
+            ["<C-v>"] = {
+              function()
+                local text = vim.fn.getreg("+")
+                -- 改行が含まれると入力が壊れることがあるので除去、またはスペースに置換
+                text = text:gsub("\n", " ")
+                vim.api.nvim_put({ text }, "c", true, true)
+              end,
+              mode = { "i", "n" },
+              desc = "Paste from clipboard",
+            },
+          },
+        },
+      },
+
       sources = {
         explorer = {
           hidden = true,
