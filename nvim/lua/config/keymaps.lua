@@ -94,3 +94,8 @@ end, { desc = "Terminal (Root Dir)" })
 map('n', '<Tab>', ':BufferLineCycleNext<CR>', { silent = true })
 -- 前のバッファへ
 map('n', '<S-Tab>', ':BufferLineCyclePrev<CR>', { silent = true })
+
+-- ウィンドウを垂直分割 (Vertical Split)
+map("n", "|", "<C-w>v", { desc = "Split window vertically" })
+-- ウィンドウを水平分割 (Horizontal Split)
+map("n", "-", "<C-w>s", { desc = "Split window horizontally" })
