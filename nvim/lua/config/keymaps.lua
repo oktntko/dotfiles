@@ -4,12 +4,28 @@
 
 local map = vim.keymap.set
 
--- #region clipboard
+-- #region delete
 -- Delete without copying to clipboard 削除時にクリップボードにコピーしない
-map("n", "x", '"_x')
-map("n", "X", '"_X')
-map("n", "<Del>", '"_x')
+-- すべての削除・変更操作をデフォルトでブラックホールレジスタ "_ に送る
 
+-- ctrl + BS/Del : 単語削除
+map({ "i" }, "<C-Del>", '<Esc>`^"_degi')
+map({ "n" }, "<C-Del>", '"_deg')
+-- <C-BS>としないのは、Backspace → <BS>
+-- Ctrl + Backspace → <C-h> となっており <C-BS> が送られてこないため。
+map({ "i" }, "<C-h>", "<C-w>")
+map({ "n" }, "<C-h>", '"_dbg')
+
+-- -- 削除(d, c, x, s)のデフォルトを "_ に向ける
+local noswap_keys = { "d", "D", "c", "C", "s", "S", "x", "X" }
+for _, key in ipairs(noswap_keys) do
+  map({ "n", "v" }, key, '"_' .. key)
+end
+-- Delキーも同様
+map({ "n", "v" }, "<Del>", '"_d')
+-- #endregion delete
+
+-- #region clipboard
 -- Standard Ctrl shortcuts like other applications
 -- Ctrl+C: Copy (yank)
 map("n", "<C-c>", "yy", { desc = "Copy line" })
@@ -68,13 +84,7 @@ map({ "i", --[[ ]] }, "<C-Right>" --[[    ]], "<C-o>e" --[[           ]])
 map({ "n", --[[ ]] }, "<C-Right>" --[[    ]], "e" --[[                ]])
 map({ "i", --[[ ]] }, "<C-Left>" --[[     ]], "<C-o>b" --[[           ]])
 map({ "n", --[[ ]] }, "<C-Left>" --[[     ]], "b" --[[                ]])
--- ctrl + BS/Del : 単語削除
-map({ "i", --[[ ]] }, "<C-Del>" --[[      ]], "<Esc>`^degi" --[[      ]])
--- <C-BS>としないのは、
--- Backspace → <BS>
--- Ctrl + Backspace → <C-h>
--- となっており <C-BS> が送られてこないため。
-map({ "i", --[[ ]] }, "<C-h>" --[[        ]], "<C-w>" --[[            ]])
+
 -- #endregion arrow/move
 
 -- 矩形選択
