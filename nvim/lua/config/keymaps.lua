@@ -129,3 +129,6 @@ map("v", "<C-Down>", ":m '>+1<CR>gv=gv", { silent = true })
 
 map("n", "<C-Up>", ':<C-u>execute "move -1-" . v:count1<CR>==', { silent = true })
 map("v", "<C-Up>", ":m '<-2<CR>gv=gv", { silent = true })
+
+-- 折り返しのトグル
+map("n", "<A-w>", ":set wrap!<CR>", { noremap = true, silent = true })
