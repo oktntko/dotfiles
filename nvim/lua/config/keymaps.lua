@@ -112,3 +112,10 @@ end, { desc = "Next Change" })
 map("n", "<A-Up>", function()
   require("gitsigns").nav_hunk("prev")
 end, { desc = "Prev Change" })
+
+-- Move Line Up/Down
+map("n", "<C-Down>", ':<C-u>execute "move +" . v:count1<CR>==', { silent = true })
+map("v", "<C-Down>", ":m '>+1<CR>gv=gv", { silent = true })
+
+map("n", "<C-Up>", ':<C-u>execute "move -1-" . v:count1<CR>==', { silent = true })
+map("v", "<C-Up>", ":m '<-2<CR>gv=gv", { silent = true })
