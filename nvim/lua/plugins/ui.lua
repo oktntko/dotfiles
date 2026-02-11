@@ -235,4 +235,10 @@ return {
     },
     opts = {},
   },
+
+  -- カーソル位置の移動を強調
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {},
+  },
 }
