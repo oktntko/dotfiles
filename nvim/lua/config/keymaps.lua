@@ -103,6 +103,8 @@ map({ "n", "t" }, "<C-g>", function()
   Snacks.terminal()
 end, { desc = "Terminal (Root Dir)" })
 
+-- #region editor
+
 -- 次のバッファへ
 map("n", "<Tab>", ":BufferLineCycleNext<CR>", { silent = true })
 -- 前のバッファへ
@@ -135,3 +137,5 @@ map("v", "<C-Up>", ":m '<-2<CR>gv=gv", { silent = true })
 
 -- 折り返しのトグル
 map("n", "<A-w>", ":set wrap!<CR>", { noremap = true, silent = true })
+
+-- #endregion
