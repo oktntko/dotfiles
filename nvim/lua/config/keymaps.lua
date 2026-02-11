@@ -49,41 +49,44 @@ map("i", "<C-y>", "<C-o><C-r>", { desc = "Redo in insert mode" })
 -- #endregion clipboard
 
 -- #region arrow/move
+-- 全選択
+map({ "n", "i", "v" }, "<C-a>", "<esc>ggVG", { desc = "Select All" })
+
 -- shift + arrow => visual mode
 -- insert mode から normal mode に抜けたときカーソルがずれるため、
 -- 「`:移動コマンド」＋「^:最後に挿入モードを終了した位置」 => カーソル位置を保持して visual mode 開始
-map({ "i", --[[ ]] }, "<S-Right>" --[[    ]], "<Esc>`^v<Right>" --[[  ]])
-map({ "n", --[[ ]] }, "<S-Right>" --[[    ]], "v<Right>" --[[         ]])
-map({ "v", --[[ ]] }, "<S-Right>" --[[    ]], "<Right>" --[[          ]])
-map({ "i", --[[ ]] }, "<S-Left>" --[[     ]], "<Esc>v<Left>" --[[     ]])
-map({ "n", --[[ ]] }, "<S-Left>" --[[     ]], "v<Left>" --[[          ]])
-map({ "v", --[[ ]] }, "<S-Left>" --[[     ]], "<Left>" --[[           ]])
-map({ "i", --[[ ]] }, "<S-Down>" --[[     ]], "<Esc>`^v<Down>" --[[   ]])
-map({ "n", --[[ ]] }, "<S-Down>" --[[     ]], "v<Down>" --[[          ]])
-map({ "v", --[[ ]] }, "<S-Down>" --[[     ]], "<Down>" --[[           ]])
-map({ "i", --[[ ]] }, "<S-Up>" --[[       ]], "<Esc>v<Up>" --[[       ]])
-map({ "n", --[[ ]] }, "<S-Up>" --[[       ]], "v<Up>" --[[            ]])
-map({ "v", --[[ ]] }, "<S-Up>" --[[       ]], "<Up>" --[[             ]])
+map({ "i" }, "<S-Right>", "<Esc>`^v<Right>")
+map({ "n" }, "<S-Right>", "v<Right>")
+map({ "v" }, "<S-Right>", "<Right>")
+map({ "i" }, "<S-Left>", "<Esc>v<Left>")
+map({ "n" }, "<S-Left>", "v<Left>")
+map({ "v" }, "<S-Left>", "<Left>")
+map({ "i" }, "<S-Down>", "<Esc>`^v<Down>")
+map({ "n" }, "<S-Down>", "v<Down>")
+map({ "v" }, "<S-Down>", "<Down>")
+map({ "i" }, "<S-Up>", "<Esc>v<Up>")
+map({ "n" }, "<S-Up>", "v<Up>")
+map({ "v" }, "<S-Up>", "<Up>")
 -- shift + move => visual mode
-map({ "i", --[[ ]] }, "<S-End>" --[[      ]], "<Esc>`^v$" --[[        ]])
-map({ "n", --[[ ]] }, "<S-End>" --[[      ]], "v$" --[[               ]])
-map({ "i", --[[ ]] }, "<S-Home>" --[[     ]], "<Esc>v^" --[[          ]])
-map({ "n", --[[ ]] }, "<S-Home>" --[[     ]], "v^" --[[               ]])
-map({ "i", --[[ ]] }, "<S-PageDown>" --[[ ]], "<Esc>`^v<C-d>" --[[    ]])
-map({ "n", --[[ ]] }, "<S-PageDown>" --[[ ]], "v<C-d>" --[[           ]])
-map({ "i", --[[ ]] }, "<S-PageUp>" --[[   ]], "<Esc>v<C-u>" --[[      ]])
-map({ "n", --[[ ]] }, "<S-PageUp>" --[[   ]], "v<C-u>" --[[           ]])
+map({ "i" }, "<S-End>", "<Esc>`^v$")
+map({ "n" }, "<S-End>", "v$")
+map({ "i" }, "<S-Home>", "<Esc>v^")
+map({ "n" }, "<S-Home>", "v^")
+map({ "i" }, "<S-PageDown>", "<Esc>`^v<C-d>")
+map({ "n" }, "<S-PageDown>", "v<C-d>")
+map({ "i" }, "<S-PageUp>", "<Esc>v<C-u>")
+map({ "n" }, "<S-PageUp>", "v<C-u>")
 
 -- ctrl + shift + arrow : 単語単位選択
-map({ "i", --[[ ]] }, "<C-S-Right>" --[[  ]], "<Esc>`^ve" --[[        ]])
-map({ "n", --[[ ]] }, "<C-S-Right>" --[[  ]], "ve" --[[               ]])
-map({ "i", --[[ ]] }, "<C-S-Left>" --[[   ]], "<Esc>vb" --[[          ]])
-map({ "n", --[[ ]] }, "<C-S-Left>" --[[   ]], "vb" --[[               ]])
+map({ "i" }, "<C-S-Right>", "<Esc>`^ve")
+map({ "n" }, "<C-S-Right>", "ve")
+map({ "i" }, "<C-S-Left>", "<Esc>vb")
+map({ "n" }, "<C-S-Left>", "vb")
 -- ctrl + arrow : 単語移動
-map({ "i", --[[ ]] }, "<C-Right>" --[[    ]], "<C-o>e" --[[           ]])
-map({ "n", --[[ ]] }, "<C-Right>" --[[    ]], "e" --[[                ]])
-map({ "i", --[[ ]] }, "<C-Left>" --[[     ]], "<C-o>b" --[[           ]])
-map({ "n", --[[ ]] }, "<C-Left>" --[[     ]], "b" --[[                ]])
+map({ "i" }, "<C-Right>", "<C-o>e")
+map({ "n" }, "<C-Right>", "e")
+map({ "i" }, "<C-Left>", "<C-o>b")
+map({ "n" }, "<C-Left>", "b")
 
 -- #endregion arrow/move
 
@@ -101,9 +104,9 @@ map({ "n", "t" }, "<C-g>", function()
 end, { desc = "Terminal (Root Dir)" })
 
 -- 次のバッファへ
-map('n', '<Tab>', ':BufferLineCycleNext<CR>', { silent = true })
+map("n", "<Tab>", ":BufferLineCycleNext<CR>", { silent = true })
 -- 前のバッファへ
-map('n', '<S-Tab>', ':BufferLineCyclePrev<CR>', { silent = true })
+map("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { silent = true })
 
 -- ウィンドウを垂直分割 (Vertical Split)
 map("n", "<A-+>", "<C-w>v", { desc = "Split window vertically" })
