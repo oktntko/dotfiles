@@ -138,4 +138,8 @@ map("v", "<C-Up>", ":m '<-2<CR>gv=gv", { silent = true })
 -- 折り返しのトグル
 map("n", "<A-w>", ":set wrap!<CR>", { noremap = true, silent = true })
 
+map({ "n", "i" }, "<F2>", function()
+  vim.lsp.buf.rename()
+end, { desc = "Rename" })
+
 -- #endregion
