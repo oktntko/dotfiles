@@ -20,7 +20,9 @@ return {
           function()
             -- 1. 特殊なバッファ（ピッカー等）なら何も出さない
             local buftype = vim.api.nvim_get_option_value("buftype", { buf = 0 })
-            if buftype ~= "" then return "" end
+            if buftype ~= "" then
+              return ""
+            end
 
             -- 2. バッファの作成時刻を記録（なければ現在の時刻をセット）
             local buf = vim.api.nvim_get_current_buf()
@@ -135,8 +137,8 @@ return {
 
           -- 5. 最終的な表示内容を組み立てて返す
           return {
-            { get_diagnostic_label() },                                   -- 左側：エラー情報
-            { get_git_diff() },                                           -- 中間：Git情報
+            { get_diagnostic_label() }, -- 左側：エラー情報
+            { get_git_diff() }, -- 中間：Git情報
             { (ft_icon or "") .. " ", guifg = ft_color, guibg = "none" }, -- アイコン
             {
               filename .. " ",
@@ -156,7 +158,7 @@ return {
     event = "VeryLazy",
     opts = {
       -- 暗さの度合い
-      tint = -30,       -- Darken colors, use a positive value to brighten
+      tint = -30, -- Darken colors, use a positive value to brighten
       -- サチュレーション（彩度）を落とす設定
       saturation = 0.6, -- Saturation to preserve
 
@@ -167,7 +169,35 @@ return {
 
         -- Do not tint `terminal` or floating windows, tint everything else
         return buftype == "terminal" or floating
-      end
+      end,
+    },
+  },
+
+  {
+    "hedyhli/outline.nvim",
+    lazy = true,
+    cmd = { "Outline", "OutlineOpen" },
+    keys = { -- Example mapping to toggle outline
+      { "<C-o>", "<cmd>Outline<CR>", desc = "Toggle outline" },
+    },
+    opts = {
+      -- Your setup opts here
+      outline_window = {
+        -- Where to open the split window: right/left
+        position = "right",
+        -- Percentage or integer of columns; serves as the base/minimum width
+        -- for the outline window (and for auto_width calculations)
+        width = 20,
+        -- The default split commands used are 'topleft vs' and 'botright vs'
+        -- depending on `position`. You can change this by providing your own
+        -- `split_command`.
+        -- `position` will not be considered if `split_command` is non-nil.
+        -- This should be a valid vim command used for opening the split for the
+        -- outline window. Eg, 'rightbelow vsplit'.
+        -- Width can be included (with will override the width setting below):
+        -- Eg, `topleft 20vsp` to prevent a flash of windows when resizing.
+        split_command = "belowright",
+      },
     },
   },
 }
