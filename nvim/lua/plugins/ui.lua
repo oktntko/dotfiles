@@ -200,4 +200,23 @@ return {
       },
     },
   },
+
+  -- 高機能スクロールバー (nvim-scrollbar)
+  {
+    "petertriho/nvim-scrollbar",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      "kevinhwang91/nvim-hlslens",
+      "lewis6991/gitsigns.nvim",
+    },
+    opts = {
+      handlers = {
+        cursor = true,
+        diagnostic = true,
+        gitsigns = true,
+        handle = true,
+        search = true,
+      },
+    },
+  },
 }
