@@ -106,9 +106,9 @@ map('n', '<Tab>', ':BufferLineCycleNext<CR>', { silent = true })
 map('n', '<S-Tab>', ':BufferLineCyclePrev<CR>', { silent = true })
 
 -- ウィンドウを垂直分割 (Vertical Split)
-map("n", "|", "<C-w>v", { desc = "Split window vertically" })
+map("n", "<A-+>", "<C-w>v", { desc = "Split window vertically" })
 -- ウィンドウを水平分割 (Horizontal Split)
-map("n", "-", "<C-w>s", { desc = "Split window horizontally" })
+map("n", "<A-->", "<C-w>s", { desc = "Split window horizontally" })
 
 -- Alt + Left で前のカーソル位置に戻る (Go Back)
 map("n", "<A-Left>", "<C-o>", { desc = "Go Back", remap = false })
