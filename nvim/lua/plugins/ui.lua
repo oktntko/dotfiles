@@ -219,4 +219,10 @@ return {
       },
     },
   },
+
+  -- 関数を sticky にする
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    opts = {},
+  },
 }
