@@ -225,4 +225,14 @@ return {
     "nvim-treesitter/nvim-treesitter-context",
     opts = {},
   },
+
+  -- パンくずリスト
+  {
+    "Bekaboo/dropbar.nvim",
+    dependencies = {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
+    },
+    opts = {},
+  },
 }
