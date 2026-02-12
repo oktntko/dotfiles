@@ -90,9 +90,6 @@ map({ "n" }, "<C-Left>", "b")
 
 -- #endregion arrow/move
 
--- 矩形選択
--- TODO
-
 -- Add custom keymap to toggle Snacks Explorer
 map("n", "<C-t>", function()
   require("config.myfunction").toggle_explorer()
@@ -147,4 +144,20 @@ map({ "n", "i" }, "<F2>", function()
   vim.lsp.buf.rename()
 end, { desc = "Rename" })
 
+-- かっこでくくる
+-- c は「変更（change）」コマンド。選択範囲を消去してインサートモードに入ります
+-- インサートモードで入力（""、''など）
+-- <Esc> ノーマルモードに戻る
+-- P はカーソルの直前に貼り付けなので、間に入力される
+-- レジスタを汚さないように ブラックホールレジスタ を使う
+map("v", '"', [["_c""<Esc>P]], { noremap = true })
+map("v", "'", [["_c''<Esc>P]], { noremap = true })
+map("v", "`", [["_c``<Esc>P]], { noremap = true })
+map("v", "(", [["_c()<Esc>P]], { noremap = true })
+map("v", "[", [["_c[]<Esc>P]], { noremap = true })
+map("v", "{", [["_c{}<Esc>P]], { noremap = true })
+map("v", "<", [["_c<><Esc>P]], { noremap = true })
+map("v", "（", [["_c（）<Esc>P]], { noremap = true })
+map("v", "「", [["_c「」<Esc>P]], { noremap = true })
+map("v", "＜", [["_c＜＞<Esc>P]], { noremap = true })
 -- #endregion
