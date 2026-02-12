@@ -160,4 +160,17 @@ map("v", "<", [["_c<><Esc>P]], { noremap = true })
 map("v", "（", [["_c（）<Esc>P]], { noremap = true })
 map("v", "「", [["_c「」<Esc>P]], { noremap = true })
 map("v", "＜", [["_c＜＞<Esc>P]], { noremap = true })
+
+-- 検索入力中に Ctrl-w で単語単位検索 (\< \>) をトグル (Whole Word)
+map("c", "<A-w>", function()
+  local cmd = vim.fn.getcmdline()
+  if cmd:find([[\<]]) then
+    -- \< と \> を削除
+    local new_cmd = cmd:gsub([[\<]], ""):gsub([[\>]], "")
+    vim.fn.setcmdline(new_cmd)
+  else
+    vim.fn.setcmdline([[\<]] .. cmd .. [[\>]])
+  end
+end, { desc = "Toggle Whole Word Search" })
+
 -- #endregion
