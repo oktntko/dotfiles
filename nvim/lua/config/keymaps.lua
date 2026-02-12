@@ -174,3 +174,9 @@ map("c", "<A-w>", function()
 end, { desc = "Toggle Whole Word Search" })
 
 -- #endregion
+
+-- 右にスクロール（画面を右へ動かす = 内容は左へ流れる）
+map({ "n", "i", "v" }, "<S-ScrollWheelDown>", "5zl", { silent = true })
+
+-- 左にスクロール（画面を左へ動かす = 内容は右へ流れる）
+map({ "n", "i", "v" }, "<S-ScrollWheelUp>", "5zh", { silent = true })
