@@ -128,6 +128,11 @@ map("n", "<A-Up>", function()
   require("gitsigns").nav_hunk("prev")
 end, { desc = "Prev Change" })
 
+map("n", "<A-S-Left>", "<C-w>h", { desc = "Move focus to left window", remap = true })
+map("n", "<A-S-Down>", "<C-w>j", { desc = "Move focus to bottom window", remap = true })
+map("n", "<A-S-Up>", "<C-w>k", { desc = "Move focus to top window", remap = true })
+map("n", "<A-S-Right>", "<C-w>l", { desc = "Move focus to right window", remap = true })
+
 -- Move Line Up/Down
 map("n", "<C-Down>", ':<C-u>execute "move +" . v:count1<CR>==', { silent = true })
 map("v", "<C-Down>", ":m '>+1<CR>gv=gv", { silent = true })
