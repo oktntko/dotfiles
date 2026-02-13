@@ -7,3 +7,6 @@ vim.opt.whichwrap:append("<,>,[,]")
 
 -- 行番号の相対表示を無効化する
 vim.opt.relativenumber = false
+
+-- 右クリックで選択範囲を拡張し、ポップアップメニューを表示させない
+vim.opt.mousemodel = "extend"
