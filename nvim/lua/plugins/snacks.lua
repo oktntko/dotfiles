@@ -91,17 +91,30 @@ return {
                 -- Disable Esc in normal mode to prevent accidental closing
                 ["<Esc>"] = { "<Nop>", mode = { "n" } },
                 -- Add custom keymap to toggle Snacks Explorer
-                ["<C-t>"] = function()
+                ["<C-e>"] = function()
                   require("config.myfunction").toggle_explorer()
                 end,
                 -- Add custom keymap to toggle Snacks terminal
-                ["<C-g>"] = function()
+                ["<C-t>"] = function()
                   Snacks.terminal()
+                end,
+                ["<C-g>"] = function()
+                  require("config.myfunction").toggle_diffview()
                 end,
                 ["<Right>"] = "expand_or_list_down",
                 ["<Left>"] = "collapse_or_up_to_parent",
               },
             },
+          },
+          matcher = {
+            fuzzy = true,
+          },
+        },
+
+        lines = {
+          layout = {
+            preset = "vscode", -- レイアウトをコンパクトにする
+            preview = false, -- プレビューを消して視覚ノイズを減らす
           },
         },
       },

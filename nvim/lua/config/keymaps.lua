@@ -91,14 +91,19 @@ map({ "n" }, "<C-Left>", "b")
 -- #endregion arrow/move
 
 -- Add custom keymap to toggle Snacks Explorer
-map("n", "<C-t>", function()
+map("n", "<C-e>", function()
   require("config.myfunction").toggle_explorer()
 end, { desc = "Toggle Snacks Explorer" })
 
 -- Add custom keymap to toggle Snacks Terminal
-map({ "n", "t" }, "<C-g>", function()
+map({ "n", "t" }, "<C-t>", function()
   Snacks.terminal()
 end, { desc = "Terminal (Root Dir)" })
+
+-- Add custom keymap to toggle Snacks Terminal
+map({ "n", "t" }, "<C-g>", function()
+  require("config.myfunction").toggle_diffview()
+end, { desc = "Toggle Diffview" })
 
 -- #region editor
 
@@ -106,6 +111,10 @@ end, { desc = "Terminal (Root Dir)" })
 map("n", "<Tab>", ":BufferLineCycleNext<CR>", { silent = true })
 -- 前のバッファへ
 map("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { silent = true })
+
+-- タブ移動 Diffview はタブを作成するため
+map("n", "<C-Tab>", ":tabnext<CR>", { noremap = true, silent = true })
+map("n", "<C-S-Tab>", ":tabprevious<CR>", { noremap = true, silent = true })
 
 -- ウィンドウを垂直分割 (Vertical Split)
 map("n", "<A-+>", "<C-w>v", { desc = "Split window vertically" })
@@ -180,3 +189,30 @@ map({ "n", "i", "v" }, "<S-ScrollWheelDown>", "5zl", { silent = true })
 
 -- 左にスクロール（画面を左へ動かす = 内容は右へ流れる）
 map({ "n", "i", "v" }, "<S-ScrollWheelUp>", "5zh", { silent = true })
+
+-- Diffview 介護 マウスホイールでスクロールすると差分の位置がずれる
+-- マウススクロール時にウィンドウを自動でフォーカスする
+local function mouse_scroll_with_focus(direction)
+  local mouse_pos = vim.fn.getmousepos()
+  local winid = mouse_pos.winid
+
+  -- マウスの下に有効なウィンドウがある場合
+  if winid > 0 and winid ~= vim.api.nvim_get_current_win() then
+    -- ウィンドウをフォーカス
+    vim.api.nvim_set_current_win(winid)
+  end
+
+  -- スクロールを実行 (feedkeys を使って本来の挙動をシミュレート)
+  local key = direction == "up" and "<ScrollWheelUp>" or "<ScrollWheelDown>"
+  -- 'n' は再帰的なマッピングを避け、't' はキーをそのまま送るフラグ
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), "nt", false)
+end
+
+-- キーマップの登録
+vim.keymap.set({ "n", "v" }, "<ScrollWheelUp>", function()
+  mouse_scroll_with_focus("up")
+end, { silent = true })
+
+vim.keymap.set({ "n", "v" }, "<ScrollWheelDown>", function()
+  mouse_scroll_with_focus("down")
+end, { silent = true })
