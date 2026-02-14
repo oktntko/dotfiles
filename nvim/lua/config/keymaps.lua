@@ -159,16 +159,26 @@ end, { desc = "Rename" })
 -- <Esc> ノーマルモードに戻る
 -- P はカーソルの直前に貼り付けなので、間に入力される
 -- レジスタを汚さないように ブラックホールレジスタ を使う
-map("v", '"', [["_c""<Esc>P]], { noremap = true })
-map("v", "'", [["_c''<Esc>P]], { noremap = true })
-map("v", "`", [["_c``<Esc>P]], { noremap = true })
-map("v", "(", [["_c()<Esc>P]], { noremap = true })
-map("v", "[", [["_c[]<Esc>P]], { noremap = true })
-map("v", "{", [["_c{}<Esc>P]], { noremap = true })
-map("v", "<", [["_c<><Esc>P]], { noremap = true })
-map("v", "（", [["_c（）<Esc>P]], { noremap = true })
-map("v", "「", [["_c「」<Esc>P]], { noremap = true })
-map("v", "＜", [["_c＜＞<Esc>P]], { noremap = true })
+map("v", '"', [["-c""<Esc>"-P]], { noremap = true })
+map("v", "'", [["-c''<Esc>"-P]], { noremap = true })
+map("v", "`", [["-c``<Esc>"-P]], { noremap = true })
+map("v", "(", [["-c()<Esc>"-P]], { noremap = true })
+map("v", "[", [["-c[]<Esc>"-P]], { noremap = true })
+map("v", "{", [["-c{}<Esc>"-P]], { noremap = true })
+map("v", "<", [["-c<><Esc>"-P]], { noremap = true })
+map("v", "（", [["-c（）<Esc>"-P]], { noremap = true })
+map("v", "「", [["-c「」<Esc>"-P]], { noremap = true })
+map("v", "＜", [["-c＜＞<Esc>"-P]], { noremap = true })
+
+-- 検索入力中に Ctrl-c で大文字小文字区別 (\C) をトグル
+vim.keymap.set("c", "<C-c>", function()
+  local cmd = vim.fn.getcmdline()
+  if cmd:find([[\C]]) then
+    vim.fn.setcmdline(cmd:gsub([[\C]], ""))
+  else
+    vim.fn.setcmdline(cmd .. [[\C]])
+  end
+end, { desc = "Toggle Case Sensitivity in Search" })
 
 -- 検索入力中に Ctrl-w で単語単位検索 (\< \>) をトグル (Whole Word)
 map("c", "<A-w>", function()
