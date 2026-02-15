@@ -53,7 +53,7 @@ return {
 
               -- dir & open or file → 下へ
               local Actions = require("snacks.picker.actions")
-              Actions.list_down(picker, item)
+              Actions.list_down(picker)
             end,
 
             -- 開いているディレクトリなら閉じる、 閉じているディレクトリ・ファイルなら親ディレクトリに移動
