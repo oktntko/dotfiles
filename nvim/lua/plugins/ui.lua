@@ -85,7 +85,9 @@ return {
         -- 左クリックで buffer 切り替え（デフォルトの挙動）
         -- left_mouse_command = "buffer %d",
         -- ミドルクリックで 閉じる
-        middle_mouse_command = "bdelete! %d",
+        middle_mouse_command = function(n)
+          Snacks.bufdelete(n)
+        end,
         -- 右クリックで 縦分割
         right_mouse_command = "vertical sbuffer %d",
       },
