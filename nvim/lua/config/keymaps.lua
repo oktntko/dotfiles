@@ -139,6 +139,12 @@ map("n", "<A-S-Down>", "<C-w>j", { desc = "Move focus to bottom window", remap =
 map("n", "<A-S-Up>", "<C-w>k", { desc = "Move focus to top window", remap = true })
 map("n", "<A-S-Right>", "<C-w>l", { desc = "Move focus to right window", remap = true })
 
+-- ウィンドウのリサイズ（Ctrl + 矢印キー）
+map("n", "<A-S-C-Up>", "<cmd>resize +1<cr>", { desc = "Increase window height" })
+map("n", "<A-S-C-Down>", "<cmd>resize -1<cr>", { desc = "Decrease window height" })
+map("n", "<A-S-C-Left>", "<cmd>vertical resize -1<cr>", { desc = "Decrease window width" })
+map("n", "<A-S-C-Right>", "<cmd>vertical resize +1<cr>", { desc = "Increase window width" })
+
 -- Move Line Up/Down
 map("n", "<C-Down>", ':<C-u>execute "move +" . v:count1<CR>==', { silent = true })
 map("v", "<C-Down>", ":m '>+1<CR>gv=gv", { silent = true })
