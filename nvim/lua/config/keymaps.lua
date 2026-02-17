@@ -177,7 +177,7 @@ map("v", "「", [["-c「」<Esc>"-P]], { noremap = true })
 map("v", "＜", [["-c＜＞<Esc>"-P]], { noremap = true })
 
 -- 検索入力中に Ctrl-c で大文字小文字区別 (\C) をトグル
-vim.keymap.set("c", "<C-c>", function()
+map("c", "<C-c>", function()
   local cmd = vim.fn.getcmdline()
   if cmd:find([[\C]]) then
     vim.fn.setcmdline(cmd:gsub([[\C]], ""))
@@ -225,10 +225,10 @@ local function mouse_scroll_with_focus(direction)
 end
 
 -- キーマップの登録
-vim.keymap.set({ "n", "v" }, "<ScrollWheelUp>", function()
+map({ "n", "v" }, "<ScrollWheelUp>", function()
   mouse_scroll_with_focus("up")
 end, { silent = true })
 
-vim.keymap.set({ "n", "v" }, "<ScrollWheelDown>", function()
+map({ "n", "v" }, "<ScrollWheelDown>", function()
   mouse_scroll_with_focus("down")
 end, { silent = true })
