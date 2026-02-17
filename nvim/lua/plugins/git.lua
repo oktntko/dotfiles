@@ -1,3 +1,6 @@
+-- 差分表示時にファイルすべてを表示する
+vim.opt.diffopt:append("context:99999")
+
 return {
   {
     "sindrets/diffview.nvim",
@@ -69,6 +72,22 @@ return {
           file_panel = {
             { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
             { "n", "X", restore_entry_with_conf, { desc = "Restore entry with confirmation" } },
+            {
+              "n",
+              "<A-Down>",
+              function()
+                require("gitsigns").nav_hunk("next")
+              end,
+              { desc = "Next Change" },
+            },
+            {
+              "n",
+              "<A-Up>",
+              function()
+                require("gitsigns").nav_hunk("prev")
+              end,
+              { desc = "Prev Change" },
+            },
           },
           file_history_panel = {
             { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
