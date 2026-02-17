@@ -16,18 +16,26 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = function(_, opts)
+      local icons = LazyVim.config.icons
+
+      opts.sections.lualine_c = {
+        LazyVim.lualine.root_dir(),
+        {
+          "diagnostics",
+          symbols = {
+            error = icons.diagnostics.Error,
+            warn = icons.diagnostics.Warn,
+            info = icons.diagnostics.Info,
+            hint = icons.diagnostics.Hint,
+          },
+        },
+      }
+
+      opts.sections.lualine_z = opts.sections.lualine_y
+      opts.sections.lualine_y = opts.sections.lualine_x
       opts.sections.lualine_x = {
         -- 1. ファイルタイプ (例: typescript, lua, python)
-        {
-          "filetype",
-          icon_only = false, -- アイコンだけでなく名前も出す
-          separator = { left = "", right = "" },
-          color = { fg = "#ff9e64", gui = "bold" },
-          on_click = function()
-            LazyVim.format.info()
-          end,
-        },
-
+        { "filetype" },
         -- 2. LSPサーバー名
         {
           function()
@@ -37,40 +45,74 @@ return {
               return ""
             end
 
-            -- 2. バッファの作成時刻を記録（なければ現在の時刻をセット）
-            local buf = vim.api.nvim_get_current_buf()
-            local now = vim.loop.now() -- ミリ秒単位
+            local servers = {}
+            local linters = {}
 
-            -- バッファごとの初回アクセス時刻を保持する変数がなければ初期化
-            if not vim.b[buf].opened_at then
-              vim.b[buf].opened_at = now
-            end
-
-            -- 3. LSPクライアントの取得
+            -- LSPクライアントをスキャン
             local clients = vim.lsp.get_clients({ bufnr = 0 })
-
-            -- LSPが見つかった場合は即座に表示
-            if next(clients) ~= nil then
-              local client_names = {}
-              for _, client in ipairs(clients) do
-                table.insert(client_names, client.name)
+            for _, client in ipairs(clients) do
+              -- 汎用的な判別ロジック:
+              -- 補完(completion)や定義ジャンプ(definition)を持っていれば「言語サーバ」
+              -- それらがなく、診断(publishDiagnostics)がメインなら「Linter」とみなす
+              local caps = client.server_capabilities
+              if caps and (caps.completionProvider or caps.definitionProvider or caps.hoverProvider) then
+                table.insert(servers, client.name)
+              else
+                table.insert(linters, client.name)
               end
-              return " " .. table.concat(client_names, "|")
             end
 
-            -- 4. LSPが見つからない場合、経過時間をチェック
-            local elapsed = now - vim.b[buf].opened_at
-
-            if elapsed < 250 then
-              -- 0.25秒（250ms）以内なら「ロード中」扱いにして No LSP を隠す
-              return "󱑮 Loading..."
-            else
-              -- 0.25秒経ってもLSPがいなければ、本当にLSPがないと判断
-              return "No LSP"
+            -- nvim-lint (LSPでない純粋なLinter) も加える
+            local ok, lint = pcall(require, "lint")
+            if ok then
+              for _, linter in ipairs(lint.get_running()) do
+                if not vim.tbl_contains(linters, linter) then
+                  table.insert(linters, linter)
+                end
+              end
             end
+
+            -- 表示文字列の作成
+            local parts = {}
+            if #servers > 0 then
+              table.insert(parts, "󰒋 " .. table.concat(servers, "|"))
+            end
+            if #linters > 0 then
+              table.insert(parts, "󱔗 " .. table.concat(linters, "|"))
+            end
+
+            return #parts > 0 and table.concat(parts, " ") or "󰦕 none"
           end,
-          color = { fg = "#7aa2f7", gui = "bold" },
+          color = { fg = "#7aa2f7" },
           separator = { left = "", right = "" },
+        },
+
+        {
+          -- フォーマッタ情報を取得する関数
+          function()
+            local conform = require("conform")
+            local formatters = conform.list_formatters(0) -- 現在のバッファのフォーマッタを取得
+            if #formatters == 0 then
+              return ""
+            end
+
+            local active_formatters = {}
+            for _, fmt in ipairs(formatters) do
+              -- ready（利用可能）なものだけを表示候補にする
+              if fmt.available then
+                table.insert(active_formatters, fmt.name)
+              end
+            end
+
+            if #active_formatters == 0 then
+              return ""
+            end
+
+            -- stop_after_first が効いている場合、実際に動くのは先頭の1つ
+            -- 分かりやすくするために "󰉼 " アイコンを付ける
+            return "󰉼 " .. active_formatters[1]
+          end,
+          color = { fg = "#ff9e64" }, -- 色はお好みで（これはオレンジ系）
         },
       }
     end,
@@ -178,12 +220,9 @@ return {
       saturation = 0.6, -- Saturation to preserve
 
       window_ignore_function = function(winid)
-        local bufid = vim.api.nvim_win_get_buf(winid)
-        local buftype = vim.api.nvim_buf_get_option(bufid, "buftype")
         local floating = vim.api.nvim_win_get_config(winid).relative ~= ""
-
-        -- Do not tint `terminal` or floating windows, tint everything else
-        return buftype == "terminal" or floating
+        local buftype = vim.api.nvim_get_option_value("buftype", { buf = 0 })
+        return buftype ~= "" or floating
       end,
     },
   },
