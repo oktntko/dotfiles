@@ -15,6 +15,16 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
+    indent = {
+      chunk = {
+        enabled = true,
+        char = {
+          corner_top = "╭",
+          corner_bottom = "╰",
+          arrow = "",
+        },
+      },
+    },
     picker = {
       win = {
         input = {
