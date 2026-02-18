@@ -11,8 +11,8 @@ local map = vim.keymap.set
 -- ctrl + BS/Del : 単語削除
 map({ "i" }, "<C-Del>", '<Esc>`^"_degi')
 map({ "n" }, "<C-Del>", '"_de')
-map({ "i" }, "<C-BS>", "<C-w>")
-map({ "n" }, "<C-BS>", '"_db')
+map({ "i" }, "<C-h>", "<C-w>") -- <C-BS> = ^h = <C-h>
+map({ "n" }, "<C-h>", '"_db')
 
 -- -- 削除(d, c, x, s)のデフォルトを "_ に向ける
 local noswap_keys = { "d", "D", "c", "C", "s", "S", "x", "X" }
@@ -231,3 +231,14 @@ end, { silent = true })
 map({ "n", "v" }, "<ScrollWheelDown>", function()
   mouse_scroll_with_focus("down")
 end, { silent = true })
+
+map({ "n", "v" }, "<C-f>", "/", { desc = "Search" })
+map("c", "<C-f>", "<C-c>", { desc = "Cancel Search" })
+
+map({ "n", "v" }, "<C-S-f>", function()
+  Snacks.picker.grep()
+end, { desc = "Grep", noremap = true, silent = true })
+map({ "n", "v" }, "<C-p>", function()
+  Snacks.picker.files()
+end, { desc = "Find Files", noremap = true, silent = true })
+map({ "n", "v" }, "<cr>", "<Esc>i", { desc = "Start Insert mode by Enter" })
