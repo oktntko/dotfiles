@@ -10,11 +10,9 @@ local map = vim.keymap.set
 
 -- ctrl + BS/Del : 単語削除
 map({ "i" }, "<C-Del>", '<Esc>`^"_degi')
-map({ "n" }, "<C-Del>", '"_deg')
--- <C-BS>としないのは、Backspace → <BS>
--- Ctrl + Backspace → <C-h> となっており <C-BS> が送られてこないため。
-map({ "i" }, "<C-h>", "<C-w>")
-map({ "n" }, "<C-h>", '"_dbg')
+map({ "n" }, "<C-Del>", '"_de')
+map({ "i" }, "<C-BS>", "<C-w>")
+map({ "n" }, "<C-BS>", '"_db')
 
 -- -- 削除(d, c, x, s)のデフォルトを "_ に向ける
 local noswap_keys = { "d", "D", "c", "C", "s", "S", "x", "X" }
@@ -22,7 +20,8 @@ for _, key in ipairs(noswap_keys) do
   map({ "n", "v" }, key, '"_' .. key)
 end
 -- Delキーも同様
-map({ "n", "v" }, "<Del>", '"_d')
+map({ "n", "v" }, "<BS>", '"_X')
+map({ "n", "v" }, "<Del>", '"_x')
 -- #endregion delete
 
 -- #region clipboard
