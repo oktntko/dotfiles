@@ -2,13 +2,11 @@ return {
 
   -- colorscheme
   {
-    "navarasu/onedark.nvim",
-    priority = 1000, -- colorscheme は最優先で読み込む
-    config = function()
-      require("onedark").setup({
-        style = "cool",
-      })
-      require("onedark").load()
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = function(_, opts)
+      opts.style = "night"
     end,
   },
 
