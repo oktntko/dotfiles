@@ -209,20 +209,12 @@ return {
 
   -- フォーカス外のウィンドウを暗くする
   {
-    "levouh/tint.nvim",
+    "tadaa/vimade",
     event = "VeryLazy",
-    opts = {
-      -- 暗さの度合い
-      tint = -30, -- Darken colors, use a positive value to brighten
-      -- サチュレーション（彩度）を落とす設定
-      saturation = 0.6, -- Saturation to preserve
-
-      window_ignore_function = function(winid)
-        local floating = vim.api.nvim_win_get_config(winid).relative ~= ""
-        local buftype = vim.api.nvim_get_option_value("buftype", { buf = 0 })
-        return buftype ~= "" or floating
-      end,
-    },
+    opts = function(_, opts)
+      opts.recipe = { "default", { animate = true } }
+      opts.fadelevel = 0.7
+    end,
   },
 
   {
