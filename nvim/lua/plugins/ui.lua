@@ -299,4 +299,55 @@ return {
     "sphamba/smear-cursor.nvim",
     opts = {},
   },
+
+  -- 折り畳み、LSPの診断結果、Gitなどの情報を表示する
+  {
+    "luukvbaal/statuscol.nvim",
+    dependencies = {
+      "lewis6991/gitsigns.nvim",
+    },
+    config = function()
+      local builtin = require("statuscol.builtin")
+      require("statuscol").setup({
+        -- configuration goes here, for example:
+        bt_ignore = { "terminal", "nofile", "ddu-ff", "ddu-ff-filter" },
+        segments = {
+          -- v:lua.<関数名> = Neovim の statuscolumn 用クリックハンドラ
+          {
+            sign = { namespace = { "diagnostic" } },
+            click = "v:lua.ScSa", -- Sign action
+            -- Left   - Open diagnostic float
+            -- Middle - Select available code action
+          },
+          {
+            text = { builtin.lnumfunc },
+            click = "v:lua.ScLa", -- Line action
+            -- Left     - Toggle DAP breakpoint
+            -- <C-Left> - Toggle DAP conditional breakpoint
+            -- Right    - Yank line
+            -- Right    - Paste line
+            -- Right x2 - Delete line
+          },
+          { text = { " " } },
+          {
+            sign = { namespace = { "gitsigns" } },
+            click = "v:lua.ScSa",
+            -- Left   - Preview hunk
+            -- Middle - Reset hunk
+            -- Right  - Stage hunk
+          },
+          {
+            text = { builtin.foldfunc },
+            click = "v:lua.ScFa", -- Fold action
+            -- Left      - Open fold
+            -- <C-Left>  - Open fold recursively
+            -- Right     - Close fold
+            -- <C-Right> - Close fold recursively
+            -- Middle    - Create fold in range(click twice)
+          },
+          { text = { " " } },
+        },
+      })
+    end,
+  },
 }

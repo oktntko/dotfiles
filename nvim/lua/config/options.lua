@@ -10,3 +10,9 @@ vim.opt.relativenumber = false
 
 -- 右クリックで選択範囲を拡張し、ポップアップメニューを表示させない
 vim.opt.mousemodel = "extend"
+
+-- luukvbaal/statuscol.nvim と使用するため、Neovim, LazyVim のデフォルト gutter を無効化、折り畳みを有効化
+vim.opt.signcolumn = "no"
+vim.opt.statuscolumn = ""
+vim.opt.foldcolumn = "1"
+vim.opt.foldenable = true
