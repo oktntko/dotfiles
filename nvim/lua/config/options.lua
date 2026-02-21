@@ -4,6 +4,8 @@
 
 -- 行末で <Right> => 次の行の行頭, 行頭で <Left> => 前の行の行末
 vim.opt.whichwrap:append("<,>,[,]")
+-- 行末の1文字先までカーソルを移動できるようにする。
+vim.opt.virtualedit = "onemore"
 
 -- 行番号の相対表示を無効化する
 vim.opt.relativenumber = false
