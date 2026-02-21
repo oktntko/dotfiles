@@ -248,20 +248,22 @@ return {
   -- 高機能スクロールバー (nvim-scrollbar)
   {
     "petertriho/nvim-scrollbar",
-    event = { "BufReadPost", "BufNewFile" },
     dependencies = {
-      "kevinhwang91/nvim-hlslens",
       "lewis6991/gitsigns.nvim",
+      -- search はごてごてするのでやめた
     },
-    opts = {
-      handlers = {
-        cursor = true,
-        diagnostic = true,
-        gitsigns = true,
-        handle = true,
-        search = true,
-      },
-    },
+    config = function()
+      require("scrollbar").setup({
+        handlers = {
+          cursor = true,
+          diagnostic = true,
+          gitsigns = true, -- Requires gitsigns
+          handle = true,
+          search = false, -- Requires hlslens
+          ale = false, -- Requires ALE
+        },
+      })
+    end,
   },
 
   -- 関数を sticky にする
