@@ -19,9 +19,17 @@ local noswap_keys = { "d", "D", "c", "C", "s", "S", "x", "X" }
 for _, key in ipairs(noswap_keys) do
   map({ "n", "v" }, key, '"_' .. key)
 end
--- Delキーも同様
-map({ "n", "v" }, "<BS>", '"_X')
-map({ "n", "v" }, "<Del>", '"_x')
+map({ "v" }, "<BS>", '"_d')
+map({ "v" }, "<Del>", '"_d')
+
+-- 改行コードも削除できるようにする
+map({ "n" }, "<BS>", function()
+  return vim.fn.col(".") == 1 and "kJ" or '"_X'
+end, { expr = true })
+
+map({ "n" }, "<Del>", function()
+  return vim.fn.col(".") > vim.fn.col("$") - 1 and "J" or '"_x'
+end, { expr = true })
 -- #endregion delete
 
 -- #region clipboard
