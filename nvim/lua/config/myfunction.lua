@@ -15,7 +15,7 @@ function M.toggle_explorer()
   Snacks.explorer()
 end
 
-function M.toggle_diffview()
+function M.toggle_diffview(diffviewCmd)
   local lib = require("diffview.lib")
   local view = lib.get_current_view()
 
@@ -34,7 +34,7 @@ function M.toggle_diffview()
     -- 3. 強制解除: もしエラーが出ても、Diffviewの内部状態をリセットしやすくする
     if not success then
       -- それでもダメな場合は、コマンドで強制的に閉じる
-      vim.cmd("DiffviewClose")
+      vim.cmd(diffviewCmd)
     end
   else
     -- 現在のタブがDiffview でない場合
@@ -47,7 +47,7 @@ function M.toggle_diffview()
       vim.api.nvim_set_current_tabpage(target_view.tabpage)
     else
       -- どこにもなければ新しく開く
-      vim.cmd("DiffviewOpen")
+      vim.cmd(diffviewCmd)
     end
   end
 end

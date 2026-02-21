@@ -109,7 +109,10 @@ return {
                   Snacks.terminal()
                 end,
                 ["<C-g>"] = function()
-                  require("config.myfunction").toggle_diffview()
+                  require("config.myfunction").toggle_diffview("DiffviewOpen")
+                end,
+                ["<C-S-g>"] = function()
+                  require("config.myfunction").toggle_diffview("DiffviewFileHistory")
                 end,
                 ["<Right>"] = "expand_or_list_down",
                 ["<Left>"] = "collapse_or_up_to_parent",

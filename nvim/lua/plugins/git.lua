@@ -1,13 +1,8 @@
--- 差分表示時にファイルすべてを表示する
-vim.opt.diffopt:append("context:99999")
-
 return {
   {
     "sindrets/diffview.nvim",
-    -- gitsigns が先に読み込まれていることを保証（依存関係の明示）
     dependencies = { "lewis6991/gitsigns.nvim" },
     keys = {
-      { "<leader>gg", "<cmd>DiffviewFileHistory<cr>", mode = { "n" }, desc = "Diffview: Repo history" },
       { "<leader>gH", "<cmd>DiffviewFileHistory %<cr>", mode = { "n" }, desc = "Diffview: Current file history" },
     },
     opts = function()
@@ -63,34 +58,34 @@ return {
           },
         },
         keymaps = {
+          -- 中央のウィンドウ
           view = {
             { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
             { "n", "X", restore_entry_with_conf, { desc = "Restore entry with confirmation" } },
             { { "n", "v" }, "s", stage_hunk_smart, { desc = "Stage hunk/range" } },
             { { "n", "v" }, "u", unstage_hunk_smart, { desc = "Unstage hunk/range" } },
-          },
-          file_panel = {
-            { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
-            { "n", "X", restore_entry_with_conf, { desc = "Restore entry with confirmation" } },
             {
               "n",
               "<A-Down>",
-              function()
-                require("gitsigns").nav_hunk("next")
-              end,
+              "]c",
               { desc = "Next Change" },
             },
             {
               "n",
               "<A-Up>",
-              function()
-                require("gitsigns").nav_hunk("prev")
-              end,
+              "[c",
               { desc = "Prev Change" },
             },
           },
+          -- diffview の左側のウィンドウ
+          file_panel = {
+            { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
+            { "n", "X", restore_entry_with_conf, { desc = "Restore entry with confirmation" } },
+          },
+          -- filehistory の下側のウィンドウ
           file_history_panel = {
             { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
+            { "n", "o", actions.open_in_diffview, { desc = "Open the entry under the cursor in a diffview" } },
           },
         },
       }
@@ -98,6 +93,27 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
-    opts = {},
+    keys = function()
+      local gs = require("gitsigns")
+
+      return {
+        {
+          "<A-Down>",
+          function()
+            gs.nav_hunk("next")
+          end,
+          mode = { "n" },
+          desc = "Next Change",
+        },
+        {
+          "<A-Up>",
+          function()
+            gs.nav_hunk("prev")
+          end,
+          mode = { "n" },
+          desc = "Prev Change",
+        },
+      }
+    end,
   },
 }

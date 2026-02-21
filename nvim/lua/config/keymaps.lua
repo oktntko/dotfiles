@@ -101,9 +101,12 @@ end, { desc = "Terminal (Root Dir)" })
 
 -- Add custom keymap to toggle Snacks Terminal
 map({ "n", "t" }, "<C-g>", function()
-  require("config.myfunction").toggle_diffview()
+  require("config.myfunction").toggle_diffview("DiffviewOpen")
 end, { desc = "Toggle Diffview" })
 
+map({ "n", "t" }, "<C-S-g>", function()
+  require("config.myfunction").toggle_diffview("DiffviewFileHistory")
+end, { desc = "Toggle Diffview: Repo history" })
 -- #region editor
 
 -- 次のバッファへ
@@ -124,14 +127,6 @@ map("n", "<A-->", "<C-w>s", { desc = "Split window horizontally" })
 map("n", "<A-Left>", "<C-o>", { desc = "Go Back", remap = false })
 -- Alt + Right で次のカーソル位置に進む (Go Forward)
 map("n", "<A-Right>", "<C-i>", { desc = "Go Forward", remap = false })
--- Alt + Down で次の差分へ (Next Hunk)
-map("n", "<A-Down>", function()
-  require("gitsigns").nav_hunk("next")
-end, { desc = "Next Change" })
--- Alt + Up で前の差分へ (Prev Hunk)
-map("n", "<A-Up>", function()
-  require("gitsigns").nav_hunk("prev")
-end, { desc = "Prev Change" })
 
 map("n", "<A-S-Left>", "<C-w>h", { desc = "Move focus to left window", remap = true })
 map("n", "<A-S-Down>", "<C-w>j", { desc = "Move focus to bottom window", remap = true })
@@ -232,7 +227,7 @@ map({ "n", "v" }, "<ScrollWheelDown>", function()
   mouse_scroll_with_focus("down")
 end, { silent = true })
 
-map({ "n", "v" }, "<C-f>", "/", { desc = "Search" })
+map({ "i", "n", "v" }, "<C-f>", "<Esc>/", { desc = "Search" })
 map("c", "<C-f>", "<C-c>", { desc = "Cancel Search" })
 
 map({ "n", "v" }, "<C-S-f>", function()

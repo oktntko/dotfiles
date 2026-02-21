@@ -16,3 +16,6 @@ vim.opt.signcolumn = "no"
 vim.opt.statuscolumn = ""
 vim.opt.foldcolumn = "1"
 vim.opt.foldenable = true
+
+-- Git/Diffview 差分表示時にファイルすべてを表示する
+vim.opt.diffopt:append("context:99999")
