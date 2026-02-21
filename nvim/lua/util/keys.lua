@@ -27,7 +27,7 @@ function M.toggle_diffview(diffviewCmd)
     vim.cmd("silent! tabprevious")
 
     -- 2. 実行: エラーが起きても後続の処理を止めないよう pcall で実行
-    local success, err = pcall(function()
+    local success = pcall(function()
       view:close()
     end)
 

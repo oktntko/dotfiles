@@ -47,6 +47,11 @@ map("n", "<C-y>", "<C-r>", { desc = "Redo" })
 map("i", "<C-y>", "<C-o><C-r>", { desc = "Redo in insert mode" })
 -- #endregion clipboard
 
+map({ "i", "n", "v" }, "<C-f>", "<Esc>/", { desc = "Search" })
+map({ "c" }, "<C-f>", "<Esc>", { desc = "Cancel Search" })
+
+map({ "n", "v" }, "<cr>", "<Esc>i", { desc = "Start Insert mode by Enter" })
+
 -- #region arrow/move
 -- 全選択
 map({ "n", "i", "v" }, "<C-a>", "<esc>ggVG", { desc = "Select All" })
@@ -86,27 +91,7 @@ map({ "i" }, "<C-Right>", "<C-o>e")
 map({ "n" }, "<C-Right>", "e")
 map({ "i" }, "<C-Left>", "<C-o>b")
 map({ "n" }, "<C-Left>", "b")
-
 -- #endregion arrow/move
-
--- Add custom keymap to toggle Snacks Explorer
-map("n", "<C-e>", function()
-  require("config.myfunction").toggle_explorer()
-end, { desc = "Toggle Snacks Explorer" })
-
--- Add custom keymap to toggle Snacks Terminal
-map({ "n", "t" }, "<C-t>", function()
-  Snacks.terminal()
-end, { desc = "Terminal (Root Dir)" })
-
--- Add custom keymap to toggle Snacks Terminal
-map({ "n", "t" }, "<C-g>", function()
-  require("config.myfunction").toggle_diffview("DiffviewOpen")
-end, { desc = "Toggle Diffview" })
-
-map({ "n", "t" }, "<C-S-g>", function()
-  require("config.myfunction").toggle_diffview("DiffviewFileHistory")
-end, { desc = "Toggle Diffview: Repo history" })
 -- #region editor
 
 -- 次のバッファへ
@@ -199,41 +184,3 @@ map({ "n", "i", "v" }, "<S-ScrollWheelDown>", "5zl", { silent = true })
 
 -- 左にスクロール（画面を左へ動かす = 内容は右へ流れる）
 map({ "n", "i", "v" }, "<S-ScrollWheelUp>", "5zh", { silent = true })
-
--- Diffview 介護 マウスホイールでスクロールすると差分の位置がずれる
--- マウススクロール時にウィンドウを自動でフォーカスする
-local function mouse_scroll_with_focus(direction)
-  local mouse_pos = vim.fn.getmousepos()
-  local winid = mouse_pos.winid
-
-  -- マウスの下に有効なウィンドウがある場合
-  if winid > 0 and winid ~= vim.api.nvim_get_current_win() then
-    -- ウィンドウをフォーカス
-    vim.api.nvim_set_current_win(winid)
-  end
-
-  -- スクロールを実行 (feedkeys を使って本来の挙動をシミュレート)
-  local key = direction == "up" and "<ScrollWheelUp>" or "<ScrollWheelDown>"
-  -- 'n' は再帰的なマッピングを避け、't' はキーをそのまま送るフラグ
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), "nt", false)
-end
-
--- キーマップの登録
-map({ "n", "v" }, "<ScrollWheelUp>", function()
-  mouse_scroll_with_focus("up")
-end, { silent = true })
-
-map({ "n", "v" }, "<ScrollWheelDown>", function()
-  mouse_scroll_with_focus("down")
-end, { silent = true })
-
-map({ "i", "n", "v" }, "<C-f>", "<Esc>/", { desc = "Search" })
-map("c", "<C-f>", "<C-c>", { desc = "Cancel Search" })
-
-map({ "n", "v" }, "<C-S-f>", function()
-  Snacks.picker.grep()
-end, { desc = "Grep", noremap = true, silent = true })
-map({ "n", "v" }, "<C-p>", function()
-  Snacks.picker.files()
-end, { desc = "Find Files", noremap = true, silent = true })
-map({ "n", "v" }, "<cr>", "<Esc>i", { desc = "Start Insert mode by Enter" })

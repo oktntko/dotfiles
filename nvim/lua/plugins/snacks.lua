@@ -1,19 +1,43 @@
--- https://github.com/folke/snacks.nvim
--- lua/snacks/picker/source/explorer.lua
----@class snacks.picker.explorer.Item: snacks.picker.finder.Item
----@field file string
----@field dir? boolean
----@field parent? snacks.picker.explorer.Item
----@field open? boolean
----@field last? boolean
----@field sort? string
----@field internal? boolean internal parent directories not part of fd output
----@field status? string
+local util_keys = require("util.keys")
 
 return {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
+  keys = {
+    {
+      "<C-e>",
+      function()
+        util_keys.toggle_explorer()
+      end,
+      mode = { "n", "v" },
+      desc = "Toggle Snacks Explorer",
+    },
+    {
+      "<C-t>",
+      function()
+        Snacks.terminal()
+      end,
+      mode = { "n", "v", "t" },
+      desc = "Terminal (Root Dir)",
+    },
+    {
+      "<C-S-f>",
+      function()
+        Snacks.picker.grep()
+      end,
+      mode = { "n", "v" },
+      desc = "Grep",
+    },
+    {
+      "<C-p>",
+      function()
+        Snacks.picker.files()
+      end,
+      mode = { "n", "v" },
+      desc = "Find Files",
+    },
+  },
   opts = {
     indent = {
       chunk = {
@@ -94,26 +118,60 @@ return {
               keys = {
                 -- "<Nop>" だと input にフォーカスが残るため。
                 ["<Esc>"] = { "focus_list", mode = { "i" } },
+                ["<C-f>"] = { "focus_list", mode = { "i" } },
               },
             },
             list = {
               keys = {
                 -- Disable Esc in normal mode to prevent accidental closing
                 ["<Esc>"] = { "<Nop>", mode = { "n" } },
-                -- Add custom keymap to toggle Snacks Explorer
-                ["<C-e>"] = function()
-                  require("config.myfunction").toggle_explorer()
-                end,
-                -- Add custom keymap to toggle Snacks terminal
-                ["<C-t>"] = function()
-                  Snacks.terminal()
-                end,
-                ["<C-g>"] = function()
-                  require("config.myfunction").toggle_diffview("DiffviewOpen")
-                end,
-                ["<C-S-g>"] = function()
-                  require("config.myfunction").toggle_diffview("DiffviewFileHistory")
-                end,
+                ["<C-e>"] = {
+                  function()
+                    util_keys.toggle_explorer()
+                  end,
+                  mode = { "n", "v" },
+                  desc = "Toggle Snacks Explorer",
+                },
+                ["<C-t>"] = {
+                  function()
+                    Snacks.terminal()
+                  end,
+                  mode = { "n", "v", "t" },
+                  desc = "Terminal (Root Dir)",
+                },
+                ["<C-g>"] = {
+                  function()
+                    util_keys.toggle_diffview("DiffviewOpen")
+                  end,
+                  mode = { "n", "v" },
+                  desc = "Toggle Diffview",
+                },
+                ["<C-S-g>"] = {
+                  function()
+                    util_keys.toggle_diffview("DiffviewFileHistory")
+                  end,
+                  mode = { "n", "v" },
+                  desc = "Toggle Diffview: Repo history",
+                },
+                ["<C-f>"] = {
+                  "focus_input",
+                  mode = { "n", "v" },
+                  desc = "Search",
+                },
+                ["<C-S-f>"] = {
+                  function()
+                    Snacks.picker.grep()
+                  end,
+                  mode = { "n", "v" },
+                  desc = "Grep",
+                },
+                ["<C-p>"] = {
+                  function()
+                    Snacks.picker.files()
+                  end,
+                  mode = { "n", "v" },
+                  desc = "Find Files",
+                },
                 ["<Right>"] = "expand_or_list_down",
                 ["<Left>"] = "collapse_or_up_to_parent",
               },

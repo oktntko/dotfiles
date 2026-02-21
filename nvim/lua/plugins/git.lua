@@ -1,9 +1,64 @@
+local util_keys = require("util.keys")
+
+-- Diffview 介護 マウスホイールでスクロールすると差分の位置がずれる
+-- マウススクロール時にウィンドウを自動でフォーカスする
+local function mouse_scroll_with_focus(direction)
+  local mouse_pos = vim.fn.getmousepos()
+  local winid = mouse_pos.winid
+
+  -- マウスの下に有効なウィンドウがある場合
+  if winid > 0 and winid ~= vim.api.nvim_get_current_win() then
+    -- ウィンドウをフォーカス
+    vim.api.nvim_set_current_win(winid)
+  end
+
+  -- スクロールを実行 (feedkeys を使って本来の挙動をシミュレート)
+  local key = direction == "up" and "<ScrollWheelUp>" or "<ScrollWheelDown>"
+  -- 'n' は再帰的なマッピングを避け、't' はキーをそのまま送るフラグ
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), "nt", false)
+end
+
 return {
   {
     "sindrets/diffview.nvim",
     dependencies = { "lewis6991/gitsigns.nvim" },
     keys = {
-      { "<leader>gH", "<cmd>DiffviewFileHistory %<cr>", mode = { "n" }, desc = "Diffview: Current file history" },
+      {
+        "<C-g>",
+        function()
+          util_keys.toggle_diffview("DiffviewOpen")
+        end,
+        mode = { "n", "v" },
+        desc = "Diffview: toggle diffview",
+      },
+      {
+        "<C-S-g>",
+        function()
+          util_keys.toggle_diffview("DiffviewFileHistory")
+        end,
+        mode = { "n", "v" },
+        desc = "Diffview: toggle repo history",
+      },
+      {
+        "<leader>gH",
+        "<cmd>DiffviewFileHistory %<cr>",
+        mode = { "n" },
+        desc = "Diffview: open file history",
+      },
+      {
+        "<ScrollWheelUp>",
+        function()
+          mouse_scroll_with_focus("up")
+        end,
+        mode = { "n", "v" },
+      },
+      {
+        "<ScrollWheelDown>",
+        function()
+          mouse_scroll_with_focus("down")
+        end,
+        mode = { "n", "v" },
+      },
     },
     opts = function()
       local actions = require("diffview.actions")
@@ -76,16 +131,19 @@ return {
               "[c",
               { desc = "Prev Change" },
             },
+            { "n", "<C-e>", actions.toggle_files, { desc = "Toggle the file panel" } },
           },
           -- diffview の左側のウィンドウ
           file_panel = {
             { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
             { "n", "X", restore_entry_with_conf, { desc = "Restore entry with confirmation" } },
+            { "n", "<C-e>", actions.toggle_files, { desc = "Toggle the file panel" } },
           },
           -- filehistory の下側のウィンドウ
           file_history_panel = {
             { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
             { "n", "o", actions.open_in_diffview, { desc = "Open the entry under the cursor in a diffview" } },
+            { "n", "<C-e>", actions.toggle_files, { desc = "Toggle the file panel" } },
           },
         },
       }
