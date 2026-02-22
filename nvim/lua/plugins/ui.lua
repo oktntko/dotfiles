@@ -120,20 +120,26 @@ return {
   -- タブっぽい見た目のやつ
   {
     "akinsho/bufferline.nvim",
-    opts = {
-      options = {
-        -- 常にタブを表示する
-        always_show_bufferline = true,
-        -- 左クリックで buffer 切り替え（デフォルトの挙動）
-        -- left_mouse_command = "buffer %d",
-        -- ミドルクリックで 閉じる
-        middle_mouse_command = function(n)
-          Snacks.bufdelete(n)
-        end,
-        -- 右クリックで 縦分割
-        right_mouse_command = "vertical sbuffer %d",
-      },
+    keys = {
+      { "<Tab>", "<Cmd>BufferLineCycleNext<CR>", mode = { "n" }, desc = "Next Buffer", silent = true },
+      { "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", mode = { "n" }, desc = "Prev Buffer", silent = true },
+      { "<C-S-w>", ":bd<CR>", mode = { "n" }, desc = "Prev Buffer", noremap = true, silent = true },
     },
+
+    opts = function(_, opts)
+      opts.options = opts.options or {}
+
+      -- 常にタブを表示する
+      opts.options.always_show_bufferline = true
+      -- 左クリックで buffer 切り替え（デフォルトの挙動）
+      -- left_mouse_command = "buffer %d",
+      -- ミドルクリックで 閉じる
+      opts.options.middle_mouse_command = function(n)
+        Snacks.bufdelete(n)
+      end
+      -- 右クリックで 縦分割
+      opts.options.right_mouse_command = "vertical sbuffer %d"
+    end,
   },
 
   -- 右上のやつ

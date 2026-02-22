@@ -102,11 +102,6 @@ map({ "n" }, "<C-Left>", "b")
 -- #endregion arrow/move
 -- #region editor
 
--- 次のバッファへ
-map("n", "<Tab>", ":BufferLineCycleNext<CR>", { silent = true })
--- 前のバッファへ
-map("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { silent = true })
-
 -- タブ移動 Diffview はタブを作成するため
 map("n", "<C-Tab>", ":tabnext<CR>", { noremap = true, silent = true })
 map("n", "<C-S-Tab>", ":tabprevious<CR>", { noremap = true, silent = true })
