@@ -16,8 +16,19 @@ return {
       -- 'manual' だと、Tabを1回叩いた時に1番目が選択されます
       opts.completion.list.selection.preselect = false
       opts.completion.list.selection.auto_insert = true
+
+      opts.sources = opts.sources or {}
+      opts.sources.providers = opts.sources.providers or {}
+      opts.sources.providers.lsp = opts.sources.providers.lsp or {}
+      opts.sources.providers.lsp.min_keyword_length = 0
+      opts.sources.providers.lsp.score_offset = 100
+      opts.sources.providers.lsp.max_items = 50
+
+      opts.sources.providers.buffer = opts.sources.providers.buffer or {}
+      opts.sources.providers.buffer.enabled = false
     end,
   },
+  { "rafamadriz/friendly-snippets", enabled = false },
 
   -- 1. LazyVim標準の mini.comment を無効化
   { "nvim-mini/mini.comment", enabled = false },

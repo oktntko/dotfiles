@@ -37,6 +37,13 @@ return {
       mode = { "n", "v" },
       desc = "Find Files",
     },
+    {
+      "<C-S-w>",
+      function()
+        Snacks.bufdelete()
+      end,
+      desc = "Delete Buffer",
+    },
   },
   opts = {
     indent = {
@@ -128,6 +135,50 @@ return {
               vim.fn.setreg("+", name)
               vim.notify(string.format("%s yanked", name))
             end,
+            open_vsplit_panel = function(picker, item, action)
+              if not item then
+                return
+              end
+
+              local Actions = require("snacks.explorer.actions").actions
+              if item.dir then
+                -- dir
+                Actions.confirm(picker, item, action)
+                return
+              end
+
+              -- Explorer のウィンドウIDを保存
+              -- 直前のウィンドウに戻る（通常は編集ウィンドウ）
+              vim.cmd("wincmd p")
+
+              -- そこで split
+              vim.cmd("vsplit")
+
+              -- split したウィンドウで開く
+              Actions.confirm(picker, item, action)
+            end,
+            open_hsplit_panel = function(picker, item, action)
+              if not item then
+                return
+              end
+
+              local Actions = require("snacks.explorer.actions").actions
+              if item.dir then
+                -- dir
+                Actions.confirm(picker, item, action)
+                return
+              end
+
+              -- Explorer のウィンドウIDを保存
+              -- 直前のウィンドウに戻る（通常は編集ウィンドウ）
+              vim.cmd("wincmd p")
+
+              -- そこで split
+              vim.cmd("split")
+
+              -- split したウィンドウで開く
+              Actions.confirm(picker, item, action)
+            end,
           },
           win = {
             input = {
@@ -194,6 +245,12 @@ return {
                 -- ファイル名コピー
                 ["y"] = "explorer_filename_yank",
                 ["Y"] = "explorer_relative_yank",
+
+                -- 開き方工夫
+                ["<RightMouse>"] = "open_vsplit_panel",
+                ["<MiddleMouse>"] = "open_hsplit_panel",
+                ["l"] = "open_vsplit_panel",
+                ["p"] = "open_hsplit_panel",
               },
             },
           },

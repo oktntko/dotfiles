@@ -123,7 +123,6 @@ return {
     keys = {
       { "<Tab>", "<Cmd>BufferLineCycleNext<CR>", mode = { "n" }, desc = "Next Buffer", silent = true },
       { "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", mode = { "n" }, desc = "Prev Buffer", silent = true },
-      { "<C-S-w>", ":bd<CR>", mode = { "n" }, desc = "Prev Buffer", noremap = true, silent = true },
     },
 
     opts = function(_, opts)

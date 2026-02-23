@@ -36,11 +36,11 @@ end, { expr = true })
 -- Standard Ctrl shortcuts like other applications
 -- Ctrl+C: Copy (yank)
 map("n", "<C-c>", "yy", { desc = "Copy line" })
-map("v", "<C-c>", "y", { desc = "Copy selection" })
+map("x", "<C-c>", "y", { desc = "Copy selection" })
 
 -- Ctrl+X: Cut
 map("n", "<C-x>", "dd", { desc = "Cut line" })
-map("v", "<C-x>", "d", { desc = "Cut selection" })
+map("x", "<C-x>", "d", { desc = "Cut selection" })
 
 -- Ctrl+V: Paste
 map("n", "<C-v>", "p", { desc = "Paste after cursor" })
@@ -53,13 +53,12 @@ map("i", "<C-z>", "<Cmd>undo<CR>", { desc = "Undo in insert mode" })
 
 -- Ctrl+Y: Redo
 map("n", "<C-y>", "<C-r>", { desc = "Redo" })
-map("i", "<C-y>", "<C-o><C-r>", { desc = "Redo in insert mode" })
 -- #endregion clipboard
 
-map({ "i", "n", "v" }, "<C-f>", "<Esc>/", { desc = "Search" })
+map({ "i", "n", "x" }, "<C-f>", "<Esc>/", { desc = "Search" })
 map({ "c" }, "<C-f>", "<Esc>", { desc = "Cancel Search" })
 
-map({ "n", "v" }, "<cr>", "<Esc>i", { desc = "Start Insert mode by Enter" })
+map({ "n", "x" }, "<cr>", "<Esc>i", { desc = "Start Insert mode by Enter" })
 
 -- #region arrow/move
 -- 全選択
