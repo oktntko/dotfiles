@@ -112,6 +112,22 @@ return {
               local Actions = require("snacks.explorer.actions")
               Actions.update(picker, { target = item.parent.file, refresh = true })
             end,
+            explorer_filename_yank = function(picker, item, action)
+              if not item then
+                return
+              end
+              local name = vim.fn.fnamemodify(item.file, ":t")
+              vim.fn.setreg("+", name)
+              vim.notify(string.format("%s yanked", name))
+            end,
+            explorer_relative_yank = function(picker, item, action)
+              if not item then
+                return
+              end
+              local name = vim.fn.fnamemodify(item.file, ":.")
+              vim.fn.setreg("+", name)
+              vim.notify(string.format("%s yanked", name))
+            end,
           },
           win = {
             input = {
@@ -174,6 +190,10 @@ return {
                 },
                 ["<Right>"] = "expand_or_list_down",
                 ["<Left>"] = "collapse_or_up_to_parent",
+
+                -- ファイル名コピー
+                ["y"] = "explorer_filename_yank",
+                ["Y"] = "explorer_relative_yank",
               },
             },
           },

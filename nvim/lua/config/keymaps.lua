@@ -15,12 +15,12 @@ map({ "i" }, "<C-h>", "<C-w>") -- <C-BS> = ^h = <C-h>
 map({ "n" }, "<C-h>", '"_db')
 
 -- -- 削除(d, c, x, s)のデフォルトを "_ に向ける
-local noswap_keys = { "d", "D", "c", "C", "s", "S", "x", "X" }
+local noswap_keys = { "d", "D", "c", "C", "s", "S", "x", "X", "p", "P" }
 for _, key in ipairs(noswap_keys) do
-  map({ "n", "v" }, key, '"_' .. key)
+  map({ "n", "x" }, key, '"_' .. key)
 end
-map({ "v" }, "<BS>", '"_d')
-map({ "v" }, "<Del>", '"_d')
+map({ "x" }, "<BS>", '"_d')
+map({ "x" }, "<Del>", '"_d')
 
 -- 改行コードも削除できるようにする
 map({ "n" }, "<BS>", function()
@@ -45,6 +45,7 @@ map("v", "<C-x>", "d", { desc = "Cut selection" })
 -- Ctrl+V: Paste
 map("n", "<C-v>", "p", { desc = "Paste after cursor" })
 map({ "i", "c" }, "<C-v>", "<C-r>+", { desc = "Paste from clipboard" })
+map({ "x" }, "<C-v>", '"_dgP', { desc = "Paste after cursor" })
 
 -- Ctrl+Z: Undo
 map("n", "<C-z>", "u", { desc = "Undo" })

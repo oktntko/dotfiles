@@ -2,25 +2,21 @@ return {
   -- 入力補完
   {
     "saghen/blink.cmp",
-    opts = {
-      keymap = {
-        preset = "enter", -- Enterで確定する基本スタイル
+    opts = function(_, opts)
+      opts.keymap = opts.keymap or {}
+      opts.keymap.preset = "enter" -- Enterで確定する基本スタイル
+      opts.keymap["<Tab>"] = { "select_next", "fallback" }
+      opts.keymap["<S-Tab>"] = { "select_prev", "fallback" }
 
-        -- Tabでメニューの最初の項目を選択し、次へと進む設定
-        ["<Tab>"] = { "select_next", "fallback" },
-        ["<S-Tab>"] = { "select_prev", "fallback" },
-      },
-      completion = {
-        list = {
-          selection = {
-            -- ここを 'preselect' にすると、メニューが出た瞬間に1番目が選択状態になります
-            -- 'manual' だと、Tabを1回叩いた時に1番目が選択されます
-            preselect = false,
-            auto_insert = true,
-          },
-        },
-      },
-    },
+      opts.completion = opts.completion or {}
+      opts.completion.list = opts.completion.list or {}
+      opts.completion.list.selection = opts.completion.list.selection or {}
+
+      -- ここを 'preselect' にすると、メニューが出た瞬間に1番目が選択状態になります
+      -- 'manual' だと、Tabを1回叩いた時に1番目が選択されます
+      opts.completion.list.selection.preselect = false
+      opts.completion.list.selection.auto_insert = true
+    end,
   },
 
   -- 1. LazyVim標準の mini.comment を無効化
