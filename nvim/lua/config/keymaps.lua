@@ -36,16 +36,38 @@ end, { expr = true })
 -- Standard Ctrl shortcuts like other applications
 -- Ctrl+C: Copy (yank)
 map("n", "<C-c>", "yy", { desc = "Copy line" })
-map("x", "<C-c>", "y", { desc = "Copy selection" })
+-- "y"だとカーソルが選択範囲の最初に戻るため "y" した後 "gv" で 直前の visual 範囲を再選択
+map("x", "<C-c>", "ygv<Esc>", { desc = "Copy selection", noremap = true })
 
 -- Ctrl+X: Cut
 map("n", "<C-x>", "dd", { desc = "Cut line" })
 map("x", "<C-x>", "d", { desc = "Cut selection" })
 
 -- Ctrl+V: Paste
-map("n", "<C-v>", "p", { desc = "Paste after cursor" })
-map({ "i", "c" }, "<C-v>", "<C-r>+", { desc = "Paste from clipboard" })
-map({ "x" }, "<C-v>", '"_dgP', { desc = "Paste after cursor" })
+-- vim.o.paste = true ペーストしたときにインデントが崩れるのを防ぐ
+map({ "n" }, "<C-v>", function()
+  local paste = vim.o.paste
+  vim.o.paste = true
+  vim.cmd("normal! gP")
+  vim.o.paste = paste
+end, { desc = "Paste", noremap = true })
+map({ "i", "c" }, "<C-v>", function()
+  local paste = vim.o.paste
+  vim.o.paste = true
+
+  local keys = vim.api.nvim_replace_termcodes("<C-r>+", true, false, true)
+  vim.api.nvim_feedkeys(keys, "n", false)
+
+  vim.schedule(function()
+    vim.o.paste = paste
+  end)
+end, { desc = "Paste", noremap = true })
+map({ "x" }, "<C-v>", function()
+  local paste = vim.o.paste
+  vim.o.paste = true
+  vim.cmd('normal! "_dgP')
+  vim.o.paste = paste
+end, { desc = "Paste", noremap = true })
 
 -- Ctrl+Z: Undo
 map("n", "<C-z>", "u", { desc = "Undo" })
@@ -188,3 +210,19 @@ map({ "n", "i", "v" }, "<A-ScrollWheelDown>", "5zl", { silent = true })
 
 -- 左にスクロール（画面を左へ動かす = 内容は右へ流れる）
 map({ "n", "i", "v" }, "<A-ScrollWheelUp>", "5zh", { silent = true })
+
+map({ "n", "x" }, "<C-Space>", function()
+  vim.lsp.buf.code_action()
+end, { desc = "Code Action" })
+map({ "n", "x" }, "<C-S-Space>", function()
+  vim.lsp.buf.code_action({
+    context = {
+      diagnostics = {},
+      only = {
+        "quickfix",
+        "refactor",
+        "source",
+      },
+    },
+  })
+end, { desc = "Code Action" })
