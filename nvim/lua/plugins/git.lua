@@ -45,20 +45,6 @@ return {
         mode = { "n" },
         desc = "Diffview: open file history",
       },
-      {
-        "<ScrollWheelUp>",
-        function()
-          mouse_scroll_with_focus("up")
-        end,
-        mode = { "n", "v" },
-      },
-      {
-        "<ScrollWheelDown>",
-        function()
-          mouse_scroll_with_focus("down")
-        end,
-        mode = { "n", "v" },
-      },
     },
     opts = function()
       local actions = require("diffview.actions")
@@ -138,6 +124,20 @@ return {
             { "n", "e", actions.goto_file_edit, { desc = "Open the file" } },
             { "n", "X", restore_entry_with_conf, { desc = "Restore entry with confirmation" } },
             { "n", "<C-e>", actions.toggle_files, { desc = "Toggle the file panel" } },
+            {
+              { "n", "v" },
+              "<ScrollWheelUp>",
+              function()
+                mouse_scroll_with_focus("up")
+              end,
+            },
+            {
+              { "n", "v" },
+              "<ScrollWheelDown>",
+              function()
+                mouse_scroll_with_focus("down")
+              end,
+            },
           },
           -- filehistory の下側のウィンドウ
           file_history_panel = {

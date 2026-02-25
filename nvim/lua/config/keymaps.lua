@@ -84,7 +84,8 @@ map({ "n", "x" }, "<cr>", "<Esc>i", { desc = "Start Insert mode by Enter" })
 
 -- #region arrow/move
 -- 全選択
-map({ "n", "i", "v" }, "<C-a>", "<esc>ggVG", { desc = "Select All" })
+map({ "n" }, "<C-a>", "ggVG", { desc = "Select All" })
+map({ "i", "v" }, "<C-a>", "<esc>ggVG", { desc = "Select All" })
 
 -- shift + arrow => visual mode
 -- insert mode から normal mode に抜けたときカーソルがずれるため、
