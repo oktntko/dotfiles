@@ -14,8 +14,26 @@ map({ "n" }, "<C-Del>", '"_de')
 map({ "i" }, "<C-h>", "<C-w>") -- <C-BS> = ^h = <C-h>
 map({ "n" }, "<C-h>", '"_db')
 
+local no_keys = {
+  "u", --
+  "o",
+  "j",
+  "h",
+  "k",
+  "l",
+  "p",
+  "b",
+  "n",
+  "m",
+  ",",
+  ".",
+}
+for _, key in ipairs(no_keys) do
+  map({ "n" }, key, "")
+end
+
 -- -- 削除(d, c, x, s)のデフォルトを "_ に向ける
-local noswap_keys = { "d", "D", "c", "C", "s", "S", "x", "X", "p", "P" }
+local noswap_keys = { "d", "D", "c", "C", "x", "X", "p", "P" }
 for _, key in ipairs(noswap_keys) do
   map({ "n", "x" }, key, '"_' .. key)
 end
@@ -80,7 +98,51 @@ map("n", "<C-y>", "<C-r>", { desc = "Redo" })
 map({ "i", "n", "x" }, "<C-f>", "<Esc>/", { desc = "Search" })
 map({ "c" }, "<C-f>", "<Esc>", { desc = "Cancel Search" })
 
+-- 共通：置換コマンド生成
+local function start_replace(text)
+  -- 完全一致 + case-sensitive
+  local pattern = "\\C\\V" .. vim.fn.escape(text, "\\/")
+  vim.fn.setreg("/", pattern)
+
+  -- 置換コマンドをプリセット（入力待機）
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes(":%s//" .. text .. "/gc" .. string.rep("<Left>", 3), true, false, true),
+    "nt",
+    false
+  )
+end
+
+-- ノーマルモード：カーソル単語
+vim.keymap.set("n", "<C-r>", function()
+  local word = vim.fn.expand("<cword>")
+  start_replace(word)
+end, { desc = "Replace word (case-sensitive)" })
+
+-- ビジュアルモード：選択範囲
+vim.keymap.set("x", "<C-r>", function()
+  local old_reg = vim.fn.getreg('"')
+  vim.cmd('normal! "vy')
+  local selection = vim.fn.getreg("v")
+  vim.fn.setreg('"', old_reg)
+  start_replace(selection)
+end, { desc = "Replace selection (case-sensitive)" })
+
+vim.keymap.set("i", "<C-r>", function()
+  vim.cmd("stopinsert")
+  local word = vim.fn.expand("<cword>")
+  start_replace(word)
+end, { desc = "Replace word" })
+
 map({ "n", "x" }, "<cr>", "<Esc>i", { desc = "Start Insert mode by Enter" })
+map({ "n", "x" }, "<A-cr>", "<Esc>A", { desc = "Start Insert mode by Enter" })
+map({ "n", "x" }, "<C-cr>", "<Esc>o", { desc = "Start Insert mode by Enter" })
+map({ "n", "x" }, "<S-cr>", "<Esc>I", { desc = "Start Insert mode by Enter" })
+map({ "n", "x" }, "<C-S-cr>", "", { desc = "" }) -- 使うかもしれないので残しておく
+-- <A-S-cr> , <C-A-cr>, <C-A-S-cr> は Windows Terminal のキーマップを変更しても効かなかった
+
+-- PageUpで画面が最上部まで戻れない
+map({ "n", "x", "i" }, "<PageUp>", "<C-u>")
+map({ "n", "x", "i" }, "<PageDown>", "<C-d>")
 
 -- #region arrow/move
 -- 全選択

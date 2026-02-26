@@ -121,8 +121,8 @@ return {
   {
     "akinsho/bufferline.nvim",
     keys = {
-      { "<Tab>", "<Cmd>BufferLineCycleNext<CR>", mode = { "n" }, desc = "Next Buffer", silent = true },
-      { "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", mode = { "n" }, desc = "Prev Buffer", silent = true },
+      { "<C-PageDown>", "<Cmd>BufferLineCycleNext<CR>", mode = { "n" }, desc = "Next Buffer", silent = true },
+      { "<C-PageUp>", "<Cmd>BufferLineCyclePrev<CR>", mode = { "n" }, desc = "Prev Buffer", silent = true },
     },
 
     opts = function(_, opts)
