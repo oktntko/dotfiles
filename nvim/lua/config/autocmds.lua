@@ -14,3 +14,17 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.formatoptions:remove({ "r", "o" })
   end,
 })
+
+vim.api.nvim_create_autocmd("CmdlineEnter", {
+  pattern = "*",
+  callback = function()
+    require("smear_cursor").enabled = false
+  end,
+})
+
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+  pattern = "*",
+  callback = function()
+    require("smear_cursor").enabled = true
+  end,
+})

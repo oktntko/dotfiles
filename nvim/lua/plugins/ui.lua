@@ -9,6 +9,10 @@ return {
       opts.style = "night"
     end,
   },
+  {
+    "akinsho/bufferline.nvim",
+    enabled = false,
+  },
 
   -- 下のライン
   {
@@ -117,52 +121,137 @@ return {
     end,
   },
 
-  -- タブっぽい見た目のやつ
-  {
-    "akinsho/bufferline.nvim",
-    keys = {
-      { "<C-PageDown>", "<Cmd>BufferLineCycleNext<CR>", mode = { "n" }, desc = "Next Buffer", silent = true },
-      { "<C-PageUp>", "<Cmd>BufferLineCyclePrev<CR>", mode = { "n" }, desc = "Prev Buffer", silent = true },
-    },
-
-    opts = function(_, opts)
-      opts.options = opts.options or {}
-
-      -- 常にタブを表示する
-      opts.options.always_show_bufferline = true
-      -- 左クリックで buffer 切り替え（デフォルトの挙動）
-      -- left_mouse_command = "buffer %d",
-      -- ミドルクリックで 閉じる
-      opts.options.middle_mouse_command = function(n)
-        Snacks.bufdelete(n)
-      end
-      -- 右クリックで 縦分割
-      opts.options.right_mouse_command = "vertical sbuffer %d"
-    end,
-  },
-
   -- 右上のやつ
   {
     "b0o/incline.nvim",
     event = "VeryLazy",
     opts = function()
       return {
-        -- render関数は、ウィンドウの右上に表示する内容を定義します
         render = function(props)
-          -- ファイル名の取得と整形
-          local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
+          local buf = props.buf
+          local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":t")
+
           if filename == "" then
             filename = "[No Name]"
           end
-          -- 最終的な表示内容を組み立てて返す
-          return {
-            {
-              filename .. " ",
-              -- ファイルが編集中の場合は太字＋斜体、そうでなければ太字
-              gui = vim.bo[props.buf].modified and "bold,italic" or "bold",
-            },
-            { "┊  " .. vim.api.nvim_win_get_number(props.win), group = "DevIconWindows" }, -- 右端：ウィンドウ番号
-          }
+
+          local modified = vim.bo[buf].modified
+
+          -------------------------------------------------
+          -- 🟢 未保存マーク
+          -------------------------------------------------
+          local modified_icon = modified and "● " or ""
+
+          -------------------------------------------------
+          --  Git差分（gitsigns）
+          -------------------------------------------------
+          local git = vim.b[buf].gitsigns_status_dict
+          local git_component = {}
+
+          if git then
+            local added = git.added or 0
+            local changed = git.changed or 0
+            local removed = git.removed or 0
+
+            if added > 0 then
+              table.insert(git_component, {
+                " " .. added .. " ",
+                guifg = "#2ea043", -- VSCodeっぽい緑
+              })
+            end
+            if changed > 0 then
+              table.insert(git_component, {
+                " " .. changed .. " ",
+                guifg = "#e3b341", -- VSCodeっぽい黄色
+              })
+            end
+            if removed > 0 then
+              table.insert(git_component, {
+                " " .. removed .. " ",
+                guifg = "#f85149", -- VSCodeっぽい赤
+              })
+            end
+          end
+
+          -------------------------------------------------
+          -- ⚠ 診断情報（LSP）
+          -------------------------------------------------
+          local diagnostics = vim.diagnostic.count(buf)
+
+          local diag_component = {}
+
+          -- ❌ Error（赤）
+          if diagnostics[vim.diagnostic.severity.ERROR] then
+            table.insert(diag_component, {
+              " " .. diagnostics[vim.diagnostic.severity.ERROR] .. " ",
+              guifg = "#f85149", -- VSCode red
+            })
+          end
+
+          -- ⚠ Warning（黄色）
+          if diagnostics[vim.diagnostic.severity.WARN] then
+            table.insert(diag_component, {
+              " " .. diagnostics[vim.diagnostic.severity.WARN] .. " ",
+              guifg = "#e3b341", -- VSCode yellow
+            })
+          end
+
+          -- ℹ Info（青）
+          if diagnostics[vim.diagnostic.severity.INFO] then
+            table.insert(diag_component, {
+              " " .. diagnostics[vim.diagnostic.severity.INFO] .. " ",
+              guifg = "#58a6ff", -- VSCode blue
+            })
+          end
+
+          -- 💡 Hint（グレー）
+          if diagnostics[vim.diagnostic.severity.HINT] then
+            table.insert(diag_component, {
+              "󰛩 " .. diagnostics[vim.diagnostic.severity.HINT] .. " ",
+              guifg = "#8b949e", -- VSCode gray
+            })
+          end
+
+          local result = {}
+          -- 🟢 未保存
+          table.insert(result, {
+            modified_icon,
+            guifg = modified and "#2ea043" or nil,
+          })
+
+          -- ファイル名
+          table.insert(result, {
+            filename,
+            gui = modified and "bold,italic" or "bold",
+          })
+
+          --  Git差分
+          if #git_component > 0 then
+            table.insert(result, {
+              " ┊ ",
+            })
+          end
+          for _, item in ipairs(git_component) do
+            table.insert(result, item)
+          end
+
+          -- 診断
+          if #diag_component > 0 then
+            table.insert(result, {
+              " ┊ ",
+            })
+          end
+          for _, item in ipairs(diag_component) do
+            table.insert(result, item)
+          end
+
+          -- ウィンドウ番号
+          table.insert(result, {
+            "┊  " .. vim.api.nvim_win_get_number(props.win),
+            group = "DevIconWindows",
+          })
+
+          return result
         end,
       }
     end,
@@ -260,7 +349,15 @@ return {
   -- カーソル位置の移動を強調
   {
     "sphamba/smear-cursor.nvim",
-    opts = {},
+    opts = { -- Default  Range
+      -- stiffness = 0.8, -- 0.6      [0, 1]
+      trailing_stiffness = 1, -- 0.45     [0, 1]
+      stiffness_insert_mode = 1, -- 0.5      [0, 1]
+      trailing_stiffness_insert_mode = 1, -- 0.5      [0, 1]
+      -- damping = 0.95, -- 0.85     [0, 1]
+      damping_insert_mode = 1, -- 0.9      [0, 1]
+      -- distance_stop_animating = 0.5, -- 0.1      > 0
+    },
   },
 
   -- 折り畳み、LSPの診断結果、Gitなどの情報を表示する
