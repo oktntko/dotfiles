@@ -7,6 +7,8 @@ return {
     priority = 1000,
     opts = function(_, opts)
       opts.style = "night"
+      opts.dim_inactive = true -- dims inactive windows
+      opts.lualine_bold = true -- When `true`, section headers in the lualine theme will be bold
     end,
   },
   {
@@ -135,6 +137,10 @@ return {
             filename = "[No Name]"
           end
 
+          local devicons = require("nvim-web-devicons")
+          local extension = vim.fn.fnamemodify(filename, ":e")
+          local icon, icon_hl = devicons.get_icon(filename, extension, { default = true })
+
           local modified = vim.bo[buf].modified
 
           -------------------------------------------------
@@ -219,6 +225,13 @@ return {
             guifg = modified and "#2ea043" or nil,
           })
 
+          if icon then
+            table.insert(result, {
+              icon .. " ",
+              group = icon_hl,
+            })
+          end
+
           -- ファイル名
           table.insert(result, {
             filename,
@@ -245,25 +258,9 @@ return {
             table.insert(result, item)
           end
 
-          -- ウィンドウ番号
-          table.insert(result, {
-            "┊  " .. vim.api.nvim_win_get_number(props.win),
-            group = "DevIconWindows",
-          })
-
           return result
         end,
       }
-    end,
-  },
-
-  -- フォーカス外のウィンドウを暗くする
-  {
-    "tadaa/vimade",
-    event = "VeryLazy",
-    opts = function(_, opts)
-      opts.recipe = { "default", { animate = true } }
-      opts.fadelevel = 0.7
     end,
   },
 

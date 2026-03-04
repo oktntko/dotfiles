@@ -2,7 +2,7 @@ local util_keys = require("util.keys")
 
 local M = {}
 
-M.open_split_panel = function(cmd) -- cmd = "vsplit" or "split"
+M.open_split_panel = function(cmd, side) -- cmd = "vsplit"/"split", side = "left"/"right"/"top"/"bottom"
   return function(picker, item, action)
     if not item then
       return
@@ -16,7 +16,7 @@ M.open_split_panel = function(cmd) -- cmd = "vsplit" or "split"
     -- 期待するレイアウトタイプ (vsplitならrow, splitならcol)
     -- winlayoutの 'row' は左右(vertical split)、'col' は上下(horizontal split)
     local target_layout = (cmd == "vsplit") and "row" or "col"
-
+    local use_first = (side == "left" or side == "top")
     -- 指定されたレイアウトが既に存在するかチェックし、末尾のウィンドウIDを返す
     local function find_target(layout, is_root)
       if layout[1] == target_layout then
@@ -28,11 +28,13 @@ M.open_split_panel = function(cmd) -- cmd = "vsplit" or "split"
         local threshold = (is_root and cmd == "vsplit") and 3 or 2
 
         if #children >= threshold then
-          local last = children[#children]
-          while last[1] ~= "leaf" do
-            last = last[2][#last[2]]
+          local index = use_first and 1 or #children
+          local target = children[index]
+          while target[1] ~= "leaf" do
+            local inner = target[2]
+            target = use_first and inner[1] or inner[#inner]
           end
-          return last[2]
+          return target[2]
         end
       end
 
@@ -57,8 +59,21 @@ M.open_split_panel = function(cmd) -- cmd = "vsplit" or "split"
       Actions.confirm(picker, item, action)
     else
       -- 分割がなければ、エクスプローラ以外の直前のウィンドウに戻って分割
+
       vim.cmd("wincmd p")
-      vim.cmd(cmd)
+
+      if side == "left" then
+        vim.cmd("vsplit")
+        vim.cmd("wincmd h")
+      elseif side == "right" then
+        vim.cmd("vsplit")
+      elseif side == "top" then
+        vim.cmd("split")
+        vim.cmd("wincmd k")
+      elseif side == "bottom" then
+        vim.cmd("split")
+      end
+
       Actions.confirm(picker, item, action)
     end
   end
@@ -128,6 +143,17 @@ return {
         },
       },
     },
+    scroll = {
+      animate = {
+        duration = { step = 10, total = 100 }, -- Reduce these values for faster scroll
+        easing = "linear",
+      },
+      animate_repeat = {
+        delay = 50, -- Delay before repeating
+        duration = { step = 3, total = 40 }, -- Faster speed when repeating
+        easing = "linear",
+      },
+    },
     picker = {
       win = {
         input = {
@@ -143,6 +169,18 @@ return {
               mode = { "i", "n" },
               desc = "Paste from clipboard",
             },
+            ["<PageDown>"] = { "list_scroll_down", mode = { "n", "i" } },
+            ["<PageUp>"] = { "list_scroll_up", mode = { "n", "i" } },
+            ["<C-Home>"] = { "list_top", mode = { "n", "i" } },
+            ["<C-End>"] = { "list_bottom", mode = { "n", "i" } },
+          },
+        },
+        list = {
+          keys = {
+            ["<PageDown>"] = { "list_scroll_down", mode = { "n", "i" } },
+            ["<PageUp>"] = { "list_scroll_up", mode = { "n", "i" } },
+            ["<C-Home>"] = { "list_top", mode = { "n", "i" } },
+            ["<C-End>"] = { "list_bottom", mode = { "n", "i" } },
           },
         },
       },
@@ -153,6 +191,12 @@ return {
             input = {
               keys = {
                 ["<c-x>"] = { "bufdelete", mode = { "n", "i" } },
+                ["<Tab>"] = { "list_down", mode = { "n", "i" } },
+                ["<S-Tab>"] = { "list_up", mode = { "n", "i" } },
+                ["<C-Tab>"] = { "select_and_next", mode = { "n", "i" } },
+                ["<C-S-Tab>"] = { "select_and_prev", mode = { "n", "i" } },
+                ["l"] = "open_vsplit_panel",
+                ["p"] = "open_hsplit_panel",
               },
             },
           },
@@ -217,8 +261,10 @@ return {
               vim.fn.setreg("+", name)
               vim.notify(string.format("%s yanked", name))
             end,
-            open_vsplit_panel = M.open_split_panel("vsplit"),
-            open_hsplit_panel = M.open_split_panel("split"),
+            open_split_right = M.open_split_panel("vsplit", "right"),
+            open_split_left = M.open_split_panel("vsplit", "left"),
+            open_split_down = M.open_split_panel("split", "bottom"),
+            open_split_up = M.open_split_panel("split", "top"),
           },
           win = {
             input = {
@@ -287,10 +333,9 @@ return {
                 ["Y"] = "explorer_relative_yank",
 
                 -- 開き方工夫
-                ["<RightMouse>"] = "open_vsplit_panel",
-                ["<MiddleMouse>"] = "open_hsplit_panel",
-                ["l"] = "open_vsplit_panel",
-                ["p"] = "open_hsplit_panel",
+                ["k"] = "open_split_left",
+                ["l"] = "open_split_right",
+                [","] = "open_split_down",
               },
             },
           },

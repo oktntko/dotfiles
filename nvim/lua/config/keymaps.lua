@@ -191,9 +191,9 @@ map("n", "<C-Tab>", ":tabnext<CR>", { noremap = true, silent = true })
 map("n", "<C-S-Tab>", ":tabprevious<CR>", { noremap = true, silent = true })
 
 -- ウィンドウを垂直分割 (Vertical Split)
-map("n", "<A-+>", "<C-w>v", { desc = "Split window vertically" })
+map("n", "l", "<C-w>v", { desc = "Split window vertically" })
 -- ウィンドウを水平分割 (Horizontal Split)
-map("n", "<A-->", "<C-w>s", { desc = "Split window horizontally" })
+map("n", ",", "<C-w>s", { desc = "Split window horizontally" })
 
 -- Alt + Left で前のカーソル位置に戻る (Go Back)
 map("n", "<A-Left>", "<C-o>", { desc = "Go Back", remap = false })
@@ -242,8 +242,8 @@ map("v", "（", [["-c（）<Esc>"-P]], { noremap = true })
 map("v", "「", [["-c「」<Esc>"-P]], { noremap = true })
 map("v", "＜", [["-c＜＞<Esc>"-P]], { noremap = true })
 
--- 検索入力中に Ctrl-c で大文字小文字区別 (\C) をトグル
-map("c", "<C-c>", function()
+-- 検索入力中に Alt-c で大文字小文字区別 (\C) をトグル
+map("c", "<A-c>", function()
   local cmd = vim.fn.getcmdline()
   if cmd:find([[\C]]) then
     vim.fn.setcmdline(cmd:gsub([[\C]], ""))
