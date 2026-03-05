@@ -9,11 +9,24 @@ return {
       opts.style = "night"
       opts.dim_inactive = true -- dims inactive windows
       opts.lualine_bold = true -- When `true`, section headers in the lualine theme will be bold
+      opts.on_highlights = function(hl)
+        hl.WinSeparator = { fg = "#35363e" }
+      end
     end,
   },
   {
     "akinsho/bufferline.nvim",
     enabled = false,
+  },
+  {
+    "mawkler/modicator.nvim",
+    event = "VeryLazy",
+    opts = {
+      highlights = {
+        defaults = { bold = true },
+        use_cursorline_background = true,
+      },
+    },
   },
 
   -- 下のライン
