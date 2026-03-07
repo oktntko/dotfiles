@@ -147,6 +147,10 @@ return {
     event = "VeryLazy",
     opts = function()
       return {
+        window = {
+          padding = 0,
+          margin = { horizontal = 0 },
+        },
         render = function(props)
           local buf = props.buf
           local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":t")
