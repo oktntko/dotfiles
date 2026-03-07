@@ -28,6 +28,11 @@ return {
       },
     },
   },
+  {
+    -- tabpage
+    "crispgm/nvim-tabline",
+    config = true,
+  },
 
   -- 下のライン
   {
