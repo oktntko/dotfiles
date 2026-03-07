@@ -112,13 +112,13 @@ local function start_replace(text)
 end
 
 -- ノーマルモード：カーソル単語
-vim.keymap.set("n", "<C-r>", function()
+map("n", "<C-r>", function()
   local word = vim.fn.expand("<cword>")
   start_replace(word)
 end, { desc = "Replace word (case-sensitive)" })
 
 -- ビジュアルモード：選択範囲
-vim.keymap.set("x", "<C-r>", function()
+map("x", "<C-r>", function()
   local old_reg = vim.fn.getreg('"')
   vim.cmd('normal! "vy')
   local selection = vim.fn.getreg("v")
@@ -126,7 +126,7 @@ vim.keymap.set("x", "<C-r>", function()
   start_replace(selection)
 end, { desc = "Replace selection (case-sensitive)" })
 
-vim.keymap.set("i", "<C-r>", function()
+map("i", "<C-r>", function()
   vim.cmd("stopinsert")
   local word = vim.fn.expand("<cword>")
   start_replace(word)
@@ -259,7 +259,7 @@ map("v", "`", [["-c``<Esc>"-P]], { noremap = true })
 map("v", "(", [["-c()<Esc>"-P]], { noremap = true })
 map("v", "[", [["-c[]<Esc>"-P]], { noremap = true })
 map("v", "{", [["-c{}<Esc>"-P]], { noremap = true })
-map("v", "<", [["-c<><Esc>"-P]], { noremap = true })
+-- map("v", "<", [["-c<><Esc>"-P]], { noremap = true })
 map("v", "（", [["-c（）<Esc>"-P]], { noremap = true })
 map("v", "「", [["-c「」<Esc>"-P]], { noremap = true })
 map("v", "＜", [["-c＜＞<Esc>"-P]], { noremap = true })
@@ -310,3 +310,18 @@ map({ "n", "x" }, "<C-S-Space>", function()
     },
   })
 end, { desc = "Code Action" })
+
+local function feed_fold(keys)
+  -- 'm' はマッピングを再帰的に展開し、'n' はノード（ノーマルモード）での実行を意味する
+  -- t: ターミナルコードなどの変換を有効にする
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), "n", false)
+end
+
+-- nowait を付けてもマッピングが競合して遅れるなら、そもそも「マッピング」として定義しない
+-- しかし、これだと < を上書きできないので、以下のように設定
+vim.keymap.set("n", ">", function()
+  feed_fold("zo")
+end, { desc = "open fold", nowait = true, silent = true })
+vim.keymap.set("n", "<", function()
+  feed_fold("zc")
+end, { desc = "close fold", nowait = true, silent = true })
