@@ -2,80 +2,19 @@ local util_keys = require("util.keys")
 
 local M = {}
 
-M.open_split_panel = function(cmd, side) -- cmd = "vsplit"/"split", side = "left"/"right"/"top"/"bottom"
-  return function(picker, item, action)
-    if not item then
-      return
-    end
-
-    local Actions = require("snacks.explorer.actions").actions
-    if item.dir then
-      return Actions.confirm(picker, item, action)
-    end
-
-    -- 期待するレイアウトタイプ (vsplitならrow, splitならcol)
-    -- winlayoutの 'row' は左右(vertical split)、'col' は上下(horizontal split)
-    local target_layout = (cmd == "vsplit") and "row" or "col"
-    local use_first = (side == "left" or side == "top")
-    -- 指定されたレイアウトが既に存在するかチェックし、末尾のウィンドウIDを返す
-    local function find_target(layout, is_root)
-      if layout[1] == target_layout then
-        local children = layout[2]
-
-        -- 【ここがポイント】
-        -- ルート(最上位)の row なら、Explorerがいるので「3つ以上」必要。
-        -- それより深い階層の row/col なら、純粋な分割なので「2つ以上」あればOK。
-        local threshold = (is_root and cmd == "vsplit") and 3 or 2
-
-        if #children >= threshold then
-          local index = use_first and 1 or #children
-          local target = children[index]
-          while target[1] ~= "leaf" do
-            local inner = target[2]
-            target = use_first and inner[1] or inner[#inner]
-          end
-          return target[2]
-        end
+M.open_split_panel = function(side) -- cmd = "vsplit"/"split", side = "left"/"right"/"top"/"bottom"
+  return function(_, item)
+    local function open_item()
+      if item.buf then
+        vim.api.nvim_set_current_buf(item.buf)
+      elseif item.file then
+        vim.cmd("edit " .. vim.fn.fnameescape(item.file))
+      elseif item.path then
+        vim.cmd("edit " .. vim.fn.fnameescape(item.path))
       end
-
-      if layout[1] ~= "leaf" then
-        for _, child in ipairs(layout[2]) do
-          -- 子要素の探索時は is_root を false にして潜る
-          local found = find_target(child, false)
-          if found then
-            return found
-          end
-        end
-      end
-      return nil
     end
 
-    -- 第一引数にレイアウト、第二引数に true (ルート階層) を渡す
-    local target_win = find_target(vim.fn.winlayout(), true)
-
-    if target_win then
-      -- 既に分割が存在すれば、そのウィンドウに移動して開く
-      vim.api.nvim_set_current_win(target_win)
-      Actions.confirm(picker, item, action)
-    else
-      -- 分割がなければ、エクスプローラ以外の直前のウィンドウに戻って分割
-
-      vim.cmd("wincmd p")
-
-      if side == "left" then
-        vim.cmd("vsplit")
-        vim.cmd("wincmd h")
-      elseif side == "right" then
-        vim.cmd("vsplit")
-      elseif side == "top" then
-        vim.cmd("split")
-        vim.cmd("wincmd k")
-      elseif side == "bottom" then
-        vim.cmd("split")
-      end
-
-      Actions.confirm(picker, item, action)
-    end
+    util_keys.smart_split(side, open_item)
   end
 end
 
@@ -155,6 +94,10 @@ return {
       },
     },
     picker = {
+      actions = {
+        open_split_left = M.open_split_panel("left"),
+        open_split_right = M.open_split_panel("right"),
+      },
       win = {
         input = {
           keys = {
@@ -173,6 +116,10 @@ return {
             ["<PageUp>"] = { "list_scroll_up", mode = { "n", "i" } },
             ["<C-Home>"] = { "list_top", mode = { "n", "i" } },
             ["<C-End>"] = { "list_bottom", mode = { "n", "i" } },
+            ["<Tab>"] = { "list_down", mode = { "n", "i" } },
+            ["<S-Tab>"] = { "list_up", mode = { "n", "i" } },
+            ["<C-Tab>"] = { "select_and_next", mode = { "n", "i" } },
+            ["<C-S-Tab>"] = { "select_and_prev", mode = { "n", "i" } },
           },
         },
         list = {
@@ -181,6 +128,10 @@ return {
             ["<PageUp>"] = { "list_scroll_up", mode = { "n", "i" } },
             ["<C-Home>"] = { "list_top", mode = { "n", "i" } },
             ["<C-End>"] = { "list_bottom", mode = { "n", "i" } },
+            ["<Tab>"] = { "list_down", mode = { "n", "i" } },
+            ["<S-Tab>"] = { "list_up", mode = { "n", "i" } },
+            ["<C-Tab>"] = { "select_and_next", mode = { "n", "i" } },
+            ["<C-S-Tab>"] = { "select_and_prev", mode = { "n", "i" } },
           },
         },
       },
@@ -190,13 +141,18 @@ return {
           win = {
             input = {
               keys = {
-                ["<c-x>"] = { "bufdelete", mode = { "n", "i" } },
-                ["<Tab>"] = { "list_down", mode = { "n", "i" } },
-                ["<S-Tab>"] = { "list_up", mode = { "n", "i" } },
-                ["<C-Tab>"] = { "select_and_next", mode = { "n", "i" } },
-                ["<C-S-Tab>"] = { "select_and_prev", mode = { "n", "i" } },
-                ["l"] = "open_vsplit_panel",
-                ["p"] = "open_hsplit_panel",
+                ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
+                -- 開き方工夫
+                ["<C-k>"] = { "open_split_left", mode = { "n", "i" } },
+                ["<C-l>"] = { "open_split_right", mode = { "n", "i" } },
+              },
+            },
+            list = {
+              keys = {
+                ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
+                -- 開き方工夫
+                ["<C-k>"] = { "open_split_left", mode = { "n", "i" } },
+                ["<C-l>"] = { "open_split_right", mode = { "n", "i" } },
               },
             },
           },
@@ -261,10 +217,6 @@ return {
               vim.fn.setreg("+", name)
               vim.notify(string.format("%s yanked", name))
             end,
-            open_split_right = M.open_split_panel("vsplit", "right"),
-            open_split_left = M.open_split_panel("vsplit", "left"),
-            open_split_down = M.open_split_panel("split", "bottom"),
-            open_split_up = M.open_split_panel("split", "top"),
           },
           win = {
             input = {
@@ -333,9 +285,8 @@ return {
                 ["Y"] = "explorer_relative_yank",
 
                 -- 開き方工夫
-                ["k"] = "open_split_left",
-                ["l"] = "open_split_right",
-                [","] = "open_split_down",
+                ["<C-k>"] = { "open_split_left", mode = { "n", "v" } },
+                ["<C-l>"] = { "open_split_right", mode = { "n", "v" } },
               },
             },
           },

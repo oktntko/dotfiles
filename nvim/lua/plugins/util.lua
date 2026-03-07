@@ -23,7 +23,7 @@ return {
     opts = {
       post_restore_cmds = { -- cmd after a session is restored
         function()
-          util_keys.toggle_explorer()
+          Snacks.explorer()
         end,
       },
       -- The following are already the default values, no need to provide them if these are already the settings you want.

@@ -190,10 +190,32 @@ map({ "n" }, "<C-Left>", "b")
 map("n", "<C-Tab>", ":tabnext<CR>", { noremap = true, silent = true })
 map("n", "<C-S-Tab>", ":tabprevious<CR>", { noremap = true, silent = true })
 
--- ウィンドウを垂直分割 (Vertical Split)
-map("n", "l", "<C-w>v", { desc = "Split window vertically" })
--- ウィンドウを水平分割 (Horizontal Split)
-map("n", ",", "<C-w>s", { desc = "Split window horizontally" })
+map("n", "<C-k>", function()
+  local util_keys = require("util.keys")
+  local buf = vim.api.nvim_get_current_buf()
+
+  local function open_item()
+    vim.api.nvim_win_set_buf(0, buf)
+  end
+
+  util_keys.smart_split("left", open_item)
+end, { desc = "Split window(max 2) and open left" })
+
+map("n", "<C-l>", function()
+  local util_keys = require("util.keys")
+  local buf = vim.api.nvim_get_current_buf()
+
+  local function open_item()
+    vim.api.nvim_win_set_buf(0, buf)
+  end
+
+  util_keys.smart_split("right", open_item)
+end, { desc = "Split window(max 2) and open right" })
+
+-- ウィンドウを | 方向に分割
+map("n", "<A-+>", "<C-w>v", { desc = "Split window vertically" })
+-- ウィンドウを - 方向に分割
+map("n", "<A-->", "<C-w>s", { desc = "Split window horizontally" })
 
 -- Alt + Left で前のカーソル位置に戻る (Go Back)
 map("n", "<A-Left>", "<C-o>", { desc = "Go Back", remap = false })
