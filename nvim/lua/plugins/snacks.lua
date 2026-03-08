@@ -120,6 +120,8 @@ return {
             ["<S-Tab>"] = { "list_up", mode = { "n", "i" } },
             ["<C-Tab>"] = { "select_and_next", mode = { "n", "i" } },
             ["<C-S-Tab>"] = { "select_and_prev", mode = { "n", "i" } },
+            ["<C-k>"] = { "open_split_left", mode = { "n", "i" } },
+            ["<C-l>"] = { "open_split_right", mode = { "n", "i" } },
           },
         },
         list = {
@@ -132,6 +134,8 @@ return {
             ["<S-Tab>"] = { "list_up", mode = { "n", "i" } },
             ["<C-Tab>"] = { "select_and_next", mode = { "n", "i" } },
             ["<C-S-Tab>"] = { "select_and_prev", mode = { "n", "i" } },
+            ["<C-k>"] = { "open_split_left", mode = { "n", "i" } },
+            ["<C-l>"] = { "open_split_right", mode = { "n", "i" } },
           },
         },
       },
@@ -142,17 +146,11 @@ return {
             input = {
               keys = {
                 ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
-                -- 開き方工夫
-                ["<C-k>"] = { "open_split_left", mode = { "n", "i" } },
-                ["<C-l>"] = { "open_split_right", mode = { "n", "i" } },
               },
             },
             list = {
               keys = {
                 ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
-                -- 開き方工夫
-                ["<C-k>"] = { "open_split_left", mode = { "n", "i" } },
-                ["<C-l>"] = { "open_split_right", mode = { "n", "i" } },
               },
             },
           },
@@ -283,10 +281,6 @@ return {
                 -- ファイル名コピー
                 ["y"] = "explorer_filename_yank",
                 ["Y"] = "explorer_relative_yank",
-
-                -- 開き方工夫
-                ["<C-k>"] = { "open_split_left", mode = { "n", "v" } },
-                ["<C-l>"] = { "open_split_right", mode = { "n", "v" } },
               },
             },
           },
