@@ -70,6 +70,20 @@ return {
       end,
       desc = "Delete Buffer",
     },
+    {
+      "<F12>",
+      function()
+        Snacks.picker.lsp_definitions()
+      end,
+      desc = "Delete Buffer",
+    },
+    {
+      "<F24>", -- <S-F12>
+      function()
+        Snacks.picker.lsp_references()
+      end,
+      desc = "Delete Buffer",
+    },
   },
   opts = {
     indent = {
