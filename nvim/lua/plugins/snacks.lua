@@ -2,7 +2,7 @@ local util_keys = require("util.keys")
 
 local M = {}
 
-M.open_split_panel = function(side) -- cmd = "vsplit"/"split", side = "left"/"right"/"top"/"bottom"
+M.open_split_panel = function(side) -- side = "left"/"right"
   return function(_, item)
     local function open_item()
       if item.buf then
@@ -16,6 +16,90 @@ M.open_split_panel = function(side) -- cmd = "vsplit"/"split", side = "left"/"ri
 
     util_keys.smart_split(side, open_item)
   end
+end
+
+M.toggle_rg_flag = function(flag)
+  -- 機能 ripgrep
+  -- - オプション
+  --    - | 単語単位         | -w, --word-regexp
+  --    - | 大文字小文字区別 | -s, --case-sensitive
+  --    - | ignore case      | -i, --ignore-case
+  --    - | literal検索      | -F, --fixed-strings
+  -- - 拡張子
+  --    - | 拡張子指定       | -t TYPE, --type=TYPE
+  --    - | 拡張子除外       | -T TYPE, --type-not=TYPE
+  -- -g GLOB, --glob=GLOB
+  --    - | ディレクトリ指定 | --glob "src/**"
+  --    - | ディレクトリ除外 | --glob "!node_modules/*"
+
+  local flag_map = {
+    ["-w"] = { "-w", "--word%-regexp" },
+    ["-s"] = { "-s", "--case%-sensitive" },
+    ["-i"] = { "-i", "--ignore%-case" },
+    ["-F"] = { "-F", "--fixed%-strings" },
+    ["-t"] = { "-t", "--type" },
+    ["-T"] = { "-T", "--type%-not" },
+    ["-g"] = { "-g", "--glob" },
+  }
+
+  local flag_list = flag_map[flag]
+  if not flag_list then
+    return
+  end
+
+  local input = vim.api.nvim_get_current_line()
+
+  -- " -- " または末尾の " --" を探す
+  local dash_start, dash_end = input:find(" %-%-")
+
+  if dash_start then
+    local text = input:sub(1, dash_start - 1)
+    local options = input:sub(dash_end + 1) -- " --" 以降の文字列
+
+    -- 既にいずれかのフラグ（短縮・フル）が含まれているかチェック
+    local has_flag = false
+    for _, f in ipairs(flag_list) do
+      if options:find(f) then
+        has_flag = true
+        break
+      end
+    end
+
+    if has_flag then
+      -- 既にフラグを含む場合、そのフラグを消す
+      local option_parts = vim.split(options, " ", { trimempty = true })
+      local filtered_options = {}
+
+      for _, o in ipairs(option_parts) do
+        local match_any = false
+        for _, f in ipairs(flag_list) do
+          if o:find(f) then
+            match_any = true
+            break
+          end
+        end
+        if not match_any then
+          table.insert(filtered_options, o)
+        end
+      end
+
+      if #filtered_options == 0 then
+        vim.api.nvim_set_current_line(text)
+      else
+        vim.api.nvim_set_current_line(text .. " -- " .. table.concat(filtered_options, " "))
+      end
+    else
+      -- " --" はあるが当該フラグがない場合、末尾に追加
+      vim.api.nvim_set_current_line(input .. " " .. flag)
+    end
+  else
+    -- " --" 自体がない場合、新規追加
+    vim.api.nvim_set_current_line(input .. " -- " .. flag)
+  end
+
+  -- カーソルを末尾に移動（入力欄を更新した後の定石）
+  local new_input = vim.api.nvim_get_current_line()
+  vim.api.nvim_win_set_cursor(0, { 1, #new_input })
 end
 
 return {
@@ -136,6 +220,49 @@ return {
             ["<C-S-Tab>"] = { "select_and_prev", mode = { "n", "i" } },
             ["<C-k>"] = { "open_split_left", mode = { "n", "i" } },
             ["<C-l>"] = { "open_split_right", mode = { "n", "i" } },
+            ["<C-h>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "delete word" },
+            ["<A-w>"] = {
+              function()
+                M.toggle_rg_flag("-w")
+              end,
+              mode = { "n", "i" },
+              desc = "Toggle word regexp",
+            },
+            ["<A-c>"] = {
+              function()
+                M.toggle_rg_flag("-s")
+              end,
+              mode = { "n", "i" },
+              desc = "Toggle case sensitive",
+            },
+            ["<A-f>"] = {
+              function()
+                M.toggle_rg_flag("-F")
+              end,
+              mode = { "n", "i" },
+              desc = "Toggle fixed strings",
+            },
+            ["<A-t>"] = {
+              function()
+                M.toggle_rg_flag("-t")
+              end,
+              mode = { "n", "i" },
+              desc = "Toggle fixed strings",
+            },
+            ["<A-S-t>"] = {
+              function()
+                M.toggle_rg_flag("-T")
+              end,
+              mode = { "n", "i" },
+              desc = "Toggle fixed strings",
+            },
+            ["<A-g>"] = {
+              function()
+                M.toggle_rg_flag("-g")
+              end,
+              mode = { "n", "i" },
+              desc = "Toggle fixed strings",
+            },
           },
         },
         list = {
