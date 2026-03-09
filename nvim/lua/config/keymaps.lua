@@ -15,26 +15,53 @@ map({ "i" }, "<C-h>", "<C-w>") -- <C-BS> = ^h = <C-h>
 map({ "n" }, "<C-h>", '"_db')
 
 local no_keys = {
-  "u", --
-  "o",
-  "j",
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
   "h",
+  "i",
+  "j",
   "k",
   "l",
-  "p",
-  "b",
   "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
   ",",
   ".",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "0",
 }
 for _, key in ipairs(no_keys) do
-  map({ "n" }, key, "")
+  map({ "n" }, key, "i" .. key)
 end
 
 -- -- 削除(d, c, x, s)のデフォルトを "_ に向ける
 local noswap_keys = { "d", "D", "c", "C", "x", "X", "p", "P" }
 for _, key in ipairs(noswap_keys) do
-  map({ "n", "x" }, key, '"_' .. key)
+  map({ "x" }, key, '"_' .. key)
 end
 map({ "x" }, "<BS>", '"_d')
 map({ "x" }, "<Del>", '"_d')
@@ -132,6 +159,8 @@ map("i", "<C-r>", function()
   start_replace(word)
 end, { desc = "Replace word" })
 
+map({ "n" }, "<F3>", "n", { desc = "Next" })
+map({ "n" }, "<F15>", "N", { desc = "Prev" })
 map({ "n", "x" }, "<cr>", "<Esc>i", { desc = "Start Insert mode by Enter" })
 map({ "n", "x" }, "<A-cr>", "<Esc>A", { desc = "Start Insert mode by Enter" })
 map({ "n", "x" }, "<C-cr>", "<Esc>o", { desc = "Start Insert mode by Enter" })
