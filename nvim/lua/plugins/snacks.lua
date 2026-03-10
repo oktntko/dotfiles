@@ -221,48 +221,6 @@ return {
             ["<C-k>"] = { "open_split_left", mode = { "n", "i" } },
             ["<C-l>"] = { "open_split_right", mode = { "n", "i" } },
             ["<C-h>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "delete word" },
-            ["<A-w>"] = {
-              function()
-                M.toggle_rg_flag("-w")
-              end,
-              mode = { "n", "i" },
-              desc = "Toggle word regexp",
-            },
-            ["<A-c>"] = {
-              function()
-                M.toggle_rg_flag("-s")
-              end,
-              mode = { "n", "i" },
-              desc = "Toggle case sensitive",
-            },
-            ["<A-f>"] = {
-              function()
-                M.toggle_rg_flag("-F")
-              end,
-              mode = { "n", "i" },
-              desc = "Toggle fixed strings",
-            },
-            ["<A-t>"] = {
-              function()
-                M.toggle_rg_flag("-t")
-              end,
-              mode = { "n", "i" },
-              desc = "Toggle fixed strings",
-            },
-            ["<A-S-t>"] = {
-              function()
-                M.toggle_rg_flag("-T")
-              end,
-              mode = { "n", "i" },
-              desc = "Toggle fixed strings",
-            },
-            ["<A-g>"] = {
-              function()
-                M.toggle_rg_flag("-g")
-              end,
-              mode = { "n", "i" },
-              desc = "Toggle fixed strings",
-            },
           },
         },
         list = {
@@ -297,8 +255,65 @@ return {
           },
         },
 
+        grep = {
+          layout = {
+            fullscreen = true,
+          },
+          win = {
+            input = {
+              keys = {
+                ["<A-w>"] = {
+                  function()
+                    M.toggle_rg_flag("-w")
+                  end,
+                  mode = { "n", "i" },
+                  desc = "Toggle word regexp",
+                },
+                ["<A-c>"] = {
+                  function()
+                    M.toggle_rg_flag("-s")
+                  end,
+                  mode = { "n", "i" },
+                  desc = "Toggle case sensitive",
+                },
+                ["<A-f>"] = {
+                  function()
+                    M.toggle_rg_flag("-F")
+                  end,
+                  mode = { "n", "i" },
+                  desc = "Toggle fixed strings",
+                },
+                ["<A-t>"] = {
+                  function()
+                    M.toggle_rg_flag("-t")
+                  end,
+                  mode = { "n", "i" },
+                  desc = "Toggle fixed strings",
+                },
+                ["<A-S-t>"] = {
+                  function()
+                    M.toggle_rg_flag("-T")
+                  end,
+                  mode = { "n", "i" },
+                  desc = "Toggle fixed strings",
+                },
+                ["<A-g>"] = {
+                  function()
+                    M.toggle_rg_flag("-g")
+                  end,
+                  mode = { "n", "i" },
+                  desc = "Toggle fixed strings",
+                },
+              },
+            },
+          },
+        },
+
         explorer = {
           hidden = true,
+          matcher = {
+            fuzzy = true,
+          },
           actions = {
             -- 閉じているディレクトリなら開く、 開いているディレクトリ・ファイルなら下に移動
             expand_or_list_down = function(picker, item, action)
@@ -425,15 +440,43 @@ return {
               },
             },
           },
+        },
+
+        files = {
+          layout = {
+            fullscreen = true,
+          },
           matcher = {
             fuzzy = true,
           },
-        },
+          fuzzy = true, -- toggles 用のオプション。 初期値 matcher.fuzzy = false なら宣言不要
+          toggles = {
+            fuzzy = { icon = "F" },
+          },
+          actions = {
+            -- toggles.fuzzy を作ると、 toggle_fuzzy が自動で定義されるため、被らない名前にする
+            toggle_fuzzy_matcher = {
+              ---@param picker snacks.Picker
+              function(picker)
+                local enabled = not picker.matcher.opts.fuzzy
 
-        lines = {
-          layout = {
-            preset = "vscode", -- レイアウトをコンパクトにする
-            preview = false, -- プレビューを消して視覚ノイズを減らす
+                picker.matcher.opts.fuzzy = enabled
+                picker.matcher.pattern = "" -- クリアしないと fuzzy 変更後の検索が即時実行されない
+
+                ---@diagnostic disable-next-line: inject-field
+                picker.opts.fuzzy = enabled
+
+                picker:find()
+                picker:update_titles()
+              end,
+            },
+          },
+          win = {
+            input = {
+              keys = {
+                ["<A-f>"] = { "toggle_fuzzy_matcher", mode = { "n", "i" } },
+              },
+            },
           },
         },
       },
