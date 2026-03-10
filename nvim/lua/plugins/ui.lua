@@ -31,6 +31,7 @@ return {
   {
     -- tabpage
     "crispgm/nvim-tabline",
+    event = "VeryLazy",
     config = true,
   },
 
@@ -288,7 +289,7 @@ return {
 
   {
     "hedyhli/outline.nvim",
-    lazy = true,
+    event = "VeryLazy",
     cmd = { "Outline", "OutlineOpen" },
     keys = { -- Example mapping to toggle outline
       { "<C-o>", "<cmd>Outline<CR>", desc = "Toggle outline" },
@@ -317,6 +318,7 @@ return {
   -- 高機能スクロールバー (nvim-scrollbar)
   {
     "petertriho/nvim-scrollbar",
+    event = "VeryLazy",
     dependencies = {
       "lewis6991/gitsigns.nvim",
       -- search はごてごてするのでやめた
@@ -338,6 +340,7 @@ return {
   -- 関数を sticky にする
   {
     "nvim-treesitter/nvim-treesitter-context",
+    event = "VeryLazy",
     opts = {
       enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
       multiwindow = false, -- Enable multiwindow support.
@@ -354,10 +357,15 @@ return {
       on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
     },
   },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    event = "VeryLazy",
+  },
 
   -- パンくずリスト
   {
     "Bekaboo/dropbar.nvim",
+    event = "VeryLazy",
     dependencies = {
       "nvim-telescope/telescope-fzf-native.nvim",
       build = "make",
@@ -368,6 +376,7 @@ return {
   -- 折り畳み、LSPの診断結果、Gitなどの情報を表示する
   {
     "luukvbaal/statuscol.nvim",
+    event = "VeryLazy",
     dependencies = {
       "lewis6991/gitsigns.nvim",
     },

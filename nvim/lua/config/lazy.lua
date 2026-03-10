@@ -39,14 +39,20 @@ require("lazy").setup({
     rtp = {
       -- disable some rtp plugins
       disabled_plugins = {
-        "gzip",
-        -- "matchit",
-        -- "matchparen",
-        -- "netrwPlugin",
-        "tarPlugin",
-        "tohtml",
-        "tutor",
-        "zipPlugin",
+        "gzip", -- .gz ファイルを直接開いて編集する機能
+        -- "matchit", -- 対応するカッコ（() や {}）をハイライトしたり、% キーで移動したりする機能
+        -- "matchparen", -- 対応するカッコ（() や {}）をハイライトしたり、% キーで移動したりする機能
+        "netrwPlugin", -- Neovim標準のファイルブラウザ
+        "tarPlugin", -- .tar ファイルの中身を閲覧する機能
+        "tohtml", -- コードをHTML形式に変換する機能（:TOhtml）
+        "tutor", -- 初心者向けのチュートリアル（:Tutor）
+        "zipPlugin", -- .zip ファイルの中身を閲覧する機能
+        "getscript", -- Vimスクリプトを自動更新する古い仕組み
+        "getscriptPlugin",
+        "logipat", -- 論理パターン（AND/ORなど）で検索する機能
+        "rrhelper", -- 置換の履歴を管理する古いヘルパー
+        "vimball", -- .vba という古い形式のプラグインアーカイブを扱う機能
+        "vimballPlugin",
       },
     },
   },
