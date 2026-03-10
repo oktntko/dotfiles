@@ -257,7 +257,7 @@ return {
 
         grep = {
           layout = {
-            fullscreen = true,
+            preset = "vertical",
           },
           win = {
             input = {
@@ -444,7 +444,7 @@ return {
 
         files = {
           layout = {
-            fullscreen = true,
+            preset = "vertical",
           },
           matcher = {
             fuzzy = true,
