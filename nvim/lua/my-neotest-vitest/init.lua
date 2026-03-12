@@ -50,24 +50,54 @@ adapter.discover_positions = function(file_path)
   logger.info("[discover_positions] file_path:" .. file_path)
 
   local query = [[
-    ;; describe ブロック (通常の文字列 + バッククォート)
+    ;; describe ブロック
     ((call_expression
       function: (identifier) @func_name (#match? @func_name "^(describe)$")
       arguments: (arguments . [(string) (template_string)] @namespace.name)
     )) @namespace.definition
 
-    ;; test/it ブロック (通常の文字列 + バッククォート)
+    ;; 通常の test/it ブロック
     ((call_expression
       function: (identifier) @func_name (#match? @func_name "^(test|it)$")
       arguments: (arguments . [(string) (template_string)] @test.name)
     )) @test.definition
 
-    ;; test.each / test.for (通常の文字列 + バッククォート)
+    ;; test.each([...])('name') や test.for([...])('name')
+    ;; 呼び出しの結果をさらに呼び出している構造を広く捉える
     ((call_expression
-      function: (member_expression
-        object: (identifier) @func_name (#match? @func_name "^(test|it)$")
-        property: (property_identifier) @method (#match? @method "^(each|for)$")
+      function: (call_expression
+        function: (member_expression
+          object: (identifier) @func_name (#match? @func_name "^(test|it)$")
+          property: (property_identifier) @method (#match? @method "^(each|for)$")
+        )
       )
+      arguments: (arguments . [(string) (template_string)] @test.name)
+    )) @test.definition
+
+    ;; test.each`table`('name') 
+    ;; tagged_template_expression の代わりに、より一般的な構造でマッチを試みる
+    ((call_expression
+      function: (binary_expression
+        left: (member_expression
+          object: (identifier) @func_name (#match? @func_name "^(test|it)$")
+          property: (property_identifier) @method (#match? @method "^(each|for)$")
+        )
+      )
+      arguments: (arguments . [(string) (template_string)] @test.name)
+    ) @test.definition)
+    
+    ;; フォールバック: あらゆる .each / .for の呼び出しの引数を test.name として試行
+    ((call_expression
+      function: [
+        (member_expression 
+          object: (call_expression)
+          property: (property_identifier) @method (#match? @method "^(each|for)$")
+        )
+        (member_expression
+          object: (identifier) @func_name (#match? @func_name "^(test|it)$")
+          property: (property_identifier) @method (#match? @method "^(each|for)$")
+        )
+      ]
       arguments: (arguments . [(string) (template_string)] @test.name)
     )) @test.definition
   ]]
