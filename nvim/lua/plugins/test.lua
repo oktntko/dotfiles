@@ -1,13 +1,9 @@
 return {
   {
     "nvim-neotest/neotest",
-    dependencies = {
-      "marilari88/neotest-vitest",
-    },
-    opts = {
-      adapters = {
-        ["neotest-vitest"] = {},
-      },
-    },
+    opts = function(_, opts)
+      opts.log_level = vim.log.levels.INFO
+      table.insert(opts.adapters, require("my-neotest-vitest"))
+    end,
   },
 }
