@@ -50,17 +50,35 @@ adapter.discover_positions = function(file_path)
   logger.info("[discover_positions] file_path:" .. file_path)
 
   local query = [[
+    ;; describe ブロック
     ((call_expression
-      function: (identifier) @test_name
-        (#match? @test_name "^(test|it|describe)$")
-    )) @scope.root
+      function: (identifier) @func_name (#match? @func_name "^(describe)$")
+      arguments: (arguments . (string) @namespace.name)
+    )) @namespace.definition
+
+    ;; test/it ブロック
+    ((call_expression
+      function: (identifier) @func_name (#match? @func_name "^(test|it)$")
+      arguments: (arguments . (string) @test.name)
+    )) @test.definition
+
+    ;; test.each / test.for ブロック
+    ((call_expression
+      function: (member_expression
+        object: (identifier) @func_name (#match? @func_name "^(test|it)$")
+        property: (property_identifier) @method (#match? @method "^(each|for)$")
+      )
+      arguments: (arguments . (string) @test.name)
+    )) @test.definition
   ]]
+
+  ---@diagnostic disable-next-line: missing-fields position_id を実装すると行単位のテストが実行できない
   local result = lib.treesitter.parse_positions(file_path, query, {
-    nested_tests = false,
+    nested_tests = true,
     require_namespaces = false,
-    position_id = function(position, parents)
-      return position.id
-    end,
+    -- position_id = function(position, parents)
+    --   return position.id
+    -- end,
   })
 
   logger.info("[discover_positions] result:" .. vim.inspect(result))
@@ -69,21 +87,41 @@ end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 adapter.build_spec = function(args)
-  logger.info("[build_spec] args:" .. vim.inspect(args))
-
   local results_path = vim.fn.tempname() .. ".json"
   local tree = args.tree
-  local position = tree:data()
+  local pos = tree:data()
+  logger.info(
+    "[build_spec] type:"
+      .. vim.inspect(pos.type)
+      .. ", path:"
+      .. vim.inspect(pos.path)
+      .. ", name:"
+      .. vim.inspect(pos.name)
+      .. ", extra_args:"
+      .. vim.inspect(args.extra_args)
+      .. ", strategy:"
+      .. vim.inspect(args.strategy)
+  )
+
+  local command = {
+    "pnpm",
+    "vitest",
+    "run",
+    pos.path, -- 対象ファイル
+    "--reporter=json",
+    "--outputFile=" .. results_path,
+  }
+
+  -- 実行対象が 'test' または 'namespace' (describe) の場合、フィルタを追加
+  if pos.type == "test" or pos.type == "namespace" then
+    -- pos.name は Treesitter でキャプチャした名前です
+    -- 特殊文字が混じる可能性を考慮し、引用符で囲むのが安全です
+    table.insert(command, "-t")
+    table.insert(command, pos.name)
+  end
 
   return {
-    command = {
-      "pnpm",
-      "vitest",
-      "run",
-      position.path,
-      "--reporter=json",
-      "--outputFile=" .. results_path,
-    },
+    command = command,
     context = {
       results_path = results_path,
     },
@@ -108,24 +146,53 @@ adapter.results = function(spec, result, tree)
   local decoded = vim.json.decode(data)
   local results = {}
 
-  -- 1. ファイル単位の結果をまず入れる
-  -- tree:data().id は通常、ファイルの絶対パスです
-  local file_id = tree:data().id
-  results[file_id] = {
-    status = decoded.success and "passed" or "failed",
-    output = spec.context.results_path, -- フルログのパス
-    short = decoded.success and "All tests passed" or "Some tests failed",
-  }
+  -- 1. 全ノードをID（パスや名前）で引きやすくするためにフラットなリストにする
+  local nodes = {}
+  for _, pos in tree:iter() do
+    logger.info("[results] pos:" .. vim.inspect(pos))
 
-  -- 2. (オプション) 個別テスト（行）の結果をマッピングする
-  -- ここを実装すると、エディタの各行に ✔ や ✖ がつきます
-  for _, testFile in ipairs(decoded.testResults or {}) do
-    for _, assertion in ipairs(testFile.assertionResults or {}) do
-      -- Vitest の JSON は 1-indexed の行番号を location.line に持っています
-      -- Neotest の ID 体系に合わせるため、tree から子ノードを探す必要があります
-      -- 最小構成なら、まずファイル単位の結果が出るだけで十分感動します！
+    -- pos.type は 'file', 'namespace', 'test' のいずれか
+    if pos.type == "test" then
+      -- 行番号をキーにしてノードを保持（0-indexedに合わせるため -1）
+      -- Vitest の line が 10 なら、Neotest の 9 行目と一致させる
+      logger.info("[results] range:" .. pos.range[1] .. ", name:" .. pos.name)
+
+      nodes[pos.range[1]] = pos
     end
   end
+
+  -- 2. Vitest の結果をループして回す
+  for _, testFile in ipairs(decoded.testResults or {}) do
+    for _, assertion in ipairs(testFile.assertionResults or {}) do
+      -- Vitest の行番号（1-indexed）を取得
+      local line = assertion.location and assertion.location.line
+
+      if line then
+        -- Neotest の 0-indexed に合わせて検索（1つ上を探す）
+        local pos = nodes[line - 1]
+
+        if pos then
+          -- マッチしたノードに対して結果を格納
+          results[pos.id] = {
+            status = assertion.status == "passed" and "passed" or "failed",
+            short = assertion.title,
+            errors = assertion.status == "failed" and {
+              {
+                message = table.concat(assertion.failureMessages, "\n"),
+                line = line - 1,
+              },
+            } or nil,
+          }
+        end
+      end
+    end
+  end
+
+  -- 3. 最後にファイル自体のステータスも忘れずに入れる
+  results[tree:data().id] = {
+    status = decoded.success and "passed" or "failed",
+    output = results_path,
+  }
   logger.info("[results] results:" .. vim.inspect(results))
 
   return results
