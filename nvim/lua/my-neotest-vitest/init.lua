@@ -138,6 +138,7 @@ adapter.build_spec = function(args)
     "vitest",
     "run",
     pos.path, -- 対象ファイル
+    "--reporter=default",
     "--reporter=json",
     "--outputFile=" .. results_path,
   }
@@ -155,6 +156,7 @@ adapter.build_spec = function(args)
 
   return {
     command = command,
+    output = output_path,
     context = {
       results_path = results_path,
     },
@@ -228,7 +230,7 @@ adapter.results = function(spec, result, tree)
   -- 3. 最後にファイル自体のステータスも忘れずに入れる
   results[tree:data().id] = {
     status = decoded.success and "passed" or "failed",
-    output = results_path,
+    output = spec.output,
   }
   logger.info("[results] results:" .. vim.inspect(results))
 
