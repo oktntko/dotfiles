@@ -241,6 +241,9 @@ return {
 
       sources = {
         buffers = {
+          layout = {
+            preset = "vertical",
+          },
           win = {
             input = {
               keys = {
