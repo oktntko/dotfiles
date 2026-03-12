@@ -50,25 +50,25 @@ adapter.discover_positions = function(file_path)
   logger.info("[discover_positions] file_path:" .. file_path)
 
   local query = [[
-    ;; describe ブロック
+    ;; describe ブロック (通常の文字列 + バッククォート)
     ((call_expression
       function: (identifier) @func_name (#match? @func_name "^(describe)$")
-      arguments: (arguments . (string) @namespace.name)
+      arguments: (arguments . [(string) (template_string)] @namespace.name)
     )) @namespace.definition
 
-    ;; test/it ブロック
+    ;; test/it ブロック (通常の文字列 + バッククォート)
     ((call_expression
       function: (identifier) @func_name (#match? @func_name "^(test|it)$")
-      arguments: (arguments . (string) @test.name)
+      arguments: (arguments . [(string) (template_string)] @test.name)
     )) @test.definition
 
-    ;; test.each / test.for ブロック
+    ;; test.each / test.for (通常の文字列 + バッククォート)
     ((call_expression
       function: (member_expression
         object: (identifier) @func_name (#match? @func_name "^(test|it)$")
         property: (property_identifier) @method (#match? @method "^(each|for)$")
       )
-      arguments: (arguments . (string) @test.name)
+      arguments: (arguments . [(string) (template_string)] @test.name)
     )) @test.definition
   ]]
 
@@ -115,9 +115,12 @@ adapter.build_spec = function(args)
   -- 実行対象が 'test' または 'namespace' (describe) の場合、フィルタを追加
   if pos.type == "test" or pos.type == "namespace" then
     -- pos.name は Treesitter でキャプチャした名前です
-    -- 特殊文字が混じる可能性を考慮し、引用符で囲むのが安全です
     table.insert(command, "-t")
-    table.insert(command, pos.name)
+
+    -- テスト名にバッククオートが含まれているとそのままコマンド引数に渡り、
+    -- テスト名とコマンド引数が一致しなくなるため、バッククオートを削除してコマンド引数に渡す
+    local name = not pos.name and "" or pos.name:gsub("^['\"`]", ""):gsub("['\"`]$", "")
+    table.insert(command, name)
   end
 
   return {
@@ -166,10 +169,14 @@ adapter.results = function(spec, result, tree)
     for _, assertion in ipairs(testFile.assertionResults or {}) do
       -- Vitest の行番号（1-indexed）を取得
       local line = assertion.location and assertion.location.line
+      logger.info(
+        "[results] location:" .. vim.inspect(assertion.location) .. ", line:" .. vim.inspect(assertion.location.line)
+      )
 
       if line then
         -- Neotest の 0-indexed に合わせて検索（1つ上を探す）
         local pos = nodes[line - 1]
+        logger.info("[results] start line:" .. vim.inspect(line) .. ", pos:" .. vim.inspect(pos))
 
         if pos then
           -- マッチしたノードに対して結果を格納
