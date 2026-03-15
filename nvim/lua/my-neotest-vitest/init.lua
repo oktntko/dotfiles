@@ -1,7 +1,5 @@
-local async = require("neotest.async")
 local lib = require("neotest.lib")
 local logger = require("neotest.logging")
-local types = require("neotest.types")
 
 ---@class neotest.Adapter
 local adapter = {
@@ -47,8 +45,6 @@ end
 ---Given a file path, parse all the tests within it.
 ---@diagnostic disable-next-line: duplicate-set-field
 adapter.discover_positions = function(file_path)
-  logger.info("[discover_positions] file_path:" .. file_path)
-
   local query = [[
     ;; describe ブロック
     ((call_expression
@@ -106,13 +102,9 @@ adapter.discover_positions = function(file_path)
   local result = lib.treesitter.parse_positions(file_path, query, {
     nested_tests = true,
     require_namespaces = false,
-    build_position = function(file_path, source, captured_nodes)
+    build_position = function(path, source, captured_nodes)
       local match_type = captured_nodes["test.definition"] and "test" or "namespace"
       local name_node = captured_nodes[match_type .. ".name"]
-
-      if not name_node then
-        return nil
-      end
 
       if not name_node then
         return nil
@@ -128,13 +120,12 @@ adapter.discover_positions = function(file_path)
       display_name = vim.trim(display_name)
 
       local definition_node = captured_nodes[match_type .. ".definition"]
+      ---@diagnostic disable-next-line: undefined-field
       local range = { definition_node:range() }
-
-      logger.info("[build_position] name:" .. vim.inspect(display_name))
 
       return {
         type = match_type,
-        path = file_path,
+        path = path,
         name = display_name,
         origin_name = origin_name, -- 実行時に参照する用の隠しフィールド
         range = range,
@@ -142,7 +133,6 @@ adapter.discover_positions = function(file_path)
     end,
   })
 
-  logger.info("[discover_positions] result:" .. vim.inspect(result))
   return result
 end
 
@@ -151,18 +141,6 @@ adapter.build_spec = function(args)
   local results_path = vim.fn.tempname() .. ".json"
   local tree = args.tree
   local pos = tree:data()
-  logger.info(
-    "[build_spec] type:"
-      .. vim.inspect(pos.type)
-      .. ", path:"
-      .. vim.inspect(pos.path)
-      .. ", name:"
-      .. vim.inspect(pos.name)
-      .. ", extra_args:"
-      .. vim.inspect(args.extra_args)
-      .. ", strategy:"
-      .. vim.inspect(args.strategy)
-  )
 
   local command = {
     "pnpm",
@@ -178,17 +156,13 @@ adapter.build_spec = function(args)
   if pos.type == "test" or pos.type == "namespace" then
     -- pos.name は Treesitter でキャプチャした名前です
     table.insert(command, "-t")
-
-    logger.info("[pos.name] pos.name:" .. vim.inspect(pos.origin_name))
-
-    -- テスト名にバッククオートが含まれているとそのままコマンド引数に渡り、
-    -- テスト名とコマンド引数が一致しなくなるため、バッククオートを削除してコマンド引数に渡す
-    local name = not pos.origin_name and "" or pos.origin_name:gsub("%$[%w_%.]+", ".*"):gsub("%%[sdjif%d%.]+", ".*")
-    table.insert(command, name)
+    ---@diagnostic disable-next-line: undefined-field
+    table.insert(command, pos.origin_name)
   end
 
   return {
     command = command,
+    ---@diagnostic disable-next-line: undefined-global
     output = output_path,
     context = {
       results_path = results_path,
@@ -197,34 +171,25 @@ adapter.build_spec = function(args)
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
-adapter.results = function(spec, result, tree)
-  logger.info("[results] spec:" .. vim.inspect(spec), ", result:" .. vim.inspect(result))
-
+adapter.results = function(spec, _, tree)
   local results_path = spec.context.results_path
 
   -- ファイルを読み込む
   local ok, data = pcall(lib.files.read, results_path)
-  logger.info("[results] ok:" .. vim.inspect(ok))
 
   if not ok then
     return {}
   end
-  logger.info("[results] data:" .. vim.inspect(data))
 
   local decoded = vim.json.decode(data)
   local results = {}
-
   -- 1. 全ノードをID（パスや名前）で引きやすくするためにフラットなリストにする
   local nodes = {}
   for _, pos in tree:iter() do
-    logger.info("[results] pos:" .. vim.inspect(pos))
-
     -- pos.type は 'file', 'namespace', 'test' のいずれか
     if pos.type == "test" then
       -- 行番号をキーにしてノードを保持（0-indexedに合わせるため -1）
       -- Vitest の line が 10 なら、Neotest の 9 行目と一致させる
-      logger.info("[results] range:" .. pos.range[1] .. ", name:" .. pos.name)
-
       nodes[pos.range[1]] = pos
     end
   end
@@ -234,14 +199,10 @@ adapter.results = function(spec, result, tree)
     for _, assertion in ipairs(testFile.assertionResults or {}) do
       -- Vitest の行番号（1-indexed）を取得
       local line = assertion.location and assertion.location.line
-      logger.info(
-        "[results] location:" .. vim.inspect(assertion.location) .. ", line:" .. vim.inspect(assertion.location.line)
-      )
 
       if line then
         -- Neotest の 0-indexed に合わせて検索（1つ上を探す）
         local pos = nodes[line - 1]
-        logger.info("[results] start line:" .. vim.inspect(line) .. ", pos:" .. vim.inspect(pos))
 
         if pos then
           -- マッチしたノードに対して結果を格納
@@ -260,12 +221,18 @@ adapter.results = function(spec, result, tree)
     end
   end
 
-  -- 3. 最後にファイル自体のステータスも忘れずに入れる
+  local status = "failed"
+  if ((decoded.numPassedTests or 0) + (decoded.numFailedTests or 0)) == 0 then
+    status = "skipped"
+  elseif decoded.success then
+    status = "passed"
+  end
+
   results[tree:data().id] = {
-    status = decoded.success and "passed" or "failed",
+    status = status,
+    ---@diagnostic disable-next-line: undefined-field
     output = spec.output,
   }
-  logger.info("[results] results:" .. vim.inspect(results))
 
   return results
 end
