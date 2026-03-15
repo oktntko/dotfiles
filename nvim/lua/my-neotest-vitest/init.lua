@@ -1,5 +1,4 @@
 local lib = require("neotest.lib")
-local logger = require("neotest.logging")
 
 ---@class neotest.Adapter
 local adapter = {
@@ -10,36 +9,48 @@ local adapter = {
 ---Should no root be found, the adapter can still be used in a non-project context if a test file matches.
 ---@diagnostic disable-next-line: duplicate-set-field
 adapter.root = function(path)
-  logger.debug("[root] path:" .. path)
+  local result = lib.files.match_root_pattern(
+    "vitest.config.ts",
+    "vitest.config.js",
+    "vite.config.ts",
+    "vite.config.js",
+    "package.json"
+  )(path)
 
-  local result = lib.files.match_root_pattern("package.json")(path)
-
-  logger.debug("[root] result:" .. vim.inspect(result))
   return result
-  -- TODO: vitest.config.ts だとダメなのか？
 end
 
 ---Filter directories when searching for test files
 ---@diagnostic disable-next-line: duplicate-set-field
-adapter.filter_dir = function(name, rel_path, root)
-  logger.debug("[filter_dir] name:" .. name .. ", rel_path:" .. rel_path .. ", root" .. root)
+adapter.filter_dir = function(name)
+  -- 基本的な除外ディレクトリ
+  local ignore_dirs = {
+    node_modules = true,
+    dist = true,
+    build = true,
+    [".git"] = true,
+  }
 
-  local result = name ~= "node_modules"
+  if ignore_dirs[name] then
+    return false
+  end
 
-  logger.debug("[filter_dir] result:" .. vim.inspect(result))
-  return result
-  -- TODO: vitest.config.ts から読めないか？
+  -- プロジェクト構造に応じて、テストが含まれないことが確実なディレクトリを除外
+  -- 本来は vitest.config の exclude を参照すべきだが、パフォーマンスのため標準的な除外を適用
+  return true
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 adapter.is_test_file = function(file_path)
-  logger.debug("[is_test_file] file_path:" .. file_path)
+  if not file_path then
+    return false
+  end
 
-  local result = file_path:match("%.test%.ts$") or file_path:match("%.spec%.ts$")
+  -- Vitestのデフォルトパターンに近い判定
+  -- .test.ts, .spec.ts, .test.js, .spec.js など
+  local result = file_path:match("%.test%.[tj]sx?$") or file_path:match("%.spec%.[tj]sx?$")
 
-  logger.debug("[is_test_file] result:" .. vim.inspect(result))
-  return result
-  -- TODO: vitest.config.ts から読めないか？
+  return result ~= nil
 end
 
 ---Given a file path, parse all the tests within it.
