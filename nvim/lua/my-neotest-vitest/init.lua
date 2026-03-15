@@ -106,9 +106,40 @@ adapter.discover_positions = function(file_path)
   local result = lib.treesitter.parse_positions(file_path, query, {
     nested_tests = true,
     require_namespaces = false,
-    -- position_id = function(position, parents)
-    --   return position.id
-    -- end,
+    build_position = function(file_path, source, captured_nodes)
+      local match_type = captured_nodes["test.definition"] and "test" or "namespace"
+      local name_node = captured_nodes[match_type .. ".name"]
+
+      if not name_node then
+        return nil
+      end
+
+      if not name_node then
+        return nil
+      end
+
+      local raw_name = vim.treesitter.get_node_text(name_node, source)
+
+      -- 1. Vitest 実行用のオリジナル名 (引用符だけ外す)
+      local origin_name = raw_name:gsub("^['\"`]", ""):gsub("['\"`]$", "")
+
+      -- 2. Summary 表示用の整形名 (改行を消して空白を集約)
+      local display_name = origin_name:gsub("[\r\n]", " "):gsub("%s+", " ")
+      display_name = vim.trim(display_name)
+
+      local definition_node = captured_nodes[match_type .. ".definition"]
+      local range = { definition_node:range() }
+
+      logger.info("[build_position] name:" .. vim.inspect(display_name))
+
+      return {
+        type = match_type,
+        path = file_path,
+        name = display_name,
+        origin_name = origin_name, -- 実行時に参照する用の隠しフィールド
+        range = range,
+      }
+    end,
   })
 
   logger.info("[discover_positions] result:" .. vim.inspect(result))
@@ -148,9 +179,11 @@ adapter.build_spec = function(args)
     -- pos.name は Treesitter でキャプチャした名前です
     table.insert(command, "-t")
 
+    logger.info("[pos.name] pos.name:" .. vim.inspect(pos.origin_name))
+
     -- テスト名にバッククオートが含まれているとそのままコマンド引数に渡り、
     -- テスト名とコマンド引数が一致しなくなるため、バッククオートを削除してコマンド引数に渡す
-    local name = not pos.name and "" or pos.name:gsub("^['\"`]", ""):gsub("['\"`]$", "")
+    local name = not pos.origin_name and "" or pos.origin_name:gsub("%$[%w_%.]+", ".*"):gsub("%%[sdjif%d%.]+", ".*")
     table.insert(command, name)
   end
 
