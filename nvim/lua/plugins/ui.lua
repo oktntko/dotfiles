@@ -1,17 +1,36 @@
 return {
-
   -- colorscheme
+  -- {
+  --   "folke/tokyonight.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = function(_, opts)
+  --     opts.dim_inactive = true -- dims inactive windows
+  --     opts.lualine_bold = true -- When `true`, section headers in the lualine theme will be bold
+  --     opts.on_highlights = function(hl)
+  --       hl.WinSeparator = { fg = "#35363e" }
+  --     end
+  --   end,
+  -- },
   {
-    "folke/tokyonight.nvim",
+    "bluz71/vim-nightfly-colors",
     lazy = false,
     priority = 1000,
-    opts = function(_, opts)
-      opts.style = "night"
-      opts.dim_inactive = true -- dims inactive windows
-      opts.lualine_bold = true -- When `true`, section headers in the lualine theme will be bold
-      opts.on_highlights = function(hl)
-        hl.WinSeparator = { fg = "#35363e" }
-      end
+    config = function()
+      -- Lua initialization file
+      vim.g.nightflyCursorColor = true
+      -- Lua initialization file
+      vim.g.nightflyNormalPmenu = true
+      -- -- Lua initialization file
+      vim.g.nightflyNormalFloat = true
+      vim.o.winborder = "single"
+      -- -- Lua initialization file
+      -- vim.g.nightflyTransparent = true
+      -- Lua initialization file
+      vim.g.nightflyUnderlineMatchParen = true
+      -- Lua initialization file
+      vim.g.nightflyVirtualTextColor = true
+      vim.cmd([[colorscheme nightfly]])
     end,
   },
   {
