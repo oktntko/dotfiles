@@ -30,6 +30,20 @@ return {
       vim.g.nightflyUnderlineMatchParen = true
       -- Lua initialization file
       vim.g.nightflyVirtualTextColor = true
+
+      -- Lua initialization file
+      local custom_highlight = vim.api.nvim_create_augroup("CustomHighlight", {})
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        pattern = "nightfly",
+        callback = function()
+          vim.api.nvim_set_hl(0, "SnacksPickerGitStatusAdded", { fg = "#a1cd5e" }) -- 緑色
+          vim.api.nvim_set_hl(0, "SnacksPickerGitStatusModified", { fg = "#e3d18a" }) -- 黄色
+          vim.api.nvim_set_hl(0, "SnacksPickerGitStatusRenamed", { fg = "#7ed491" }) -- 黄色
+          vim.api.nvim_set_hl(0, "SnacksPickerGitStatusUntracked", { fg = "#c792ea" }) -- 紫色
+        end,
+        group = custom_highlight,
+      })
+
       vim.cmd([[colorscheme nightfly]])
     end,
   },

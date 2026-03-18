@@ -33,13 +33,13 @@ local no_keys = {
   "p",
   -- "q",
   -- "r",
-  "s",
+  -- "s",
   "t",
   "u",
   -- "v",
   "w",
   "x",
-  "y",
+  -- "y",
   -- "z",
   ",",
   ".",
@@ -82,10 +82,14 @@ end, { expr = true })
 map("n", "<C-c>", "yy", { desc = "Copy line" })
 -- "y"だとカーソルが選択範囲の最初に戻るため "y" した後 "gv" で 直前の visual 範囲を再選択
 map("x", "<C-c>", "ygv<Esc>", { desc = "Copy selection", noremap = true })
+-- mz (位置zにマーク) -> viwy (ヤンク) -> `z (位置zに戻る)
+-- bve だと 単語の先頭文字にカーソルがあると前の単語にカーソルが移動する
+map("n", "<C-S-c>", "mzviwy`z", { desc = "Copy word" })
 
 -- Ctrl+X: Cut
 map("n", "<C-x>", "dd", { desc = "Cut line" })
 map("x", "<C-x>", "d", { desc = "Cut selection" })
+map("n", "<C-S-x>", "mzviwd`z", { desc = "Cut word" })
 
 -- Ctrl+V: Paste
 -- vim.o.paste = true ペーストしたときにインデントが崩れるのを防ぐ
@@ -208,7 +212,7 @@ map({ "n" }, "<C-S-Right>", "ve")
 map({ "i" }, "<C-S-Left>", "<Esc>vb")
 map({ "n" }, "<C-S-Left>", "vb")
 -- ctrl + arrow : 単語移動
-map({ "i" }, "<C-Right>", "<C-o>e")
+map({ "i" }, "<C-Right>", "<C-o>e<Right>")
 map({ "n" }, "<C-Right>", "e")
 map({ "i" }, "<C-Left>", "<C-o>b")
 map({ "n" }, "<C-Left>", "b")
@@ -348,9 +352,21 @@ end
 
 -- nowait を付けてもマッピングが競合して遅れるなら、そもそも「マッピング」として定義しない
 -- しかし、これだと < を上書きできないので、以下のように設定
-vim.keymap.set("n", ">", function()
+map("n", ">", function()
   feed_fold("zo")
 end, { desc = "open fold", nowait = true, silent = true })
-vim.keymap.set("n", "<", function()
+map("n", "<", function()
   feed_fold("zc")
 end, { desc = "close fold", nowait = true, silent = true })
+
+-- Ctrl + j で行番号入力プロンプトを出す
+map("n", "<C-j>", function()
+  local line = vim.fn.input("Goto Line: ")
+  if line ~= "" then
+    vim.cmd(line)
+  end
+end, { desc = "Goto line (absolute)" })
+-- ほかのジャンプの仕方
+-- [行番号]G (例) 120G
+-- [行番号]gg (例) 120gg
+-- :[行番号]<Enter> (例) :120
