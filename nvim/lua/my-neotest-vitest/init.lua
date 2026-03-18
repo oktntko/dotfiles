@@ -130,6 +130,10 @@ adapter.discover_positions = function(file_path)
       local display_name = origin_name:gsub("[\r\n]", " "):gsub("%s+", " ")
       display_name = vim.trim(display_name)
 
+      -- テスト名にバッククオートが含まれているとそのままコマンド引数に渡り、
+      -- テスト名とコマンド引数が一致しなくなるため、バッククオートを削除してコマンド引数に渡す
+      origin_name = origin_name:gsub("%$[%w_%.]+", ".*"):gsub("%%[sdjif%d%.]+", ".*")
+
       local definition_node = captured_nodes[match_type .. ".definition"]
       ---@diagnostic disable-next-line: undefined-field
       local range = { definition_node:range() }
