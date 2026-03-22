@@ -31,15 +31,21 @@ return {
       -- Lua initialization file
       vim.g.nightflyVirtualTextColor = true
 
+      require("nightfly").custom_colors({
+        blue = "#33adff",
+      })
       -- Lua initialization file
       local custom_highlight = vim.api.nvim_create_augroup("CustomHighlight", {})
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "nightfly",
         callback = function()
-          vim.api.nvim_set_hl(0, "SnacksPickerGitStatusAdded", { fg = "#a1cd5e" }) -- 緑色
-          vim.api.nvim_set_hl(0, "SnacksPickerGitStatusModified", { fg = "#e3d18a" }) -- 黄色
-          vim.api.nvim_set_hl(0, "SnacksPickerGitStatusRenamed", { fg = "#7ed491" }) -- 黄色
-          vim.api.nvim_set_hl(0, "SnacksPickerGitStatusUntracked", { fg = "#c792ea" }) -- 紫色
+          local highlight = vim.api.nvim_set_hl
+
+          -- snacks picker
+          highlight(0, "SnacksPickerGitStatusAdded", { fg = "#a1cd5e" }) -- 緑色
+          highlight(0, "SnacksPickerGitStatusModified", { fg = "#e3d18a" }) -- 黄色
+          highlight(0, "SnacksPickerGitStatusRenamed", { fg = "#7ed491" }) -- 黄色
+          highlight(0, "SnacksPickerGitStatusUntracked", { fg = "#c792ea" }) -- 紫色
         end,
         group = custom_highlight,
       })
